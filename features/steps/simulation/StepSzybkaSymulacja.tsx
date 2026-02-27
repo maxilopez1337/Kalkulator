@@ -63,7 +63,7 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
             // SAVINGS: 28% prowizji, brak podwyżek.
             // WIN_WIN: 26% prowizji całkowitej (z czego część idzie na podwyżkę, ale w uproszczeniu koszt modelu = koszt pracodawcy + cała "prowizja" 26%)
             const provPercent = strategy === 'SAVINGS' ? 28 : 26;
-            const provision = opt.swiadczenie.brutto * (provPercent / 100);
+            const provision = opt.swiadczenie.netto * (provPercent / 100);
 
             // W wariancie WIN_WIN, podwyżka jest częścią "prowizji" w sensie podziału oszczędności, 
             // ale technicznie jest kosztem pracodawcy wypłacanym pracownikowi. 

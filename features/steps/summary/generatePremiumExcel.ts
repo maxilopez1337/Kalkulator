@@ -160,7 +160,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
         prowizjaTotal: round(wyniki.szczegoly.reduce((acc, w) => {
             const isStudent = w.pracownik.trybSkladek === 'STUDENT_UZ';
             if (isStudent) return acc;
-            return acc + round(w.podzial.swiadczenie.brutto);
+            return acc + round(w.podzial.swiadczenie.netto);
         }, 0) * (prowizjaProc / 100))
     };
 
@@ -335,9 +335,9 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
             let adminBonus = 0;
             
             if (isPlusVariant) {
-                const swiadczenieBrutto = w.podzial.swiadczenie.brutto;
-                systemRaise = swiadczenieBrutto * 0.04;
-                adminBonus = swiadczenieBrutto * 0.02;
+                const swiadczenieNetto = w.podzial.swiadczenie.netto;
+                systemRaise = swiadczenieNetto * 0.04;
+                adminBonus = swiadczenieNetto * 0.02;
             }
 
             wsSim.getCell(`F${r}`).value = systemRaise;
@@ -347,7 +347,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
             wsSim.getCell(`G${r}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEFF6FF' } }; 
 
             // KOLUMNA H: Oszczędność wygenerowana (Na czysto dla przedsiębiorcy przed dodatkową podwyżką)
-            const fullProvision = w.podzial.swiadczenie.brutto * (prowizjaProc / 100);
+            const fullProvision = w.podzial.swiadczenie.netto * (prowizjaProc / 100);
             const savings = w.standard.kosztPracodawcy - (w.podzial.kosztPracodawcy + fullProvision);
             
             // FORMULA DLA KOLUMNY H:

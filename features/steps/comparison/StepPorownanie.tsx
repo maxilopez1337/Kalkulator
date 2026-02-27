@@ -65,50 +65,50 @@ export const StepPorownanie = () => {
       const qualifiedEmployees = wyniki.szczegoly.filter(w => w.pracownik.trybSkladek !== 'STUDENT_UZ');
       const excludedCount = wyniki.szczegoly.length - qualifiedEmployees.length;
 
-      // 2. Przeliczamy sumy ręcznie na podstawie przefiltrowanej listy
-      const sumaKosztStandard = qualifiedEmployees.reduce((acc, w) => acc + w.standard.kosztPracodawcy, 0);
-      const sumaKosztPodzial = qualifiedEmployees.reduce((acc, w) => acc + w.podzial.kosztPracodawcy, 0);
-      const benefitBruttoTotal = qualifiedEmployees.reduce((acc, w) => acc + w.podzial.swiadczenie.brutto, 0);
+            // 2. Przeliczamy sumy ręcznie na podstawie przefiltrowanej listy
+            const sumaKosztStandard = qualifiedEmployees.reduce((acc, w) => acc + w.standard.kosztPracodawcy, 0);
+            const sumaKosztPodzial = qualifiedEmployees.reduce((acc, w) => acc + w.podzial.kosztPracodawcy, 0);
+            const benefitNettoTotal = qualifiedEmployees.reduce((acc, w) => acc + w.podzial.swiadczenie.netto, 0);
       
-      const oszczednoscBrutto = sumaKosztStandard - sumaKosztPodzial;
+            const oszczednoscBrutto = sumaKosztStandard - sumaKosztPodzial;
 
-      // Koszt prowizji (Faktura) zależny od *wybranego* modelu (globalnego prowizjaProc)
-      const totalCommissionAmount = benefitBruttoTotal * (prowizjaProc / 100);
+            // Koszt prowizji (Faktura) zależny od *wybranego* modelu (globalnego prowizjaProc)
+            const totalCommissionAmount = benefitNettoTotal * (prowizjaProc / 100);
       
-      // Logika podziału dla wyświetlania szczegółów w Dashboardzie (dla aktywnego scenariusza)
-      const isStandard = activeCard === 'STANDARD';
+            // Logika podziału dla wyświetlania szczegółów w Dashboardzie (dla aktywnego scenariusza)
+            const isStandard = activeCard === 'STANDARD';
       
-    const raiseRate = isStandard ? 0 : 4;
-    // ZAWSZE licz 2% bonusu od benefitBruttoTotal dla STANDARD
-    const adminAmount = benefitBruttoTotal * 0.02;
-    const raiseAmount = benefitBruttoTotal * (raiseRate / 100);
-    const feeAmount = Math.max(0, totalCommissionAmount - raiseAmount - (isStandard ? 0 : adminAmount));
+            const raiseRate = isStandard ? 0 : 4;
+            // ZAWSZE licz 2% bonusu od benefitNettoTotal dla STANDARD
+            const adminAmount = benefitNettoTotal * 0.02;
+            const raiseAmount = benefitNettoTotal * (raiseRate / 100);
+            const feeAmount = Math.max(0, totalCommissionAmount - raiseAmount - (isStandard ? 0 : adminAmount));
 
-      return {
-          sumaKosztStandard,
-          sumaKosztPodzial,
-          benefitBruttoTotal,
-          oszczednoscBrutto,
-          feeAmount,
-          raiseAmount,
-          adminAmount,
-          oszczednoscNetto: oszczednoscBrutto - totalCommissionAmount,
-          baseSavings: oszczednoscBrutto, // Brutto oszczędność (przed prowizją)
-          benefitBase: benefitBruttoTotal,
-          oszczednoscRoczna: (oszczednoscBrutto - totalCommissionAmount) * 12,
-          prowizja: totalCommissionAmount,
-          qualifiedCount: qualifiedEmployees.length,
-          excludedCount: excludedCount
-      };
+            return {
+                    sumaKosztStandard,
+                    sumaKosztPodzial,
+                    benefitNettoTotal,
+                    oszczednoscBrutto,
+                    feeAmount,
+                    raiseAmount,
+                    adminAmount,
+                    oszczednoscNetto: oszczednoscBrutto - totalCommissionAmount,
+                    baseSavings: oszczednoscBrutto, // Brutto oszczędność (przed prowizją)
+                    benefitBase: benefitNettoTotal,
+                    oszczednoscRoczna: (oszczednoscBrutto - totalCommissionAmount) * 12,
+                    prowizja: totalCommissionAmount,
+                    qualifiedCount: qualifiedEmployees.length,
+                    excludedCount: excludedCount
+            };
   }, [wyniki, prowizjaProc, activeCard]);
 
   if (!wyniki || !stats) return null;
 
   // Wyliczenia lokalne dla kart (niezależne od tego co jest aktywne - symulacja "co by było gdyby")
-  const profitStandardCalc = stats.baseSavings - (stats.benefitBase * (customStandardRate / 100));
-  const profitPrimeCalc = stats.baseSavings - (stats.benefitBase * (customPrimeRate / 100));
+    const profitStandardCalc = stats.baseSavings - (stats.benefitBase * (customStandardRate / 100));
+    const profitPrimeCalc = stats.baseSavings - (stats.benefitBase * (customPrimeRate / 100));
   
-  const raiseAmountDisplay = stats.benefitBase * 0.04;
+    const raiseAmountDisplay = stats.benefitBase * 0.04;
 
   // Top Savers - również filtrujemy studentów
   const topSavers = [...wyniki.szczegoly]

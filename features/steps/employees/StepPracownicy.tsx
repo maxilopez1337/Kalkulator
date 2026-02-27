@@ -297,9 +297,10 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
                                                 <FormField label="Wynagrodzenie Netto">
                                                     <Input 
                                                         type="number" 
-                                                        value={p.nettoDocelowe} 
-                                                        onChange={(e) => updateEmployee(p.id, 'nettoDocelowe', parseFloat(e.target.value))} 
+                                                        value={Number(p.nettoDocelowe).toFixed(2)} 
+                                                        onChange={(e) => updateEmployee(p.id, 'nettoDocelowe', parseFloat(e.target.value.replace(',', '.')))} 
                                                         className="font-bold text-right"
+                                                        step="0.01"
                                                     />
                                                 </FormField>
                                                 <FormField label="Tryb ZUS">

@@ -38,12 +38,13 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
     const strKosztZProwizja = stats.stratton.kosztPracodawcy + stats.stratton.prowizja;
 
     const totalProvision = stats.stratton.prowizja;
-    const baseBenefitBrutto = prowizjaProc > 0 ? totalProvision / (prowizjaProc / 100) : 0;
+    // Podstawa prowizji to suma świadczeń netto (nie brutto!)
+    const baseBenefitNetto = prowizjaProc > 0 ? totalProvision / (prowizjaProc / 100) : 0;
     const includeRaises = activeModel === 'PRIME';
 
     // Bonus admina 2% zawsze liczony, ale podwyżka 4% tylko dla PRIME
-    const raiseAmount = includeRaises ? baseBenefitBrutto * 0.04 : 0;
-    const adminAmount = baseBenefitBrutto * 0.02;
+    const raiseAmount = includeRaises ? baseBenefitNetto * 0.04 : 0;
+    const adminAmount = baseBenefitNetto * 0.02;
     const feeAmount = includeRaises
         ? Math.max(0, totalProvision - raiseAmount - adminAmount)
         : Math.max(0, totalProvision - adminAmount);
@@ -215,16 +216,16 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                 {/* Spacer */}
                 <div className="h-4 bg-slate-50/30 border-b border-slate-50"></div>
 
-                {renderRow("Opłata Success Fee", "za obługę modelu Eliton Prime ",
+                 {renderRow("Opłata Success Fee", "za obsługę modelu Eliton Prime (naliczana od świadczenia netto)",
                      null, feeAmount, false, undefined, "text-slate-600 font-semibold", true)}
 
                 {/* Bonus admina 2% zawsze pokazuj */}
                 {adminAmount > 0 &&
-                    renderRow("Bonus dla Działu Księgowo-Kadrowego wyliczany od wyskości opłaty za obsługę", "2% wypłacane przez STRATTON", 0, adminAmount, true, (s, n) => n, 'text-blue-700 font-bold')
+                    renderRow("Bonus dla Działu Księgowo-Kadrowego wyliczany od świadczenia netto", "2% wypłacane przez STRATTON", 0, adminAmount, true, (s, n) => n, 'text-blue-700 font-bold')
                 }
                 {/* Podwyżka 4% tylko dla PRIME */}
                 {includeRaises && raiseAmount > 0 && 
-                    renderRow("Dodatkowa podwyżka wynagrodzenia dla pracowników, wyliczana od wysokości opłaty za obsługę Modelu Eliton Prime ", "4% FINANSOWANE PRZEZ STRATTON", 0, raiseAmount, true, (s, n) => n, 'text-emerald-700 font-bold')
+                    renderRow("Dodatkowa podwyżka wynagrodzenia dla pracowników, wyliczana od świadczenia netto", "4% FINANSOWANE PRZEZ STRATTON", 0, raiseAmount, true, (s, n) => n, 'text-emerald-700 font-bold')
                 }
             </div>
 

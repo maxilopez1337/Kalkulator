@@ -208,7 +208,7 @@ describe('Silnik Podatkowy 2025 (Features Module)', () => {
                 const savingsBrutto = standard.kosztPracodawcy - split.kosztPracodawcy;
                 expect(savingsBrutto).toBeGreaterThan(0);
 
-                const bruttoSwiadczenia = split.swiadczenie.brutto;
+                const bruttoSwiadczenia = split.swiadczenie.netto;
                 const commission = bruttoSwiadczenia * (prowizjaProc / 100);
                 const savingsNetto = savingsBrutto - commission;
                 
@@ -235,7 +235,7 @@ describe('Silnik Podatkowy 2025 (Features Module)', () => {
 
             const sumaKosztStandard = results.reduce((acc, r) => acc + r.standard.kosztPracodawcy, 0);
             const sumaKosztPodzial = results.reduce((acc, r) => acc + r.podzial.kosztPracodawcy, 0);
-            const sumaBruttoSwiadczen = results.reduce((acc, r) => acc + r.podzial.swiadczenie.brutto, 0);
+            const sumaBruttoSwiadczen = results.reduce((acc, r) => acc + r.podzial.swiadczenie.netto, 0);
             
             const oszczednoscBrutto = sumaKosztStandard - sumaKosztPodzial;
             const kwotaProwizji = sumaBruttoSwiadczen * (prowizjaProc / 100);

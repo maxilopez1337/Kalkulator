@@ -144,36 +144,16 @@ export const offerPdfGenerator = {
             const { firma } = dane;
 
             const stats = buildStatsFromKalkulacja(dane);
-
             const fullHtml = renderOfferHtml(firma, stats);
 
-            try {
-                const response = await fetch('http://localhost:3002/generate-pdf', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ html: fullHtml })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
-                }
-
-                const blob = await response.blob();
-                
-                 // Download
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `Oferta_${firma.nazwa || 'Firmy'}_HTML_${new Date().toISOString().slice(0,10)}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
+            // Otwórz HTML w nowej karcie przeglądarki
+            const newWindow = window.open();
+            if (newWindow) {
+                newWindow.document.write(fullHtml);
+                newWindow.document.close();
                 return true;
-
-            } catch (serverError) {
-                console.error("Puppeteer server failed or not reachable.", serverError);
-                alert("Błąd generatora PDF (Server 3002). Upewnij się, że backend jest uruchomiony poleceniem 'node server/index.js'.\n\nFallback do starego generatora (opcjonalne, nie zaimplementowane w tym kroku).");
+            } else {
+                alert('Nie udało się otworzyć nowej karty.');
                 return false;
             }
 

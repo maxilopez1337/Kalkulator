@@ -230,7 +230,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
       }, 0),
       
       prowizja: round(qualifiedList.reduce((acc, w) => {
-          return acc + round(w.podzial.swiadczenie.brutto);
+          return acc + round(w.podzial.swiadczenie.netto);
       }, 0) * (prowizjaProc / 100))
     };
 
@@ -263,12 +263,20 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
       displayedStats.stratton.pit;
     // Wylicz bonus admina 2% (zgodnie z SummaryComparisonTable)
     const totalProvision = displayedStats.stratton.prowizja;
-    const baseBenefitBrutto = prowizjaProc > 0 ? totalProvision / (prowizjaProc / 100) : 0;
-    const raiseAmount = activeModel === 'PRIME' ? baseBenefitBrutto * 0.04 : 0;
-    const adminAmount = baseBenefitBrutto * 0.02;
-    const feeAmount = activeModel === 'PRIME'
-        ? Math.max(0, totalProvision - raiseAmount - adminAmount)
-        : Math.max(0, totalProvision - adminAmount);
+    // Podstawa prowizji to suma świadczeń netto (nie brutto!)
+    let raiseAmount = 0;
+    let adminAmount = 0;
+    let feeAmount = 0;
+    if (activeModel === 'PRIME' && prowizjaProc === 26) {
+        // Model PLUS: 20% Success Fee, 4% podwyżka, 2% admin (wszystko z prowizji)
+        feeAmount = totalProvision * (20 / 26);
+        raiseAmount = totalProvision * (4 / 26);
+        adminAmount = totalProvision * (2 / 26);
+    } else {
+        // Model STANDARD lub inna stawka: tylko Success Fee i admin
+        adminAmount = totalProvision * 0.02;
+        feeAmount = totalProvision - adminAmount;
+    }
     const serviceFee = feeAmount;
   
   // NOTE: Nie sumujemy tutaj, bo totalReference to Koszt Standardowy, a nie suma elementów.
@@ -303,7 +311,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
       } : null,
       { 
           label: 'Obsługa Systemu', 
-          subtext: 'Opłata SUCCESS FEE za obsługę modelu Eliton Prime',
+          subtext: 'Opłata SUCCESS FEE za obsługę modelu Eliton Prime (naliczana od świadczenia netto)',
           value: serviceFee, 
           color: '#6366f1' // Indigo 500
       }
