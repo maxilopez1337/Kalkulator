@@ -1,9 +1,12 @@
 
 import React, { useState, useMemo } from 'react';
-import { Database, Folder, FileText, Trash, Search, X, Calculator, Users, Wallet, Download } from '../../common/Icons';
+import { Database, Folder, Trash, Search, X, Calculator, Users, Wallet, Download } from '../../common/Icons';
 import { ZapisanaKalkulacja } from '../../entities/history/model';
 import { formatPLN } from '../../shared/utils/formatters';
-import { useAppStore } from '../../store/AppContext';
+import { Modal } from '../../shared/ui/Modal';
+import { SectionLabel } from '../../shared/ui/SectionLabel';
+import { SearchInput } from '../../shared/ui/SearchInput';
+import { useAppStore, useConfirm } from '../../store/AppContext';
 
 interface Props {
   isOpen: boolean;
@@ -12,7 +15,8 @@ interface Props {
 }
 
 export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
-  const { historia, loadFromHistory, deleteFromHistory, generateOffer, generateExcelFromHistory } = useAppStore();
+  const { historia, loadFromHistory, deleteFromHistory, generateExcelFromHistory } = useAppStore();
+  const { confirmDialog } = useConfirm();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMonth, setSelectedMonth] = useState<string | 'ALL'>('ALL');
 
@@ -44,12 +48,12 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
     };
   }, [historia, searchQuery, selectedMonth]);
 
-  const totalFilteredCount = Object.values(groupedHistory).reduce((acc, curr: any) => acc + curr.length, 0);
+  const totalFilteredCount = (Object.values(groupedHistory) as ZapisanaKalkulacja[][]).reduce((acc: number, curr) => acc + curr.length, 0);
 
   if (!isOpen) return null;
 
-  const handleLoad = (item: ZapisanaKalkulacja) => {
-      const success = loadFromHistory(item);
+  const handleLoad = async (item: ZapisanaKalkulacja): Promise<void> => {
+      const success = await loadFromHistory(item);
       if (success) {
           onClose();
           // Opóźnienie dla upewnienia się, że stan został zaktualizowany przed nawigacją
@@ -66,212 +70,230 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 flex items-end md:items-center justify-center z-50 p-0 md:p-4 backdrop-blur-sm transition-opacity" onClick={onClose}>
-      <div className="bg-white w-full md:max-w-6xl h-[100dvh] md:h-[85vh] flex flex-col shadow-2xl overflow-hidden md:rounded-xl" onClick={(e) => e.stopPropagation()}>
-        
-        {/* HEADER */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between px-4 md:px-6 py-4 border-b border-slate-200 bg-white z-10 shrink-0 gap-4">
-          <div className="flex items-center justify-between w-full md:w-auto">
-             <div className="flex items-center gap-3 md:gap-4">
-                 <div className="p-2 md:p-2.5 bg-indigo-50 text-indigo-700 rounded-lg">
-                    <Database className="w-5 h-5 md:w-6 md:h-6" />
-                 </div>
-                 <div>
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">Baza Ofert</h2>
-                    <div className="text-xs text-slate-500 hidden md:block">Historia kalkulacji i wygenerowanych propozycji</div>
-                 </div>
-             </div>
-             {/* Mobile Close Button */}
-             <button onClick={onClose} className="md:hidden w-8 h-8 flex items-center justify-center text-slate-400 bg-slate-100 rounded-full">
-                <X className="w-5 h-5" />
-             </button>
-          </div>
-          
-          <div className="flex items-center gap-3 w-full md:w-auto">
-              <div className="relative w-full md:w-80">
-                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Search /></div>
-                 <input 
-                    type="text" 
-                    placeholder="Szukaj po nazwie firmy..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
-                 />
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="md:max-w-[1360px]" height="md:h-[92vh]">
+      <div className="flex flex-col h-full bg-[#faf9f8] overflow-hidden">
+
+        {/* ── M365 COMMAND BAR ─────────────────────────────────────────────── */}
+        <div className="flex items-center gap-4 px-6 py-3.5 border-b border-[#edebe9] bg-white shrink-0">
+          {/* Left: icon + title block */}
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-9 h-9 rounded-sm bg-[#0078d4] flex items-center justify-center flex-shrink-0 shadow-sm">
+              <Database className="w-5 h-5 text-white" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-baseline gap-2.5">
+                <h2 className="text-[16px] font-semibold text-[#201f1e] leading-tight">Baza Ofert</h2>
+                <span className="text-[11px] text-[#a19f9d] font-medium">
+                  {historia.length} {historia.length === 1 ? 'kalkulacja' : 'kalkulacji'}
+                </span>
               </div>
-              {/* Desktop Close Button */}
-              <button 
-                onClick={onClose}
-                className="hidden md:flex w-9 h-9 items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all"
-              >
-                <X />
-              </button>
+              <p className="text-[11px] text-[#a19f9d] leading-none mt-0.5">Historia kalkulacji i wygenerowanych propozycji</p>
+            </div>
+          </div>
+
+          {/* Right: search + close */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="w-80">
+              <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Szukaj po nazwie firmy..." />
+            </div>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center text-[#605e5c] hover:bg-[#f3f2f1] rounded-sm transition-colors flex-shrink-0"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
-        
-        {/* BODY (Split View / Mobile Flex Col) */}
-        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-            
-            {/* SIDEBAR (Timeline) - Horizontal scroll on mobile, vertical on desktop */}
-            <div className="w-full md:w-64 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 flex-shrink-0 flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar">
-                <div className="p-2 md:p-4 flex md:flex-col gap-2 min-w-max md:min-w-0">
-                    <div className="hidden md:block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Oś czasu</div>
-                    
-                    <button
-                        onClick={() => setSelectedMonth('ALL')}
-                        className={`flex-shrink-0 flex items-center gap-2 md:justify-between px-3 py-2 text-xs md:text-sm font-medium rounded-lg transition-colors border md:border-transparent ${
-                            selectedMonth === 'ALL' 
-                            ? 'bg-white text-blue-700 shadow-sm border-slate-200 md:ring-1 md:ring-slate-200' 
-                            : 'text-slate-600 hover:bg-slate-100 border-transparent'
-                        }`}
-                    >
-                        <span>Wszystkie</span>
-                        <span className="bg-slate-200 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full">{historia.length}</span>
-                    </button>
-                    
-                    {sortedMonths.map(monthKey => (
-                        <button
-                            key={monthKey}
-                            onClick={() => setSelectedMonth(monthKey)}
-                            className={`flex-shrink-0 flex items-center gap-2 md:justify-between px-3 py-2 text-xs md:text-sm font-medium rounded-lg transition-colors capitalize border md:border-transparent ${
-                                selectedMonth === monthKey 
-                                ? 'bg-white text-blue-700 shadow-sm border-slate-200 md:ring-1 md:ring-slate-200' 
-                                : 'text-slate-600 hover:bg-slate-100 border-transparent'
-                            }`}
-                        >
-                            <span>{formatMonthLabel(monthKey)}</span>
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${selectedMonth === monthKey ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-600'}`}>
-                                {groupedHistory[monthKey]?.length || 0}
-                            </span>
-                        </button>
-                    ))}
+
+        {/* ── BODY ─────────────────────────────────────────────────────────── */}
+        <div className="flex flex-1 overflow-hidden">
+
+          {/* LEFT NAV — timeline pivot */}
+          <div className="w-[200px] bg-white border-r border-[#edebe9] flex flex-col overflow-y-auto shrink-0">
+            <div className="px-3 pt-4 pb-3 space-y-0.5">
+              <p className="text-[10px] font-bold text-[#a19f9d] uppercase tracking-widest px-3 pb-2">Oś czasu</p>
+
+              <button
+                onClick={() => setSelectedMonth('ALL')}
+                className={`flex items-center justify-between w-full px-3 py-2.5 text-[13px] rounded-sm transition-colors text-left ${
+                  selectedMonth === 'ALL'
+                    ? 'bg-[#deecf9] text-[#0078d4] font-semibold'
+                    : 'text-[#323130] hover:bg-[#f3f2f1] font-normal'
+                }`}
+              >
+                <span>Wszystkie</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold min-w-[20px] text-center ${
+                  selectedMonth === 'ALL' ? 'bg-[#0078d4] text-white' : 'bg-[#edebe9] text-[#605e5c]'
+                }`}>{historia.length}</span>
+              </button>
+
+              {sortedMonths.map(monthKey => (
+                <button
+                  key={monthKey}
+                  onClick={() => setSelectedMonth(monthKey)}
+                  className={`flex items-center justify-between w-full px-3 py-2.5 text-[13px] rounded-sm transition-colors text-left capitalize ${
+                    selectedMonth === monthKey
+                      ? 'bg-[#deecf9] text-[#0078d4] font-semibold'
+                      : 'text-[#323130] hover:bg-[#f3f2f1] font-normal'
+                  }`}
+                >
+                  <span className="truncate">{formatMonthLabel(monthKey)}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold min-w-[20px] text-center flex-shrink-0 ml-1 ${
+                    selectedMonth === monthKey ? 'bg-[#0078d4] text-white' : 'bg-[#edebe9] text-[#605e5c]'
+                  }`}>{groupedHistory[monthKey]?.length || 0}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* MAIN CANVAS */}
+          <div className="flex-1 bg-[#f3f2f1] overflow-y-auto custom-scrollbar">
+            {totalFilteredCount === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center">
+                <div className="w-16 h-16 bg-white border border-[#edebe9] rounded-sm flex items-center justify-center mb-4 shadow-sm">
+                  <Folder className="text-[#a19f9d] w-7 h-7" />
                 </div>
-            </div>
+                <p className="text-[15px] font-semibold text-[#201f1e]">Brak ofert</p>
+                <p className="text-sm text-[#605e5c] mt-1">Zmień filtry lub dodaj nową kalkulację.</p>
+              </div>
+            ) : (
+              <div className="p-5 space-y-6 pb-10">
+                {Object.keys(groupedHistory).map(monthKey => {
+                  const items = groupedHistory[monthKey];
+                  if (items.length === 0) return null;
 
-            {/* MAIN CONTENT (Grid) */}
-            <div className="flex-1 bg-slate-100/50 p-4 md:p-6 overflow-y-auto custom-scrollbar">
-                {totalFilteredCount === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-slate-400">
-                        <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                            <Folder />
-                        </div>
-                        <p className="text-lg font-medium text-slate-600">Brak ofert</p>
-                        <p className="text-sm">Zmień filtry wyszukiwania.</p>
-                    </div>
-                ) : (
-                    <div className="space-y-6 md:space-y-8 pb-10">
-                        {Object.keys(groupedHistory).map(monthKey => {
-                            const items = groupedHistory[monthKey];
-                            if (items.length === 0) return null;
+                  return (
+                    <div key={monthKey}>
+                      {/* Month section header */}
+                      <div className="flex items-center gap-3 mb-4 sticky top-0 bg-[#f3f2f1] py-1.5 z-10">
+                        <span className="text-[11px] font-bold text-[#605e5c] uppercase tracking-widest capitalize">
+                          {formatMonthLabel(monthKey)}
+                        </span>
+                        <div className="flex-1 h-px bg-[#edebe9]" />
+                        <span className="text-[11px] text-[#a19f9d]">{items.length} {items.length === 1 ? 'oferta' : 'ofert'}</span>
+                      </div>
 
-                            return (
-                                <div key={monthKey}>
-                                    <h3 className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 md:mb-4 flex items-center gap-2 sticky top-0 bg-slate-100/95 backdrop-blur py-2 z-10 md:static md:bg-transparent">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
-                                        {formatMonthLabel(monthKey)}
-                                    </h3>
-                                    
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
-                                        {items.map(item => (
-                                            <div key={item.id} className="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-200 flex flex-col overflow-hidden">
-                                                
-                                                {/* Card Header */}
-                                                <div className="p-4 border-b border-slate-50 flex justify-between items-start bg-gradient-to-br from-white to-slate-50/50">
-                                                    <div className="flex items-start gap-3">
-                                                        <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
-                                                            {item.nazwaFirmy.substring(0, 2).toUpperCase()}
-                                                        </div>
-                                                        <div className="min-w-0">
-                                                            <div className="font-bold text-slate-900 text-sm md:text-base leading-tight truncate" title={item.nazwaFirmy}>
-                                                                {item.nazwaFirmy || 'Bez nazwy'}
-                                                            </div>
-                                                            <div className="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-1">
-                                                                <span className="truncate max-w-[100px]">NIP: {item.dane.firma.nip || 'Brak'}</span>
-                                                                <span className="text-slate-300">•</span>
-                                                                <span>{new Date(item.dataUtworzenia).toLocaleDateString()}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <button 
-                                                        onClick={(e) => { 
-                                                            e.stopPropagation(); 
-                                                            if(window.confirm(`Usunąć ofertę dla ${item.nazwaFirmy}?`)) deleteFromHistory(item.id); 
-                                                        }}
-                                                        className="text-slate-300 hover:text-rose-500 p-1.5 hover:bg-rose-50 rounded transition-colors"
-                                                    >
-                                                        <Trash className="w-4 h-4" />
-                                                    </button>
-                                                </div>
+                      {/* Cards grid — auto-fill to use all horizontal space */}
+                      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {items.map(item => {
+                          const uzCount = item.dane.pracownicy.filter(p => p.typUmowy === 'UZ').length;
+                          const uopCount = item.dane.pracownicy.filter(p => p.typUmowy === 'UOP').length;
+                          const miesieczna = item.oszczednoscRoczna / 12;
 
-                                                {/* Card Body - KPIs */}
-                                                <div className="p-4 flex-1">
-                                                    <div className="flex justify-between gap-4 mb-4">
-                                                        <div className="space-y-0.5">
-                                                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Pracownicy</div>
-                                                            <div className="flex items-center gap-1.5 text-slate-700 font-semibold text-sm">
-                                                                <Users className="w-3.5 h-3.5 text-slate-400" />
-                                                                {item.liczbaPracownikow}
-                                                            </div>
-                                                        </div>
-                                                        <div className="space-y-0.5 text-right">
-                                                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Prowizja</div>
-                                                            <div className="flex items-center justify-end gap-1.5 text-slate-700 font-semibold text-sm">
-                                                                <span className="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-slate-500">
-                                                                    {item.dane.prowizjaProc || 28}%
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                          return (
+                            <div
+                              key={item.id}
+                              className="bg-white border border-[#edebe9] rounded-sm hover:border-[#0078d4] hover:shadow-[0_4px_16px_rgba(0,120,212,0.12)] transition-all duration-150 flex flex-col overflow-hidden group"
+                            >
+                              {/* Top accent stripe */}
+                              <div className="h-[3px] bg-[#0078d4] flex-shrink-0" />
 
-                                                    <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-100 flex items-center justify-between">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[10px] text-emerald-600 font-bold uppercase">Oszczędność Roczna</span>
-                                                            <span className="text-base md:text-lg font-bold text-emerald-700 leading-none mt-0.5">
-                                                                {formatPLN(item.oszczednoscRoczna)}
-                                                            </span>
-                                                        </div>
-                                                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-emerald-600 shadow-sm">
-                                                            <Wallet className="w-4 h-4" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Card Footer - Actions */}
-                                                <div className="p-2 bg-slate-50 border-t border-slate-200 grid grid-cols-3 gap-2">
-                                                    <button 
-                                                        onClick={() => handleLoad(item)}
-                                                        className="flex flex-col items-center justify-center py-2 px-1 rounded-md text-xs font-medium text-slate-600 hover:bg-white hover:text-blue-700 hover:shadow-sm transition-all active:scale-95"
-                                                    >
-                                                        <Calculator className="w-4 h-4 mb-1 opacity-70" />
-                                                        Wczytaj
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => generateOffer(item)}
-                                                        className="flex flex-col items-center justify-center py-2 px-1 rounded-md text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm transition-all active:scale-95"
-                                                    >
-                                                        <FileText className="w-4 h-4 mb-1 opacity-70" />
-                                                        PDF
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => generateExcelFromHistory(item)}
-                                                        className="flex flex-col items-center justify-center py-2 px-1 rounded-md text-xs font-medium text-slate-600 hover:bg-white hover:text-emerald-700 hover:shadow-sm transition-all active:scale-95"
-                                                    >
-                                                        <Download className="w-4 h-4 mb-1 opacity-70" />
-                                                        Excel
-                                                    </button>
-                                                </div>
-
-                                            </div>
-                                        ))}
+                              {/* Card header */}
+                              <div className="px-4 pt-3 pb-2.5 flex items-start justify-between gap-2">
+                                <div className="flex items-start gap-2.5 min-w-0">
+                                  <div className="w-9 h-9 rounded-sm bg-[#0078d4] text-white flex items-center justify-center font-bold text-[13px] flex-shrink-0 select-none">
+                                    {item.nazwaFirmy.substring(0, 2).toUpperCase()}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="font-semibold text-[#201f1e] text-[13px] leading-snug truncate" title={item.nazwaFirmy}>
+                                      {item.nazwaFirmy || 'Bez nazwy'}
                                     </div>
+                                    <div className="text-[11px] text-[#605e5c] mt-0.5 flex items-center gap-1 flex-wrap leading-none">
+                                      <span className="truncate max-w-[90px]">NIP: {item.dane.firma.nip || '—'}</span>
+                                      <span className="text-[#c8c6c4]">·</span>
+                                      <span className="whitespace-nowrap">{new Date(item.dataUtworzenia).toLocaleDateString('pl-PL')}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                                      {item.dane.firma.okres && (
+                                        <span className="bg-[#deecf9] text-[#0078d4] px-1.5 py-0.5 rounded text-[10px] font-semibold">{item.dane.firma.okres}</span>
+                                      )}
+                                      {item.dane.firma.opiekunNazwa && (
+                                        <span className="text-[10px] text-[#a19f9d] truncate max-w-[100px]" title={item.dane.firma.opiekunNazwa}>
+                                          {item.dane.firma.opiekunNazwa}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                            );
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); if (window.confirm(`Usunąć ofertę dla ${item.nazwaFirmy}?`)) deleteFromHistory(item.id); }}
+                                  className="text-[#c8c6c4] hover:text-[#d83b01] hover:bg-[#fde7e2] p-1.5 rounded-sm transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100"
+                                  title="Usuń"
+                                >
+                                  <Trash className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+
+                              <div className="mx-4 border-t border-[#f3f2f1]" />
+
+                              {/* KPIs row */}
+                              <div className="px-4 py-2.5 flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5 text-[12px] text-[#323130]">
+                                  <Users className="w-3.5 h-3.5 text-[#a19f9d]" />
+                                  <span className="font-semibold">{item.liczbaPracownikow}</span>
+                                  <span className="text-[#a19f9d] text-[11px]">prac.</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  {uopCount > 0 && (
+                                    <span className="text-[10px] bg-[#f3f2f1] text-[#605e5c] px-1.5 py-0.5 rounded font-semibold">UoP·{uopCount}</span>
+                                  )}
+                                  {uzCount > 0 && (
+                                    <span className="text-[10px] bg-[#deecf9] text-[#0078d4] px-1.5 py-0.5 rounded font-semibold">UZ·{uzCount}</span>
+                                  )}
+                                  <span className="text-[10px] bg-[#f3f2f1] text-[#605e5c] px-1.5 py-0.5 rounded font-semibold ml-1">{item.dane.prowizjaProc ?? '—'}%</span>
+                                </div>
+                              </div>
+
+                              {/* Savings highlight */}
+                              <div className="mx-4 mb-3 bg-[#e6f3e6] rounded-sm px-3 py-2.5 flex items-center justify-between flex-1">
+                                <div>
+                                  <p className="text-[9px] font-bold text-[#107c10] uppercase tracking-widest mb-0.5">Oszczędność Roczna</p>
+                                  <p className="text-[16px] font-bold text-[#107c10] leading-tight">{formatPLN(item.oszczednoscRoczna)}</p>
+                                  <p className="text-[10px] text-[#107c10] opacity-70 mt-0.5">{formatPLN(miesieczna)}/mies.</p>
+                                </div>
+                                <Wallet className="w-5 h-5 text-[#107c10] opacity-40 flex-shrink-0" />
+                              </div>
+
+                              {/* Footer actions */}
+                              <div className="border-t border-[#edebe9] flex mt-auto shrink-0">
+                                <button
+                                  onClick={() => handleLoad(item)}
+                                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold text-[#0078d4] hover:bg-[#deecf9] transition-colors border-r border-[#edebe9]"
+                                >
+                                  <Calculator className="w-3.5 h-3.5" />
+                                  Wczytaj
+                                </button>
+                                <button
+                                  onClick={() => generateExcelFromHistory(item)}
+                                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold text-[#107c10] hover:bg-[#e6f3e6] transition-colors"
+                                >
+                                  <Download className="w-3.5 h-3.5" />
+                                  Excel
+                                </button>
+                              </div>
+                            </div>
+                          );
                         })}
+                      </div>
                     </div>
-                )}
-            </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* ── STATUS BAR ───────────────────────────────────────────────────── */}
+        <div className="shrink-0 bg-white border-t border-[#edebe9] px-6 py-1.5 flex items-center justify-between">
+          <span className="text-[11px] text-[#a19f9d]">
+            {totalFilteredCount > 0
+              ? `${totalFilteredCount} ${totalFilteredCount === 1 ? 'oferta' : 'ofert'}${searchQuery ? ` · filtr: "${searchQuery}"` : ''}`
+              : 'Brak wyników'}
+          </span>
+          <span className="text-[11px] text-[#a19f9d]">Stratton Prime · Baza Ofert</span>
+        </div>
+
       </div>
-    </div>
+    </Modal>
   );
 };

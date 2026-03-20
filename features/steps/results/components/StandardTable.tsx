@@ -1,16 +1,28 @@
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { formatPLN } from '../../../../shared/utils/formatters';
-import { TableContainer, Thead, Tbody, Tfoot, Tr, Th, ThRight, ThCenter, Td, TdRight, TdCenter } from '../../../../common/TableUI';
+import { TableContainer, Thead, Tbody, Tfoot, Tr, ThGroup, ThRight, ThCenter, Td, TdRight, TdCenter } from '../../../../common/TableUI';
 import { WynikPracownika } from '../../../../entities/calculation/model';
 
 // Helper: Zaokrąglenie do 2 miejsc po przecinku (grosze)
 const round = (val: number) => Math.round(val * 100) / 100;
 
+type GroupKey = 'zusPrac' | 'zdrowotna' | 'pit' | 'zusFirma';
+type ExpState = Record<GroupKey, boolean>;
+
+const ALL_CLOSED: ExpState = { zusPrac: false, zdrowotna: false, pit: false, zusFirma: false };
+const ALL_OPEN: ExpState   = { zusPrac: true,  zdrowotna: true,  pit: true,  zusFirma: true  };
+
 export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
     if (!data || data.length === 0) return null;
 
-    const total = {
+    const [exp, setExp] = useState<ExpState>(ALL_CLOSED);
+    const [compact, setCompact] = useState(false);
+
+    const tog = (k: GroupKey) => setExp(p => ({ ...p, [k]: !p[k] }));
+    const allOpen = Object.values(exp).every(Boolean);
+
+    const total = useMemo(() => ({
         netto: data.reduce((acc, w) => acc + round(w.standard.netto), 0),
         brutto: data.reduce((acc, w) => acc + round(w.standard.brutto), 0),
         koszt: data.reduce((acc, w) => acc + round(w.standard.kosztPracodawcy), 0),
@@ -30,66 +42,136 @@ export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
         fgsp: data.reduce((acc, w) => acc + round(w.standard.zusPracodawca.fgsp), 0),
         kup: data.reduce((acc, w) => acc + round(w.standard.kup), 0),
         podstawaPit: data.reduce((acc, w) => acc + round(w.standard.podstawaPit), 0),
-    };
+    }), [data]);
 
-    // Style helper classes
-    const detailHeaderClass = "text-[10px] font-semibold text-slate-400 uppercase tracking-tight py-2 px-2";
-    const detailCellClass = "text-[11px] text-slate-500 py-2 px-2 border-slate-50";
-    const mainCellClass = "text-[13px] font-medium text-slate-700 py-3 px-3";
-    const groupHeaderBase = "text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r";
+    // ── Style helpers ──────────────────────────────────────────────────
+    const rowPy = compact ? '!py-0.5' : '!py-2';
+    const dh  = `text-[10px] font-semibold text-slate-400 uppercase tracking-tight ${rowPy} px-2 text-right`; // detail header
+    const dc  = `text-[11px] text-slate-500 ${rowPy} px-2 tabular-nums text-right border-slate-50`;            // detail cell
+    const mc  = `text-sm font-medium text-slate-700 ${rowPy} px-3 tabular-nums text-right`;                    // main cell
+
+    // Collapsed-groups hint pills
+    const collapsedGroups: { key: GroupKey; label: string; value: number; color: string }[] = (
+        [
+            { key: 'zusPrac'   as GroupKey, label: 'ZUS Prac.',  value: total.zusPrac,   color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+            { key: 'zdrowotna' as GroupKey, label: 'Zdrowotna',  value: total.zdrowotna, color: 'bg-teal-50 text-teal-700 border-teal-200' },
+            { key: 'pit'       as GroupKey, label: 'PIT',        value: total.pit,       color: 'bg-rose-50 text-rose-700 border-rose-200' },
+            { key: 'zusFirma'  as GroupKey, label: 'ZUS Firma',  value: total.zusFirma,  color: 'bg-purple-50 text-purple-700 border-purple-200' },
+        ] as { key: GroupKey; label: string; value: number; color: string }[]
+    ).filter(g => !exp[g.key]);
 
     return (
-        <div className="w-full overflow-x-auto">
-            <TableContainer className="max-h-[calc(100vh-350px)] bg-white min-w-[1200px]">
+        <div className="w-full h-full flex flex-col min-h-0">
+
+            {/* ── D365 PIVOT TOOLBAR ──────────────────────────────────── */}
+            <div className="flex items-stretch bg-[#f8f9fa] border-b border-[#edebe9] flex-shrink-0 h-[34px]">
+                <span className="flex items-center text-[11px] font-semibold text-[#a19f9d] uppercase tracking-widest px-3 select-none border-r border-[#edebe9]">Widok</span>
+                <button
+                    onClick={() => setCompact(false)}
+                    className={`flex items-center gap-1 px-4 h-full text-[12px] font-medium border-b-2 transition-all ${
+                        !compact ? 'border-[#0078d4] text-[#0078d4]' : 'border-transparent text-[#605e5c] hover:text-[#323130] hover:border-[#c8c6c4]'
+                    }`}
+                >
+                    <span className="text-[10px]">⊞</span> Komfort
+                </button>
+                <button
+                    onClick={() => setCompact(true)}
+                    className={`flex items-center gap-1 px-4 h-full text-[12px] font-medium border-b-2 transition-all ${
+                        compact ? 'border-[#0078d4] text-[#0078d4]' : 'border-transparent text-[#605e5c] hover:text-[#323130] hover:border-[#c8c6c4]'
+                    }`}
+                >
+                    <span className="text-[10px]">≡</span> Kompakt
+                </button>
+                <div className="flex-1" />
+                <button
+                    onClick={() => setExp(allOpen ? ALL_CLOSED : ALL_OPEN)}
+                    className="flex items-center px-4 h-full text-[12px] text-[#0078d4] hover:text-[#106ebe] hover:underline transition-colors whitespace-nowrap border-l border-[#edebe9]"
+                >
+                    {allOpen ? '← Zwiń wszystkie' : '→ Rozwiń wszystkie'}
+                </button>
+            </div>
+
+            {/* ── D365 FILTER BAR: collapsed group tags ───────────────── */}
+            {collapsedGroups.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 px-3 py-1.5 bg-white border-b border-[#edebe9] flex-shrink-0">
+                    <span className="text-[11px] text-[#a19f9d] font-medium select-none mr-1">Zwinięte:</span>
+                    {collapsedGroups.map(g => (
+                        <button
+                            key={g.key}
+                            onClick={() => tog(g.key)}
+                            className="inline-flex items-center gap-1.5 h-[22px] px-2.5 bg-[#deecf9] text-[#0078d4] border border-[#c7e0f4] text-[11px] font-medium hover:bg-[#c7e0f4] active:bg-[#b3d6f0] transition-colors whitespace-nowrap"
+                            title="Kliknij aby rozwinąć"
+                        >
+                            {g.label}
+                            <span className="opacity-60 tabular-nums">{formatPLN(g.value)}</span>
+                            <span className="opacity-40 text-[9px] ml-0.5">▸</span>
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            <TableContainer className="flex-1 min-h-0 bg-white">
             <Thead>
                 {/* GROUP HEADERS */}
                 <Tr className="h-8">
-                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[40px] sticky left-0 z-30 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] text-slate-400">LP</ThCenter>
-                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[140px] md:min-w-[220px] sticky left-[40px] z-30 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] text-left pl-4 text-slate-600">PRACOWNIK</ThCenter>
+                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[40px] text-slate-400">LP</ThCenter>
+                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[140px] md:min-w-[220px] text-left pl-4 text-slate-600">PRACOWNIK</ThCenter>
 
-                    <ThCenter colSpan={4} className={`${groupHeaderBase} bg-slate-50 text-slate-500 border-slate-200`}>WARUNKI ZATRUDNIENIA (AS-IS)</ThCenter>
-                    
-                    <ThCenter colSpan={5} className={`${groupHeaderBase} bg-indigo-50/50 text-indigo-800 border-indigo-100`}>SKŁADNIKI ZUS PRACOWNIKA</ThCenter>
-                    <ThCenter colSpan={3} className={`${groupHeaderBase} bg-teal-50/50 text-teal-800 border-teal-100`}>ZDROWOTNA</ThCenter>
-                    <ThCenter colSpan={4} className={`${groupHeaderBase} bg-rose-50/50 text-rose-800 border-rose-100`}>PODATEK PIT</ThCenter>
-                    <ThCenter colSpan={6} className={`${groupHeaderBase} bg-purple-50/50 text-purple-800 border-purple-100`}>KOSZTY PRACODAWCY</ThCenter>
-                    <ThCenter colSpan={1} className={`${groupHeaderBase} bg-slate-100 text-slate-600 border-slate-300`}>SUMA</ThCenter>
+                    <ThCenter colSpan={4} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-slate-50 text-slate-500 border-slate-200 text-center whitespace-nowrap">AKTUALNY KOSZT ZATRUDNIENIA</ThCenter>
+
+                    <ThGroup colSpan={exp.zusPrac ? 5 : 1} expanded={exp.zusPrac} onToggle={() => tog('zusPrac')}
+                        className="bg-indigo-50/50 text-indigo-800 border-indigo-100">
+                        {exp.zusPrac ? 'ZUS PRACOWNIKA' : 'Σ ZUS Prac.'}
+                    </ThGroup>
+                    <ThGroup colSpan={exp.zdrowotna ? 3 : 1} expanded={exp.zdrowotna} onToggle={() => tog('zdrowotna')}
+                        className="bg-teal-50/50 text-teal-800 border-teal-100">
+                        {exp.zdrowotna ? 'ZDROWOTNA' : 'Σ ZDR'}
+                    </ThGroup>
+                    <ThGroup colSpan={exp.pit ? 4 : 1} expanded={exp.pit} onToggle={() => tog('pit')}
+                        className="bg-rose-50/50 text-rose-800 border-rose-100">
+                        {exp.pit ? 'PODATEK PIT' : 'Σ PIT'}
+                    </ThGroup>
+                    <ThGroup colSpan={exp.zusFirma ? 6 : 1} expanded={exp.zusFirma} onToggle={() => tog('zusFirma')}
+                        className="bg-purple-50/50 text-purple-800 border-purple-100">
+                        {exp.zusFirma ? 'ZUS PRACODAWCY' : 'Σ ZUS Firma'}
+                    </ThGroup>
+                    <ThCenter colSpan={1} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-slate-100 text-slate-600 border-slate-300 text-center whitespace-nowrap">SUMA</ThCenter>
                 </Tr>
 
                 {/* COLUMN HEADERS */}
                 <Tr className="h-10">
-                    {/* DANE FINANSOWE */}
+                    {/* DANE FINANSOWE — zawsze widoczne */}
                     <ThCenter className="w-20 text-[11px]">Umowa</ThCenter>
                     <ThRight className="w-28 text-slate-700">Netto</ThRight>
                     <ThRight className="w-28 text-slate-500">Brutto</ThRight>
                     <ThRight className="w-32 border-r bg-slate-50/50 font-bold text-slate-800">Koszt Całk.</ThRight>
 
                     {/* ZUS PRACOWNIK */}
-                    <ThRight className={detailHeaderClass}>Podstawa</ThRight>
-                    <ThRight className={detailHeaderClass}>Emeryt.</ThRight>
-                    <ThRight className={detailHeaderClass}>Rent.</ThRight>
-                    <ThRight className={detailHeaderClass}>Chor.</ThRight>
-                    <ThRight className="text-[11px] font-bold text-indigo-700 bg-indigo-50/30 border-r border-indigo-100 py-2 px-2 text-right">Suma</ThRight>
-                    
+                    {exp.zusPrac && <ThRight className={dh}>Podstawa</ThRight>}
+                    {exp.zusPrac && <ThRight className={dh}>Emeryt.</ThRight>}
+                    {exp.zusPrac && <ThRight className={dh}>Rent.</ThRight>}
+                    {exp.zusPrac && <ThRight className={dh}>Chor.</ThRight>}
+                    <ThRight className="text-[11px] font-bold text-indigo-700 bg-indigo-50/30 border-r border-indigo-100 py-2 px-2 text-right">Σ ZUS Prac.</ThRight>
+
                     {/* ZDROWOTNA */}
-                    <ThRight className={detailHeaderClass}>Podstawa</ThRight>
-                    <ThRight className={detailHeaderClass}>Składka</ThRight>
-                    <ThRight className="text-[11px] font-bold text-teal-700 bg-teal-50/30 border-r border-teal-100 py-2 px-2 text-right">ZUS + ZDR</ThRight>
+                    {exp.zdrowotna && <ThRight className={dh}>Podstawa</ThRight>}
+                    {exp.zdrowotna && <ThRight className={dh}>Składka</ThRight>}
+                    <ThRight className="text-[11px] font-bold text-teal-700 bg-teal-50/30 border-r border-teal-100 py-2 px-2 text-right">Σ ZDR</ThRight>
 
                     {/* PIT */}
-                    <ThRight className={detailHeaderClass}>KUP</ThRight>
-                    <ThRight className={detailHeaderClass}>Podstawa</ThRight>
-                    <ThCenter className={detailHeaderClass}>%</ThCenter>
-                    <ThRight className="text-[11px] font-bold text-rose-700 bg-rose-50/30 border-r border-rose-100 py-2 px-2 text-right">Zaliczka</ThRight>
-                    
+                    {exp.pit && <ThRight className={dh}>KUP</ThRight>}
+                    {exp.pit && <ThRight className={dh}>Podstawa</ThRight>}
+                    {exp.pit && <ThCenter className={dh}>%</ThCenter>}
+                    <ThRight className="text-[11px] font-bold text-rose-700 bg-rose-50/30 border-r border-rose-100 py-2 px-2 text-right">Σ PIT</ThRight>
+
                     {/* ZUS PRACODAWCA */}
-                    <ThRight className={detailHeaderClass}>Emeryt.</ThRight>
-                    <ThRight className={detailHeaderClass}>Rent.</ThRight>
-                    <ThRight className={detailHeaderClass}>Wypadk.</ThRight>
-                    <ThRight className={detailHeaderClass}>FP</ThRight>
-                    <ThRight className={`${detailHeaderClass} border-r`}>FGŚP</ThRight>
-                    <ThRight className="text-[11px] font-bold text-purple-700 bg-purple-50/30 border-r border-purple-100 py-2 px-2 text-right">ZUS Firmy</ThRight>
-                    
+                    {exp.zusFirma && <ThRight className={dh}>Emeryt.</ThRight>}
+                    {exp.zusFirma && <ThRight className={dh}>Rent.</ThRight>}
+                    {exp.zusFirma && <ThRight className={dh}>Wypadk.</ThRight>}
+                    {exp.zusFirma && <ThRight className={dh}>FP</ThRight>}
+                    {exp.zusFirma && <ThRight className={`${dh} border-r`}>FGŚP</ThRight>}
+                    <ThRight className="text-[11px] font-bold text-purple-700 bg-purple-50/30 border-r border-purple-100 py-2 px-2 text-right">Σ Firma</ThRight>
+
                     {/* SUMA */}
                     <ThRight className="text-[11px] font-extrabold bg-slate-100 text-slate-800 py-2 px-2">SUMA SKŁ.</ThRight>
                 </Tr>
@@ -97,10 +179,10 @@ export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
             <Tbody>
                 {data.map((w, idx) => {
                     return (
-                        <Tr key={w.pracownik.id} className="hover:bg-blue-50/10 transition-colors group">
+                        <Tr key={w.pracownik.id} className={`transition-colors group ${idx % 2 === 1 ? 'bg-slate-50/40' : 'bg-white'} hover:bg-[#f0f7ff]`}>
                             {/* Sticky Columns */}
-                            <Td className="text-center sticky left-0 bg-white group-hover:bg-[#fafcfe] z-20 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)] text-slate-400 font-mono text-[10px]">{idx + 1}</Td>
-                            <Td className="sticky left-[40px] bg-white group-hover:bg-[#fafcfe] z-20 border-r border-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)] pl-4">
+                            <Td className="text-center bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 text-slate-400 font-mono text-[10px]">{idx + 1}</Td>
+                            <Td className="bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 pl-4">
                                 <div className="font-semibold text-slate-900 text-sm truncate max-w-[120px] md:max-w-[200px]" title={`${w.pracownik.imie} ${w.pracownik.nazwisko}`}>
                                     {w.pracownik.imie} {w.pracownik.nazwisko}
                                 </div>
@@ -112,80 +194,79 @@ export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
                                     {w.pracownik.typUmowy}
                                 </span>
                             </Td>
-                            <TdRight className={mainCellClass}>{formatPLN(w.standard.netto)}</TdRight>
-                            <TdRight className={`${mainCellClass} text-slate-500`}>{formatPLN(w.standard.brutto)}</TdRight>
-                            <TdRight className={`${mainCellClass} font-bold text-slate-900 border-r border-slate-200 bg-slate-50/30`}>{formatPLN(w.standard.kosztPracodawcy)}</TdRight>
-                            
+                            <TdRight className={mc}>{formatPLN(w.standard.netto)}</TdRight>
+                            <TdRight className={`${mc} text-slate-500`}>{formatPLN(w.standard.brutto)}</TdRight>
+                            <TdRight className={`${mc} font-bold text-slate-900 border-r border-slate-200`}>{formatPLN(w.standard.kosztPracodawcy)}</TdRight>
+
                             {/* ZUS PRACOWNIK (Detale) */}
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.podstawaZus)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracownik.emerytalna)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracownik.rentowa)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracownik.chorobowa)}</TdRight>
-                            <TdRight className="text-[11px] font-medium border-r border-indigo-100 bg-indigo-50/10 text-indigo-900">{formatPLN(w.standard.zusPracownik.suma)}</TdRight>
-                            
+                            {exp.zusPrac && <TdRight className={dc}>{formatPLN(w.standard.podstawaZus)}</TdRight>}
+                            {exp.zusPrac && <TdRight className={dc}>{formatPLN(w.standard.zusPracownik.emerytalna)}</TdRight>}
+                            {exp.zusPrac && <TdRight className={dc}>{formatPLN(w.standard.zusPracownik.rentowa)}</TdRight>}
+                            {exp.zusPrac && <TdRight className={dc}>{formatPLN(w.standard.zusPracownik.chorobowa)}</TdRight>}
+                            <TdRight className={`text-[11px] font-semibold border-r border-indigo-100 bg-indigo-50/10 text-indigo-900 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.standard.zusPracownik.suma)}</TdRight>
+
                             {/* ZDROWOTNA */}
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.podstawaZdrowotna)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zdrowotna)}</TdRight>
-                            <TdRight className="text-[11px] font-bold border-r border-teal-100 bg-teal-50/10 text-teal-800">{formatPLN(w.standard.zusPracownik.suma + w.standard.zdrowotna)}</TdRight>
-                            
+                            {exp.zdrowotna && <TdRight className={dc}>{formatPLN(w.standard.podstawaZdrowotna)}</TdRight>}
+                            {exp.zdrowotna && <TdRight className={dc}>{formatPLN(w.standard.zdrowotna)}</TdRight>}
+                            <TdRight className={`text-[11px] font-bold border-r border-teal-100 bg-teal-50/10 text-teal-800 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.standard.zusPracownik.suma + w.standard.zdrowotna)}</TdRight>
+
                             {/* PIT */}
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.kup)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.podstawaPit)}</TdRight>
-                            <TdCenter className={detailCellClass}>{w.standard.stawkaPit}%</TdCenter>
-                            <TdRight className="text-[11px] font-bold border-r border-rose-100 bg-rose-50/10 text-rose-800">{formatPLN(w.standard.pit)}</TdRight>
-                            
+                            {exp.pit && <TdRight className={dc}>{formatPLN(w.standard.kup)}</TdRight>}
+                            {exp.pit && <TdRight className={dc}>{formatPLN(w.standard.podstawaPit)}</TdRight>}
+                            {exp.pit && <TdCenter className={dc}>{w.standard.stawkaPit}%</TdCenter>}
+                            <TdRight className={`text-[11px] font-bold border-r border-rose-100 bg-rose-50/10 text-rose-800 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.standard.pit)}</TdRight>
+
                             {/* ZUS PRACODAWCA */}
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracodawca.emerytalna)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracodawca.rentowa)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracodawca.wypadkowa)}</TdRight>
-                            <TdRight className={detailCellClass}>{formatPLN(w.standard.zusPracodawca.fp)}</TdRight>
-                            <TdRight className={`${detailCellClass} border-r border-slate-100`}>{formatPLN(w.standard.zusPracodawca.fgsp)}</TdRight>
-                            <TdRight className="text-[12px] font-bold text-purple-900 bg-purple-50/10 border-r border-purple-200">{formatPLN(w.standard.zusPracodawca.suma)}</TdRight>
-                            
+                            {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.standard.zusPracodawca.emerytalna)}</TdRight>}
+                            {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.standard.zusPracodawca.rentowa)}</TdRight>}
+                            {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.standard.zusPracodawca.wypadkowa)}</TdRight>}
+                            {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.standard.zusPracodawca.fp)}</TdRight>}
+                            {exp.zusFirma && <TdRight className={`${dc} border-r border-slate-100`}>{formatPLN(w.standard.zusPracodawca.fgsp)}</TdRight>}
+                            <TdRight className={`text-[12px] font-bold text-purple-900 bg-purple-50/10 border-r border-purple-200 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.standard.zusPracodawca.suma)}</TdRight>
+
                             {/* SUMA */}
-                            <TdRight className="font-extrabold text-[12px] text-slate-800 bg-slate-50">{formatPLN(w.standard.zusPracodawca.suma + w.standard.zusPracownik.suma + w.standard.zdrowotna)}</TdRight>
+                            <TdRight className={`font-extrabold text-[12px] text-slate-800 bg-slate-50 tabular-nums ${rowPy} px-3`}>{formatPLN(w.standard.zusPracodawca.suma + w.standard.zusPracownik.suma + w.standard.zdrowotna)}</TdRight>
                         </Tr>
                     );
                 })}
             </Tbody>
             <Tfoot>
-                <Tr className="bg-slate-100 border-t-2 border-slate-300 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-                    <Td className="sticky left-0 bg-slate-100 z-30 font-bold text-slate-500 text-xs border-r border-slate-300" colSpan={2}>
+                <Tr className="bg-slate-100 border-t-2 border-slate-300">
+                    <Td className="bg-slate-100 font-bold text-slate-500 text-xs border-r border-slate-300" colSpan={2}>
                         <div className="pl-4 flex items-center gap-2">
-                            <span className="hidden md:inline">SUMA CAŁKOWITA</span>
-                            <span className="md:hidden">SUMA</span>
+                            SUMA CAŁKOWITA
                             <span className="bg-slate-200 text-slate-600 px-1.5 rounded text-[10px]">{data.length} poz.</span>
                         </div>
                     </Td>
-                    
-                    <Td className="bg-slate-100"></Td>
-                    <TdRight className="font-bold text-slate-800 text-sm border-t border-slate-300">{formatPLN(total.netto)}</TdRight>
-                    <TdRight className="text-slate-600 border-t border-slate-300">{formatPLN(total.brutto)}</TdRight>
-                    <TdRight className="font-extrabold text-slate-900 border-r border-slate-300 text-sm border-t">{formatPLN(total.koszt)}</TdRight>
-                    
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.podstawaZus)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.emerytalnaPrac)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.rentowaPrac)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.chorobowaPrac)}</TdRight>
-                    <TdRight className="font-bold text-indigo-900 text-xs border-r border-t border-slate-300">{formatPLN(total.zusPrac)}</TdRight>
-                    
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{/* Podst Zdr */}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.zdrowotna)}</TdRight>
-                    <TdRight className="font-bold text-teal-900 text-xs border-r border-t border-slate-300">{formatPLN(total.zusPrac + total.zdrowotna)}</TdRight>
-                    
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.kup)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.podstawaPit)}</TdRight>
-                    <Td className="border-t border-slate-300"></Td>
-                    <TdRight className="font-bold text-rose-900 text-xs border-r border-t border-slate-300">{formatPLN(total.pit)}</TdRight>
-                    
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.emerytalnaFirma)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.rentowaFirma)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.wypadkowaFirma)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-t border-slate-300">{formatPLN(total.fp)}</TdRight>
-                    <TdRight className="text-[10px] text-slate-400 border-r border-t border-slate-300">{formatPLN(total.fgsp)}</TdRight>
-                    
-                    <TdRight className="font-bold text-purple-900 text-xs border-r border-t border-slate-300">{formatPLN(total.zusFirma)}</TdRight>
-                    <TdRight className="bg-slate-200 font-extrabold text-slate-900 text-sm border-t border-slate-300">{formatPLN(total.sumaSkladek)}</TdRight>
+
+                    <Td className="bg-slate-100" />
+                    <TdRight className="font-bold text-slate-800 text-sm">{formatPLN(total.netto)}</TdRight>
+                    <TdRight className="text-slate-600">{formatPLN(total.brutto)}</TdRight>
+                    <TdRight className="font-extrabold text-slate-900 border-r border-slate-300 text-sm">{formatPLN(total.koszt)}</TdRight>
+
+                    {exp.zusPrac && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.podstawaZus)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.emerytalnaPrac)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.rentowaPrac)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.chorobowaPrac)}</TdRight>}
+                    <TdRight className="font-bold text-indigo-900 text-xs border-r">{formatPLN(total.zusPrac)}</TdRight>
+
+                    {exp.zdrowotna && <TdRight className="text-[10px] text-slate-400" />}
+                    {exp.zdrowotna && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.zdrowotna)}</TdRight>}
+                    <TdRight className="font-bold text-teal-900 text-xs border-r">{formatPLN(total.zusPrac + total.zdrowotna)}</TdRight>
+
+                    {exp.pit && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.kup)}</TdRight>}
+                    {exp.pit && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.podstawaPit)}</TdRight>}
+                    {exp.pit && <Td />}
+                    <TdRight className="font-bold text-rose-900 text-xs border-r">{formatPLN(total.pit)}</TdRight>
+
+                    {exp.zusFirma && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.emerytalnaFirma)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.rentowaFirma)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.wypadkowaFirma)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="text-[10px] text-slate-400">{formatPLN(total.fp)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="text-[10px] text-slate-400 border-r">{formatPLN(total.fgsp)}</TdRight>}
+                    <TdRight className="font-bold text-purple-900 text-xs border-r">{formatPLN(total.zusFirma)}</TdRight>
+
+                    <TdRight className="bg-slate-200 font-extrabold text-slate-900 text-sm">{formatPLN(total.sumaSkladek)}</TdRight>
                 </Tr>
             </Tfoot>
             </TableContainer>

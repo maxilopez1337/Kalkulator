@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eliton Prime™ — Oferta Indywidualna — Stratton Prime</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1F3C; --navy2:#162B4A;
+  --gold:#B09020; --gold2:#D4AF5A; --gold3:#F2E8C8;
+  --white:#FFFFFF; --off:#F8F7F4;
+  --ink:#1C1C1C; --slate:#4A5467; --muted:#8896A8;
+  --border:#DDD8CE;
+  --green:#1B5E20; --green2:#E8F5E9;
+  --red:#9B1C1C; --red2:#FFF0F0;
+  --W:860px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{background:#CCC8C2}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--ink);
+  font-size:13.5px;line-height:1.65;
+  max-width:var(--W);margin:0 auto;background:var(--white);
+}
+.page{
+  width:var(--W);min-height:1180px;background:var(--white);
+  position:relative;overflow:hidden;
+  margin-bottom:10px;box-shadow:0 2px 28px rgba(0,0,0,.15);
+  display:flex;flex-direction:column;
+}
+/* HEADER */
+.ph{display:flex;justify-content:space-between;align-items:flex-end;padding:20px 48px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ph-left .tag{font-size:8.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.ph-left .title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:400;color:var(--navy)}
+.ph-right{font-size:10px;color:var(--muted);text-align:right;line-height:1.55}
+/* BODY */
+.pb{padding:36px 48px 70px;flex:1}
+/* FOOTER */
+.pf{position:absolute;bottom:0;left:0;right:0;border-top:1px solid var(--border);padding:10px 48px;display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);letter-spacing:.05em}
+.pf strong{color:var(--navy)}
+/* HEADINGS */
+h3.sh{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);display:flex;align-items:center;gap:10px;margin:28px 0 14px}
+h3.sh::before{content:'';display:inline-block;width:3px;height:15px;background:var(--gold);flex-shrink:0}
+p.lead{font-size:14px;color:var(--slate);line-height:1.8;margin-bottom:24px;max-width:680px}
+/* BOXES */
+.box{border:1px solid var(--border);padding:22px 26px;background:var(--off);margin-bottom:14px}
+.box-navy{background:var(--navy);color:var(--white);padding:26px 30px;margin-bottom:14px;position:relative;overflow:hidden}
+.box-gold{border:1px solid var(--gold);border-left:4px solid var(--gold);background:var(--gold3);padding:18px 22px;margin-bottom:14px}
+.box-red{border:1px solid var(--red);border-left:4px solid var(--red);background:var(--red2);padding:18px 22px;margin-bottom:14px}
+/* CARDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px}
+.gc{background:var(--white);padding:22px 20px}
+.gc.navy{background:var(--navy)}
+.gc-lbl{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.gc.navy .gc-lbl{color:var(--gold2)}
+.gc-val{font-family:'Libre Baskerville',serif;font-size:28px;color:var(--navy);line-height:1.1}
+.gc.navy .gc-val{color:var(--white)}
+.gc-val.big{font-size:40px}
+.gc-val.strike{color:var(--red);font-size:30px}
+.gc-val.green{color:var(--green)}
+.gc-val.gold{color:var(--gold2)}
+.gc-note{font-size:11.5px;color:var(--slate);margin-top:5px;line-height:1.5}
+.gc.navy .gc-note{color:rgba(255,255,255,.5)}
+/* TABLE */
+.dt{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:20px}
+.dt thead th{background:var(--navy);color:var(--white);padding:11px 15px;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.dt thead th.gold{color:var(--gold2)}.dt thead th.r{text-align:right}
+.dt tbody tr{border-bottom:1px solid var(--border)}
+.dt tbody tr:hover{background:var(--off)}
+.dt tbody tr.tr-total{background:var(--navy)}
+.dt tbody tr.tr-save{background:var(--gold3)}
+.dt td{padding:12px 15px;color:var(--slate);vertical-align:top}
+.dt td .sub{display:block;font-size:10.5px;color:var(--muted);margin-top:1px}
+.dt .old{color:var(--red);text-align:right}
+.dt .new{font-weight:600;color:var(--navy);text-align:right}
+.dt .delta{text-align:right;font-weight:600}
+.dt .save{color:var(--green)}.dt .cost{color:var(--red)}.dt .neutral{color:var(--muted)}
+.dt .tr-total td{color:var(--white);font-weight:600}
+.dt .tr-total .new{color:var(--gold2)}
+.dt .tr-total .delta{color:#81C784}
+.dt .tr-save td{font-weight:600;color:var(--navy)}
+.dt .tr-save .new{color:var(--green);text-align:right}
+/* VARIANT TABLE */
+.vt{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:16px}
+.vt thead th{padding:13px 15px;text-align:center;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.vt thead th:first-child{text-align:left;color:var(--muted);background:transparent;border-bottom:1px solid var(--border)}
+.vt thead th:nth-child(2){background:var(--gold);color:var(--white)}
+.vt thead th:last-child{background:var(--navy);color:rgba(255,255,255,.7)}
+.vt tbody tr{border-bottom:1px solid var(--border)}
+.vt tbody tr:hover{background:var(--off)}
+.vt td{padding:11px 15px;color:var(--slate)}
+.vt td:nth-child(2),.vt td:last-child{text-align:center}
+.vt .hl{background:rgba(176,144,32,.06)}
+.yes{color:var(--green);font-weight:700;font-size:14px}
+.no{color:var(--muted);font-size:14px}
+/* TIMELINE */
+.tl{margin-bottom:20px}
+.tl-item{display:grid;grid-template-columns:52px 1fr;gap:0}
+.tl-left{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:36px;height:36px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:16px;color:var(--gold);background:var(--white);flex-shrink:0;z-index:1}
+.tl-dot.fill{background:var(--gold);color:var(--white)}
+.tl-dot.green-fill{background:var(--green);border-color:var(--green);color:var(--white)}
+.tl-line{width:1px;flex:1;min-height:20px;background:rgba(176,144,32,.3)}
+.tl-item:last-child .tl-line{display:none}
+.tl-body{padding:6px 0 26px 16px}
+.tl-tag{font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.tl-title{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.tl-text{font-size:12px;color:var(--slate);line-height:1.65}
+.tl-badge{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--navy);color:var(--white);padding:3px 10px;margin-top:7px}
+/* SHIELD */
+.shield{background:var(--navy);padding:28px 30px;color:var(--white);position:relative;overflow:hidden;margin-bottom:16px}
+.shield::after{content:'⬡';position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:100px;color:rgba(176,144,32,.06);line-height:1;pointer-events:none}
+.shield-title{font-family:'Libre Baskerville',serif;font-size:20px;color:var(--gold2);margin-bottom:8px}
+.shield-sub{font-size:12.5px;color:rgba(255,255,255,.6);margin-bottom:20px;max-width:500px;line-height:1.7}
+.shield-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.sh-ct{font-size:11px;font-weight:600;color:var(--gold2);margin-bottom:3px}
+.sh-cx{font-size:11.5px;color:rgba(255,255,255,.48);line-height:1.55}
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--border);padding:16px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;display:flex;gap:9px;align-items:flex-start}
+.faq-q::before{content:'Q';font-size:9px;font-weight:700;background:var(--navy);color:var(--gold2);width:17px;height:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.faq-a{font-size:12.5px;color:var(--slate);line-height:1.7;padding-left:26px}
+/* CASE */
+.case{border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:12px;background:var(--off)}
+.case-hd{display:flex;justify-content:space-between;margin-bottom:5px}
+.case-name{font-size:13px;font-weight:600;color:var(--navy)}
+.case-size{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.case-txt{font-size:12px;color:var(--slate);line-height:1.6;margin-bottom:4px}
+.case-res{font-size:13px;font-weight:600;color:var(--green)}
+/* CONTACT */
+.cc{border:1px solid var(--border);padding:24px;background:var(--off)}
+.cc-name{font-family:'Libre Baskerville',serif;font-size:24px;color:var(--navy);margin-bottom:3px}
+.cc-role{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.cc-bio{font-size:12px;color:var(--slate);font-style:italic;line-height:1.65;margin-bottom:14px}
+.cc-row{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--slate);margin-bottom:5px}
+.cc-ico{width:16px;color:var(--gold);font-size:12px;flex-shrink:0}
+/* UTIL */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.two-w{display:grid;grid-template-columns:3fr 2fr;gap:26px}
+ul.cl{list-style:none;margin:6px 0 14px}
+ul.cl li{font-size:12.5px;color:var(--slate);padding:5px 0 5px 20px;position:relative;border-bottom:1px solid var(--border)}
+ul.cl li:last-child{border-bottom:none}
+ul.cl li::before{content:'—';position:absolute;left:0;color:var(--gold);font-weight:700}
+ul.cl li strong{color:var(--navy)}
+.disc{font-size:10.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+.pill-g{display:inline-block;padding:2px 9px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--white)}
+.pill-n{display:inline-block;padding:2px 9px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--navy);color:var(--gold2)}
+
+/* ═══ PROCESS AXIS (str. 9) ═══ */
+.proc-axis{
+  display:flex;align-items:flex-start;
+  gap:0;margin:24px 0 32px;
+  position:relative;
+}
+.proc-axis::before{
+  content:'';position:absolute;
+  top:22px;left:22px;right:22px;height:2px;
+  background:linear-gradient(90deg,var(--green) 0%,var(--green) 50%,var(--border) 50%,var(--border) 100%);
+  z-index:0;
+}
+.proc-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  position:relative;z-index:1;
+  padding:0 6px;
+}
+.proc-circle{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:10px;
+  border:2px solid var(--border);background:var(--white);
+  flex-shrink:0;
+  transition:all .2s;
+}
+.proc-circle.done{
+  background:var(--green);border-color:var(--green);
+  color:var(--white);font-size:16px;
+}
+.proc-circle.active{
+  background:var(--gold);border-color:var(--gold);
+  color:var(--white);
+  box-shadow:0 0 0 6px rgba(176,144,32,.15);
+}
+.proc-circle.future{
+  background:var(--white);border-color:var(--border);
+  color:var(--muted);
+}
+.proc-label{
+  font-size:10px;font-weight:600;text-align:center;
+  line-height:1.35;color:var(--slate);
+}
+.proc-label.done{color:var(--green)}
+.proc-label.active{color:var(--navy);font-weight:700}
+.proc-label.future{color:var(--muted)}
+.proc-sub{
+  font-size:9.5px;text-align:center;color:var(--muted);
+  margin-top:4px;line-height:1.4;
+}
+.proc-badge-now{
+  position:absolute;top:-28px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--white);
+  font-size:8.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 10px;
+  white-space:nowrap;
+}
+.proc-badge-now::after{
+  content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:5px solid var(--gold);
+}
+
+/* ═══ COST-OF-DELAY BOX (str. 9) ═══ */
+.cod{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border);margin-bottom:20px;
+}
+.cod-cell{
+  background:var(--navy);padding:44px 12px;text-align:center;overflow:hidden;
+}
+.cod-period{font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:14px}
+.cod-amount{font-family:'Libre Baskerville',serif;font-size:clamp(26px,3.2vw,44px);color:var(--red);line-height:1;margin-bottom:12px;white-space:nowrap}
+.cod-label{font-size:11px;color:rgba(255,255,255,.7);font-weight:500}
+
+/* ═══ HOOK PAGE (str. 10 — full dark) ═══ */
+.hook-page{
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  min-height:1180px;
+}
+.hook-page::before{
+  content:'';
+  position:absolute;top:-120px;right:-120px;
+  width:500px;height:500px;
+  border:60px solid rgba(176,144,32,.05);
+  border-radius:50%;pointer-events:none;
+}
+.hook-page::after{
+  content:'';
+  position:absolute;bottom:-80px;left:-100px;
+  width:400px;height:400px;
+  border:50px solid rgba(176,144,32,.04);
+  border-radius:50%;pointer-events:none;
+}
+.hook-body{
+  position:relative;z-index:1;
+  padding:80px 80px 80px;
+  flex:1;display:flex;flex-direction:column;justify-content:space-between;
+}
+.hook-tag{
+  font-size:9px;font-weight:600;letter-spacing:.25em;
+  text-transform:uppercase;color:rgba(212,175,90,.5);
+  margin-bottom:32px;display:flex;align-items:center;gap:12px;
+}
+.hook-tag::before{content:'';width:32px;height:1px;background:rgba(212,175,90,.4)}
+.hook-headline{
+  font-family:'Libre Baskerville',serif;
+  font-size:48px;font-weight:400;font-style:italic;
+  color:var(--white);line-height:1.15;
+  margin-bottom:28px;
+  max-width:680px;
+}
+.hook-headline em{color:var(--gold2);font-style:normal}
+.hook-vision{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:1px;background:var(--border);
+  margin-bottom:40px;
+}
+.hook-vis-cell{
+  padding:28px 24px;
+  background:var(--white);
+}
+.hook-vis-period{
+  font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.hook-vis-period::before{content:'';width:16px;height:2px;background:var(--gold)}
+.hook-vis-amount{
+  font-family:'Libre Baskerville',serif;font-size:32px;
+  color:var(--green);line-height:1;margin-bottom:8px;
+}
+.hook-vis-text{font-size:11.5px;color:var(--slate);line-height:1.6}
+.hook-cta-block{
+  border-top:1px solid rgba(255,255,255,.1);
+  padding-top:36px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;
+}
+.hook-cta-left{}
+.hook-cta-eyebrow{
+  font-size:9px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold2);margin-bottom:12px;
+}
+.hook-cta-title{
+  font-family:'Libre Baskerville',serif;font-size:26px;
+  color:var(--white);margin-bottom:12px;line-height:1.2;
+}
+.hook-cta-steps{
+  display:flex;gap:16px;flex-wrap:wrap;
+}
+.hook-cta-step{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(255,255,255,.55);
+}
+.hook-cta-step .n{
+  width:22px;height:22px;background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--white);flex-shrink:0;
+}
+.hook-cta-right{text-align:right}
+.hook-deadline{
+  display:inline-block;
+  border:1px solid rgba(212,175,90,.4);
+  padding:18px 24px;
+  margin-bottom:16px;
+  text-align:center;
+}
+.hook-deadline-label{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,90,.6);margin-bottom:6px}
+.hook-deadline-date{font-family:'Libre Baskerville',serif;font-size:22px;color:var(--gold2);line-height:1;margin-bottom:4px}
+.hook-deadline-sub{font-size:10px;color:rgba(255,255,255,.35)}
+.hook-contact{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.65}
+.hook-contact strong{color:rgba(255,255,255,.75)}
+.hook-pf{
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:12px 80px;
+  display:flex;justify-content:space-between;
+  font-size:9.5px;color:rgba(255,255,255,.25);letter-spacing:.05em;
+  flex-shrink:0;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ STR 1 — OKŁADKA ══════════════════ -->
+<div class="page">
+  <div style="padding:24px 48px 0;display:flex;align-items:center;gap:12px;flex-shrink:0">
+    <div style="width:8px;height:8px;background:var(--gold)"></div>
+    <span style="font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--navy)">S T R A T T O N &nbsp; P R I M E</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 256px;flex:1">
+    <div style="padding:56px 48px 72px">
+      <div style="font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:10px">
+        <div style="width:26px;height:1px;background:var(--gold)"></div>
+        INDYWIDUALNY MODEL WYNAGRADZANIA
+      </div>
+      <div style="font-family:'Libre Baskerville',serif;font-size:80px;font-weight:400;line-height:.92;color:var(--navy);letter-spacing:-.02em">ELITON</div>
+      <div style="font-family:'Libre Baskerville',serif;font-size:80px;font-weight:400;font-style:italic;line-height:.92;color:var(--gold);letter-spacing:-.02em;margin-bottom:10px">Prime<span style="font-size:26px;vertical-align:super;font-style:normal">™</span></div>
+      <p style="font-size:15px;color:var(--slate);max-width:380px;line-height:1.8;margin-bottom:48px">Zintegrowany model wynagradzania oparty na świadczeniach rzeczowych — zaprojektowany w zgodzie z przepisami, z indywidualną weryfikacją każdego wdrożenia i potencjałem redukcji kosztów pracy.</p>
+      <div style="border-top:1px solid var(--border);padding-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px">
+        <div>
+          <div style="font-size:8.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Przygotowano dla</div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);line-height:1.45">Przedsiębiorstwo<br>Handlowo-Usługowe<br>Sp. z o.o.</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:4px">NIP: 524-291-29-83</div>
+        </div>
+        <div>
+          <div style="font-size:8.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Szczegóły dokumentu</div>
+          <div style="font-size:13.5px;font-weight:600;color:var(--navy)">Data: 9.03.2026</div>
+          <div style="font-size:11.5px;color:var(--muted)">REF: SP/2026/03/001</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:6px">Dokument poufny — przygotowany przez</div>
+          <div style="font-size:11.5px;font-weight:600;color:var(--navy);margin-top:2px">Michał Zawadzki · m.zawadzki@stratton-prime.pl</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--navy);padding:48px 28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;border:36px solid rgba(176,144,32,.06);border-radius:50%"></div>
+      <div style="position:absolute;bottom:60px;left:-60px;width:160px;height:160px;border:26px solid rgba(176,144,32,.04);border-radius:50%"></div>
+      <div>
+        <div style="font-size:8.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,90,.5);margin-bottom:18px">Wynik kalkulacji</div>
+        <div style="margin-bottom:28px">
+          <div style="font-size:10px;color:rgba(255,255,255,.38);margin-bottom:6px">Oszczędność roczna</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:48px;color:var(--gold2);line-height:1">5&nbsp;190,14 zł</div>
+        </div>
+        <div style="margin-bottom:28px">
+          <div style="font-size:10px;color:rgba(255,255,255,.38);margin-bottom:6px">Oszczędność miesięczna</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:38px;color:var(--green);line-height:1">+432,51 zł</div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,.07);margin-bottom:24px"></div>
+        <div style="margin-bottom:18px">
+          <div style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:3px">Obecny koszt / m-c</div>
+          <div style="font-size:20px;color:var(--red)">8&nbsp;253,05 zł</div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,.1);margin-bottom:18px"></div>
+        <div>
+          <div style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:3px">Nowy koszt (PLUS)</div>
+          <div style="font-size:26px;font-weight:600;color:var(--white)">7&nbsp;820,54 zł</div>
+          <div style="font-size:9.5px;color:rgba(255,255,255,.28);margin-top:3px">z opłatą za obsługę EBS</div>
+        </div>
+      </div>
+      <div>
+        
+        <div style="font-size:8.5px;color:rgba(212,175,90,.4);letter-spacing:.15em">STRATTON-PRIME.PL</div>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 2 — DIAGNOZA I ROI ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">01. Diagnoza</div><div class="title">Jak zrozumieliśmy Twoją sytuację</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 2/13</div>
+  </div>
+  <div class="pb" style="display:flex;flex-direction:column;gap:0;padding-top:16px">
+
+    <!-- BLOK 1 — PROBLEM -->
+    <div style="border-left:4px solid var(--red);padding:20px 24px;background:var(--white);border-bottom:1px solid var(--border);flex:1">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:14px">Problem — co zaobserwowaliśmy z Twojej listy płac</div>
+      <p style="font-size:13.5px;color:var(--navy);font-weight:600;line-height:1.6;margin-bottom:14px">Przedsiębiorstwo Handlowo-Usługowe Sp. z o.o. odprowadza co miesiąc <strong>1&nbsp;402,91 zł składek ZUS</strong> od jednego pracownika. Wynagrodzenie brutto wynosi <strong>6&nbsp;850,14 zł</strong> — poziom 43% powyżej minimum ustawowego.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+        <div style="background:var(--off);padding:14px 18px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">ZUS pracodawcy / m-c</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:24px;color:var(--red);line-height:1">1&nbsp;402,91 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">odprowadzane przy pełnym oskładkowaniu</div>
+        </div>
+        <div style="background:var(--off);padding:14px 18px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Wynagrodzenie brutto</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:24px;color:var(--navy);line-height:1">6&nbsp;850,14 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">pełna przestrzeń wyłączenia dostępna</div>
+        </div>
+        <div style="background:var(--off);padding:14px 18px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Wyłączenie dostępne od</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:24px;color:var(--navy);line-height:1">1998 r.</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">§2 ust. 1 pkt 26 Rozp. MPiPS — dostępne od 1998 r. — działa dla Twojej firmy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOK 2 — ROZWIĄZANIE -->
+    <div style="border-left:4px solid var(--gold);padding:20px 24px;background:var(--white);border-bottom:1px solid var(--border);flex:1">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Rozwiązanie — Eliton Prime™ PLUS dla Twojej firmy</div>
+      <p style="font-size:13px;color:var(--slate);line-height:1.7;margin-bottom:14px">Część wynagrodzenia zostaje zastąpiona <strong>Voucherem EBS</strong> — świadczeniem rzeczowym wyłączonym z podstawy ZUS na mocy §2 ust. 1 pkt 26 Rozp. MPiPS. Wynagrodzenie zasadnicze z umowy pozostaje: <strong>4&nbsp;805,99 zł gotówka + 1&nbsp;639,92 zł voucher EBS = 6&nbsp;445,91 zł łącznie</strong>. Różnica 404,23 zł wobec poprzedniego brutto to obniżona składka ZUS pracownika — zostaje ona w całości skompensowana wartością vouchera EBS, dzięki czemu pracownik nie traci na wartości świadczeń.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+        <div style="background:var(--off);padding:14px 18px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">ZUS pracodawcy po wdrożeniu</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:24px;color:var(--green);line-height:1">984,27 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">składki od podstawy 4&nbsp;805,99 zł</div>
+        </div>
+        <div style="background:var(--navy);padding:14px 18px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(212,175,90,.5);margin-bottom:6px">Oszczędność pracodawcy / m-c</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:24px;color:var(--green);line-height:1">+432,51 zł</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:4px">netto po odliczeniu opłaty EBS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOK 3 — WNIOSEK -->
+    <div style="border-left:4px solid var(--green);padding:20px 24px;background:var(--white);flex:1">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:14px">Wniosek — co Ty na tym zyskujesz</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Oszczędność miesięczna</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:28px;color:var(--green);line-height:1">+432,51 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">zostaje w budżecie firmy</div>
+        </div>
+        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Oszczędność roczna</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:28px;color:var(--green);line-height:1">+5&nbsp;190,14 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">przy stałych parametrach ZUS 2026</div>
+        </div>
+        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Potencjał przy 5 pracownikach</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:28px;color:var(--green);line-height:1">+2&nbsp;162,55 zł</div>
+          <div style="font-size:10px;color:var(--slate);margin-top:4px">oszczędność / m-c · 25 950 zł/rok</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px 16px;background:var(--navy);display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.5">Nie wymaga zmiany formy zatrudnienia · pracownicy nie tracą netto · dokumentacja po stronie Stratton Prime</div>
+        <div style="font-size:10px;font-weight:700;color:var(--gold2);white-space:nowrap;padding-left:20px">→ Szczegóły str. 3–5</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 3 — MECHANIZM I BEZPIECZEŃSTWO ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">02. Metodologia rozwiązania</div><div class="title">Mechanizm i Bezpieczeństwo</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 3/13</div>
+  </div>
+  <div class="pb">
+
+    <!-- 3 kroki -->
+    <div class="g3" style="margin-bottom:18px">
+      <div class="gc">
+        <div class="gc-lbl">Krok 1</div>
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Zmiana struktury wynagrodzenia</div>
+        <p style="font-size:11.5px;color:var(--slate);line-height:1.6">Część wynagrodzenia przyznawana jest w formie imiennego świadczenia rzeczowego — Vouchera EBS. Podstawa: <strong>§2 ust. 1 pkt 26 Rozp. MPiPS z 18.12.1998 r.</strong> (Dz.U. 1998 nr 161 poz. 1106).</p>
+      </div>
+      <div class="gc">
+        <div class="gc-lbl">Krok 2</div>
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Zamknięty katalog usług EBS</div>
+        <p style="font-size:11.5px;color:var(--slate);line-height:1.6">Pracownik korzysta z usług: pakiety medyczne, VPN, narzędzia AI, wellbeing, ubezpieczenia, telekomunikacja. Voucher nie jest środkiem pieniężnym — nie podlega wymianie na gotówkę.</p>
+      </div>
+      <div class="gc">
+        <div class="gc-lbl">Krok 3</div>
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Wyłączenie z podstawy ZUS</div>
+        <p style="font-size:11.5px;color:var(--slate);line-height:1.6">Świadczenie rzeczowe spełniające 4 przesłanki ustawowe nie wchodzi do podstawy wymiaru składek ZUS — ani pracowniczych, ani pracodawcy.</p>
+      </div>
+    </div>
+
+    <!-- 4 przesłanki -->
+    <h3 class="sh">4 przesłanki wyłączenia ZUS — §2 ust. 1 pkt 26 Rozp. MPiPS</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
+
+      <div style="background:var(--white);padding:14px 18px;border-left:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Przesłanka 1 · Rzeczowość świadczenia</div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Zamknięty katalog — nie środek pieniężny</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:6px">Voucher EBS uprawnia wyłącznie do usług z predefiniowanego katalogu. Nie jest instrumentem płatniczym ani nie podlega wypłacie w gotówce — wyklucza kwalifikację jako „korzyść pieniężna".</p>
+        <div style="font-size:10px;color:var(--gold);font-weight:600">→ Pełna analiza: Przewodnik Prawny, str. 3–4</div>
+      </div>
+
+      <div style="background:var(--white);padding:14px 18px;border-left:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Przesłanka 2 · Częściowa odpłatność pracownika</div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Ceny w EBS niższe niż detaliczne</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:6px">Pracownik korzysta z usług po cenach preferencyjnych (5–20% poniżej cen detalicznych). Platforma EBS dokumentuje porównanie cen przy każdej transakcji — dowód gotowy dla ZUS.</p>
+        <div style="font-size:10px;color:var(--gold);font-weight:600">→ Pełna analiza: Przewodnik Prawny, str. 4–5</div>
+      </div>
+
+      <div style="background:var(--white);padding:14px 18px;border-left:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Przesłanka 3 · Ujęcie w przepisach o wynagradzaniu</div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Uchwała Zarządu (art. 77² KP) · Instrukcja (art. 353¹ KC)</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:3px"><strong>UoP:</strong> Regulamin Wynagradzania (art. 77² KP) lub Uchwała Zarządu — wyrok SN <strong>II UK 337/09</strong>.</p>
+        <p style="font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:6px"><strong>UZ:</strong> Instrukcja przyznawania świadczeń (art. 353¹ KC) — interpretacja ZUS <strong>DI/100000/43/620/2023</strong>.</p>
+        <div style="font-size:10px;color:var(--gold);font-weight:600">→ Wzory dokumentów: Przewodnik Prawny, str. 6–8</div>
+      </div>
+
+      <div style="background:var(--white);padding:14px 18px;border-left:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Przesłanka 4 · Pieniężne określenie wartości</div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Nominalna wartość Vouchera EBS w PLN</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:6px">Wartość świadczenia wyrażona kwotowo w PLN, imiennie przypisana pracownikowi. Raport miesięczny EBS gotowy do przedłożenia ZUS. Skutki PIT: przychód z <strong>art. 12 ust. 1 uPIT</strong> (UoP) lub <strong>art. 13 pkt 8 uPIT</strong> (UZ).</p>
+        <div style="font-size:10px;color:var(--gold);font-weight:600">→ Rozliczenie PIT i KUP CIT: Przewodnik Prawny, str. 9–11</div>
+      </div>
+
+    </div>
+
+    <!-- Tarcza Ochronna -->
+    <div class="shield">
+      <div class="shield-title">Tarcza Ochronna™ Stratton Prime</div>
+      <p class="shield-sub">Reprezentacja i dokumentacja w ramach umowy — na każdym etapie wdrożenia i ewentualnych postępowań kontrolnych. <span style="color:rgba(255,255,255,.5);font-size:11px">→ Pełny zakres: Przewodnik Prawny, str. 12–13</span></p>
+      <div class="shield-cols">
+        <div><div class="sh-ct">Interpretacja indywidualna ZUS/US <span style="font-size:8px;background:rgba(212,175,90,.2);color:var(--gold2);padding:1px 5px;border-radius:2px;vertical-align:middle">opcja</span></div><p class="sh-cx">Pomagamy przygotować wniosek o wiążącą interpretację dedykowaną dla Twojej spółki.</p></div>
+        <div><div class="sh-ct">Polisa D&O Leadenhall — do 30 mln zł</div><p class="sh-cx">Ubezpieczenie D&O LW020/D&O/01 — ochrona Zarządu i wdrożonego rozwiązania (wariant PLUS).</p></div>
+        <div><div class="sh-ct">Reprezentacja prawna</div><p class="sh-cx">Obsługa kontroli ZUS, PIP i KAS przez radców prawnych Kancelarii Żuk Pośpiech.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 3.5 — CZYM JEST / CZYM NIE JEST ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">03. Granice modelu</div><div class="title">Czym Jest — i Czym Nie Jest — Eliton Prime™</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 4/13</div>
+  </div>
+  <div class="pb">
+
+    <p class="lead">Transparentność jest fundamentem naszej pracy. Zanim podejmiesz decyzję, chcemy żebyś wiedział dokładnie: co ten model robi, czego nie robi, kiedy jest dla Ciebie idealny — i kiedy nie jest.</p>
+
+    <!-- CZYM JEST / CZYM NIE JEST -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:24px">
+
+      <div style="background:var(--green2);padding:22px 24px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">✓</span> Czym Eliton Prime™ JEST
+        </div>
+        <ul class="cl" style="margin:0">
+          <li style="border-color:rgba(27,94,32,.15)"><strong>Legalnym wyłączeniem z podstawy ZUS</strong> — na podstawie §2 ust. 1 pkt 26 Rozp. MPiPS, obowiązującego od 1998 r.</li>
+          <li style="border-color:rgba(27,94,32,.15)"><strong>Zmianą struktury wynagrodzenia</strong> — część wypłaty zastępowana jest imiennym świadczeniem rzeczowym o tej samej wartości nominalnej.</li>
+          <li style="border-color:rgba(27,94,32,.15)"><strong>Narzędziem retencji pracowników</strong> — pracownik otrzymuje wyższe świadczenia rzeczowe (voucher EBS) i dostęp do benefitów niedostępnych w modelu standardowym. Wzrost wartości odczuwalny jak podwyżka, lecz realizowany przez świadczenie, nie gotówkę.</li>
+          <li style="border-color:rgba(27,94,32,.15)"><strong>Rozwiązaniem transparentnym dla ZUS</strong> — wszystkie składki odprowadzane są terminowo, wyłączeniu podlega wyłącznie podstawa oskładkowania w zakresie świadczenia rzeczowego.</li>
+          <li style="border-color:rgba(27,94,32,.15);border-bottom:none"><strong>Systemem w pełni dokumentowanym</strong> — uchwała Zarządu, imienne przypisanie świadczeń, logi EBS, raporty miesięczne dostępne na każde wezwanie organu.</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--red2);padding:22px 24px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">✗</span> Czym Eliton Prime™ NIE JEST
+        </div>
+        <ul class="cl" style="margin:0">
+          <li style="border-color:rgba(155,28,28,.12)"><strong>Nie jest agresywną restrukturyzacją podatkową</strong> — nie tworzymy fikcyjnych spółek, nie zmieniamy formy zatrudnienia na B2B, nie wyprowadzamy majątku.</li>
+          <li style="border-color:rgba(155,28,28,.12)"><strong>Nie jest działaniem na granicy prawa</strong> — przepis §2 ust. 1 pkt 26 ma 28-letnią historię stosowania i jest znany ZUS.</li>
+          <li style="border-color:rgba(155,28,28,.12)"><strong>Nie jest bonem podarunkowym ani kartą pre-paid</strong> — voucher EBS nie jest środkiem płatniczym, nie można go wymienić na gotówkę.</li>
+          <li style="border-color:rgba(155,28,28,.12)"><strong>Nie jest obejściem prawa pracy</strong> — pracownik zachowuje pełną ochronę KP, wynagrodzenie zasadnicze nie spada poniżej ustawowego minimum.</li>
+          <li style="border-color:rgba(155,28,28,.12);border-bottom:none"><strong>Nie jest rozwiązaniem dla każdej firmy</strong> — poniżej pokazujemy, kiedy model działa, a kiedy nie.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- KIEDY DZIAŁA / KIEDY NIE DZIAŁA -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:20px">
+
+      <div style="background:var(--white);padding:22px 24px;border-top:3px solid var(--green)">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:12px">Kiedy model działa najlepiej</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">✓</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Stałe zatrudnienie (UoP lub UZ)</div><div style="font-size:11.5px;color:var(--slate)">Wynagrodzenie regularne, powtarzalne co miesiąc — model generuje stałe oszczędności.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">✓</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Wynagrodzenie ≥ 4 000 zł brutto</div><div style="font-size:11.5px;color:var(--slate)">Przy wyższych wynagrodzeniach część objęta świadczeniem rzeczowym jest większa — oszczędności proporcjonalnie wyższe.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">✓</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Pracownicy gotowi korzystać z benefitów cyfrowych</div><div style="font-size:11.5px;color:var(--slate)">Platforma EBS wymaga aktywności pracownika — modele zdalne, administracyjne i biurowe sprawdzają się najlepiej.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">✓</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Pracodawca chce wzmocnić retencję bez wzrostu kosztów</div><div style="font-size:11.5px;color:var(--slate)">Model PLUS finansuje +4% wartości świadczeń rzeczowych dla pracownika ze środków Stratton Prime — realny benefit w postaci vouchera EBS, bez dodatkowego wydatku pracodawcy.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);padding:22px 24px;border-top:3px solid var(--red)">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:12px">Kiedy model może nie być optymalny</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">—</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Wynagrodzenie bliskie minimum ustawowego</div><div style="font-size:11.5px;color:var(--slate)">Przy wynagrodzeniu ≤ minimalnego, wynagrodzenie zasadnicze nie może spaść — przestrzeń do wyłączenia jest ograniczona lub zerowa.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">—</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Pracownicy w szczególnych grupach ZUS</div><div style="font-size:11.5px;color:var(--slate)">Np. studenci do 26 r.ż. (zerowe składki) — model ZUS nie generuje oszczędności, bo podstawa i tak jest zerowa.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">—</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Zatrudnienie nieregularne lub sezonowe</div><div style="font-size:11.5px;color:var(--slate)">Model wymaga cykliczności — przy umowach krótkoterminowych lub zmiennych wymiarach etatu koszty wdrożenia mogą przewyższyć oszczędności.</div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:10px;color:var(--white);font-weight:700">—</span></div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Brak zgody pracowników</div><div style="font-size:11.5px;color:var(--slate)">Uczestnictwo jest dobrowolne. Jeśli pracownicy masowo odmówią, oszczędności będą proporcjonalnie niższe od kalkulacji.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="box-gold">
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Wniosek z kalkulacji dla Twojej firmy</div>
+      <p style="font-size:13px;color:var(--ink);line-height:1.7">Przeanalizowaliśmy Twoją listę płac pod kątem wszystkich powyższych czynników. <strong>Na podstawie przesłanej listy płac model jest dopasowany do Twojej struktury zatrudnienia.</strong> Żadna ze znanych przesłanek wykluczających nie zachodzi — wynagrodzenie brutto (6&nbsp;850,14 zł) daje przestrzeń do wdrożenia, a prognozowana oszczędność 432,51 zł miesięcznie jest kalkulowana konserwatywnie. Wyniki mogą się różnić w zależności od indywidualnych okoliczności.</p>
+    </div>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 5 (dawna 4) — TWARDE DANE FINANSOWE ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">04. Analiza porównawcza</div><div class="title">Twarde Dane Finansowe</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 5/13</div>
+  </div>
+  <div class="pb">
+    <p class="lead">Poniższe zestawienie przygotowano indywidualnie na podstawie Twojej listy płac. Rekomendujemy <strong>Eliton Prime™ PLUS</strong> — łączy oszczędności dla firmy z realnym wzrostem wartości świadczeń rzeczowych pracownika.</p>
+
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Parametr (miesięcznie)</th>
+          <th class="r">Obecny model</th>
+          <th class="r gold">Eliton Prime™ PLUS</th>
+          <th class="r gold">Zmiana</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wynagrodzenie brutto z umowy<span class="sub">Gotówka + świadczenie rzeczowe (łącznie)</span></td>
+          <td class="old">6&nbsp;850,14 zł</td>
+          <td class="new" style="font-size:10px;line-height:1.5">4&nbsp;805,99 zł<br><span style="color:var(--gold);font-weight:600">+ 1&nbsp;639,92 zł EBS</span><br><span style="color:var(--green);font-weight:700">= 6&nbsp;445,91 zł</span></td>
+          <td class="delta" style="color:var(--muted);font-size:10px">−404,23 zł<br><span style="font-size:9px;color:var(--muted);font-weight:400">(część → ZUS)</span></td>
+        </tr>
+        <tr>
+          <td>ZUS Pracodawcy<span class="sub">Emerytalna, rentowa, wypadkowa</span></td>
+          <td class="old">1&nbsp;402,91 zł</td>
+          <td class="new">984,27 zł</td>
+          <td class="delta save">+418,64 zł</td>
+        </tr>
+        <tr>
+          <td>ZUS Pracownika<span class="sub">Społeczne + zdrowotne</span></td>
+          <td class="old">1&nbsp;471,14 zł</td>
+          <td class="new">1&nbsp;032,14 zł</td>
+          <td class="delta save">+439,00 zł</td>
+        </tr>
+        <tr>
+          <td>Wynagrodzenie netto (do wypłaty)<span class="sub">Kwota na konto + wartość vouchera EBS</span></td>
+          <td style="text-align:right;color:var(--slate)">5&nbsp;000,00 zł</td>
+          <td class="new" style="color:var(--green)">5&nbsp;055,77 zł</td>
+          <td class="delta save">+55,77 zł (+4%)</td>
+        </tr>
+        <tr>
+          <td>Bonus administracyjny dla kadr i księg.<span class="sub">2% wartości świadczeń — finansowany przez Stratton Prime</span></td>
+          <td style="text-align:right;color:var(--muted)">—</td>
+          <td class="new">27,88 zł</td>
+          <td class="delta save">✓ SP</td>
+        </tr>
+        <tr>
+          <td>Opłata za obsługę EBS<span class="sub">26% wartości nominalnej świadczeń</span></td>
+          <td style="text-align:right;color:var(--muted)">—</td>
+          <td class="new">362,48 zł</td>
+          <td class="delta cost">+362,48 zł</td>
+        </tr>
+        <tr class="tr-total">
+          <td><strong>Całkowity koszt pracodawcy / miesiąc</strong><span class="sub">Oszczędność netto po odliczeniu opłaty EBS</span></td>
+          <td style="text-align:right">8&nbsp;253,05 zł</td>
+          <td class="new">7&nbsp;820,54 zł</td>
+          <td class="delta" style="color:var(--green)">+432,51 zł</td>
+        </tr>
+        <tr class="tr-save">
+          <td><strong>Oszczędność roczna</strong></td>
+          <td style="text-align:right;color:var(--muted)">—</td>
+          <td class="new">5&nbsp;190,14 zł</td>
+          <td class="delta save">✓</td>
+        </tr>
+        <tr style="background:var(--navy)">
+          <td style="padding:10px 14px"><strong style="color:var(--gold2);font-size:12px">ROI opłaty za obsługę EBS</strong><span class="sub" style="color:rgba(255,255,255,.4)">Na każdą złotówkę opłaty — ile odzyskujesz</span></td>
+          <td style="text-align:right;color:rgba(255,255,255,.3);font-size:12px">—</td>
+          <td style="text-align:right;padding:10px 14px"><span style="font-family:'Libre Baskerville',serif;font-size:22px;color:var(--gold2);font-weight:700">2,20 zł</span></td>
+          <td style="text-align:right;padding:10px 14px"><span style="font-size:11px;font-weight:700;color:var(--gold2)">ROI 120%/m-c</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- BOX: Bonus administracyjny — wyjaśnienie -->
+    <div style="background:var(--off);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 20px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start">
+      <div>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Bonus administracyjny — co to jest?</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.6;margin:0">Miesięczny dodatek dla pracowników działu kadr i księgowości obsługujących dokumentację EBS. Wynosi <strong>2% wartości nominalnej świadczeń</strong> przyznanych w danym miesiącu — przy świadczeniu 1&nbsp;639,92 zł daje to <strong>27,88 zł/m-c</strong>.</p>
+      </div>
+      <div>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Kto otrzymuje i skąd środki?</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.6;margin:0">Bonus wypłacany jest wskazanym pracownikom kadr lub księgowości — osobom, które faktycznie obsługują wdrożenie. <strong>Finansowany w całości przez Stratton Prime</strong> — nie stanowi kosztu pracodawcy ani dodatkowego obciążenia budżetu płacowego.</p>
+      </div>
+      <div>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Skutki podatkowe i ewidencja</div>
+        <p style="font-size:11px;color:var(--slate);line-height:1.6;margin:0">Bonus stanowi przychód pracownika ze stosunku pracy (art. 12 ust. 1 uPIT) — pracodawca jako płatnik odprowadza zaliczkę PIT. Stratton Prime dostarcza gotowy schemat ewidencji księgowej i wzór listy wypłat bonusu.</p>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="box-navy" style="margin-bottom:0">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px">Rekomendacja: Eliton Prime™ PLUS</div>
+        <p style="font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:14px">Model PLUS to optymalny balans. Firma oszczędza <strong style="color:var(--gold2)">5&nbsp;190,14 zł rocznie</strong>, a pracownik otrzymuje <strong style="color:var(--gold2)">+4% w formie świadczenia rzeczowego</strong> (voucher EBS) — bez wzrostu budżetu płacowego.</p>
+        <div style="display:flex;gap:22px">
+          <div><div style="font-size:8.5px;color:rgba(255,255,255,.35);margin-bottom:2px">PRACOWNIK ZYSKUJE</div><div style="font-size:20px;font-weight:600;color:var(--gold2)">+4% świadczeń</div></div>
+          <div><div style="font-size:8.5px;color:rgba(255,255,255,.35);margin-bottom:2px">FIRMA ZYSKUJE</div><div style="font-size:20px;font-weight:600;color:var(--white)">5&nbsp;190 zł/rok</div></div>
+        </div>
+      </div>
+      <div class="box-gold" style="margin-bottom:0">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Wniosek analityczny: koszt zaniechania</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--slate)">Strata miesięczna</span>
+          <span style="font-family:'Libre Baskerville',serif;font-size:22px;color:var(--red)">−432,51 zł</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:12px;color:var(--slate)">Strata roczna</span>
+          <span style="font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--red)">−5&nbsp;190,14 zł</span>
+        </div>
+        <p style="font-size:12px;color:var(--slate);line-height:1.6">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która nie zostaje zrealizowana — środki trafiają do systemu danin publicznych w wyższej niż możliwa wysokości.</p>
+      </div>
+    </div>
+    <p class="disc">Kalkulacja indywidualna na podstawie przesłanej listy płac. Wyniki mogą się różnić w zależności od zmian struktury zatrudnienia, formy umów i stawek ZUS. Dane mają charakter szacunkowy i mogą się różnić od wyników faktycznie osiągniętych. · Szczegółowy rozkład tego, jak liczona jest oszczędność — patrz str. 12.</p>
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 6 — WYKRESY ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">04. Wizualizacja danych</div><div class="title">Obraz Finansowy — Porównanie i Prognoza</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 6/13</div>
+  </div>
+  <div class="pb" style="padding-top:16px;display:flex;flex-direction:column;gap:0">
+
+    <!-- ══ SEKCJA A: Porównanie kosztów pracodawcy ══ -->
+    <div style="margin-bottom:18px">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.05em;color:var(--white);background:var(--navy);padding:2px 7px;border-radius:2px">Wykres 1</span>
+        <span style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy)">Całkowity koszt pracodawcy / miesiąc — przed i po wdrożeniu</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:28px;align-items:start">
+
+        <!-- Słupki poziome -->
+        <div>
+          <!-- Model obecny -->
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+              <span style="font-size:10.5px;font-weight:600;color:var(--slate)">Model obecny</span>
+              <span style="font-size:14px;font-weight:700;color:var(--slate)">8 253,05 zł</span>
+            </div>
+            <div style="display:flex;height:44px;border-radius:2px;overflow:hidden;border:1px solid var(--border);position:relative">
+              <div style="width:83%;background:#8fa3b8;display:flex;align-items:center;padding-left:12px">
+                <span style="font-size:9.5px;font-weight:600;color:#fff">Brutto 6 850,14 zł</span>
+              </div>
+              <div style="width:17%;background:#c0cdd8;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:9px;color:#fff;font-weight:600">ZUS 1 403 zł</span>
+              </div>
+              <!-- Etykieta bezpośrednio na słupku -->
+              <div style="position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:8px;color:rgba(0,0,0,.35);font-weight:700">= 8 253 zł</div>
+            </div>
+          </div>
+
+          <!-- Eliton PLUS -->
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+              <span style="font-size:10.5px;font-weight:700;color:var(--navy)">Eliton Prime™ PLUS</span>
+              <span style="font-size:14px;font-weight:700;color:var(--navy)">7 820,54 zł</span>
+            </div>
+            <div style="display:flex;height:44px;border-radius:2px;overflow:hidden;border:1px solid var(--border);width:94.8%;position:relative">
+              <div style="width:61.4%;background:var(--navy);display:flex;align-items:center;padding-left:12px">
+                <span style="font-size:9.5px;font-weight:600;color:rgba(255,255,255,.9)">Brutto 4 805,99 zł</span>
+              </div>
+              <div style="width:21%;background:var(--gold);display:flex;align-items:center;justify-content:center">
+                <span style="font-size:9px;color:#fff;font-weight:700">Voucher</span>
+              </div>
+              <div style="width:12.6%;background:#3a6186;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:8.5px;color:#fff;font-weight:600">ZUS 984</span>
+              </div>
+              <div style="width:5%;background:#c0a040;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:7px;color:#fff;font-weight:600">EBS</span>
+              </div>
+            </div>
+            <!-- Pasek oszczędności + etykieta końcowa -->
+            <div style="display:flex;height:10px;margin-top:3px;width:100%;align-items:center">
+              <div style="width:94.8%;background:transparent"></div>
+              <div style="width:5.2%;background:var(--green);border-radius:0 2px 2px 0;height:100%;position:relative">
+                <div style="position:absolute;right:0;top:50%;transform:translate(calc(100% + 6px),-50%);font-size:9px;color:var(--green);font-weight:700;white-space:nowrap">+432,51 zł/m-c</div>
+              </div>
+            </div>
+            <div style="font-size:8.5px;color:var(--muted);margin-top:5px">w tym opłata EBS 362,48 zł — oszczędność netto po jej odliczeniu</div>
+          </div>
+
+          <!-- Legenda -->
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;background:#8fa3b8;border-radius:1px"></div><span style="font-size:8.5px;color:var(--slate)">Brutto (obecne)</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;background:var(--navy);border-radius:1px"></div><span style="font-size:8.5px;color:var(--slate)">Brutto (nowe)</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;background:var(--gold);border-radius:1px"></div><span style="font-size:8.5px;color:var(--slate)">Voucher EBS (poza ZUS)</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;background:#3a6186;border-radius:1px"></div><span style="font-size:8.5px;color:var(--slate)">ZUS pracodawcy</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;background:var(--green);border-radius:1px"></div><span style="font-size:8.5px;color:var(--slate)">Potencjalna oszczędność</span></div>
+          </div>
+        </div>
+
+        <!-- Prawa kolumna: netto + bonus -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy);margin-bottom:0">Efekt dla pracownika</div>
+
+          <!-- Słupki pionowe netto -->
+          <div style="display:flex;align-items:flex-end;gap:12px;height:96px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+              <div style="width:100%;background:#8fa3b8;height:87%;border-radius:2px 2px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:6px">
+                <span style="font-size:9px;color:#fff;font-weight:700">5 000 zł</span>
+              </div>
+              <div style="font-size:8.5px;color:var(--muted);padding-top:4px;border-top:2px solid var(--navy);width:100%;text-align:center">Przed</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative">
+              <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:8.5px;color:var(--green);font-weight:700;white-space:nowrap;background:white;padding:0 2px">+55,77 zł</div>
+              <div style="width:100%;background:var(--navy);height:92%;border-radius:2px 2px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:6px">
+                <span style="font-size:9px;color:#fff;font-weight:700">5 055,77 zł</span>
+              </div>
+              <div style="font-size:8.5px;color:var(--navy);font-weight:600;padding-top:4px;border-top:2px solid var(--navy);width:100%;text-align:center">Po PLUS</div>
+            </div>
+          </div>
+
+          <!-- Bonus kadr -->
+          <div style="background:var(--off);border-left:3px solid var(--gold);padding:10px 12px">
+            <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Bonus kadr i księg.</div>
+            <div style="font-size:20px;font-weight:700;color:var(--navy);line-height:1">27,88 zł<span style="font-size:10px;font-weight:400;color:var(--muted)">/m-c</span></div>
+            <div style="font-size:8.5px;color:var(--slate);margin-top:3px">Finansuje Stratton Prime<br>Koszt pracodawcy: <strong>0 zł</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ SEKCJA B: Oszczędności narastająco ══ -->
+    <div style="border-top:2px solid var(--border);padding-top:14px;flex:1;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.05em;color:var(--white);background:var(--navy);padding:2px 7px;border-radius:2px">Wykres 2</span>
+        <span style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy)">Oszczędności narastająco — prognoza 36 miesięcy</span>
+        <span style="font-size:8px;color:var(--muted);font-weight:400">(1 pracownik · wariant PLUS · wartości szacunkowe)</span>
+      </div>
+
+      <!-- Kontener wykresu — rozciąga się do wypełnienia strony -->
+      <div style="flex:1;display:flex;flex-direction:column;min-height:220px">
+
+        <!-- Wykres z osią Y -->
+        <div style="display:flex;gap:0;flex:1">
+
+          <!-- Oś Y z jednostką zł -->
+          <div style="width:60px;flex-shrink:0;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding-bottom:2px">
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:8px">
+              <span style="font-size:7.5px;color:var(--muted);white-space:nowrap">15 570 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:8px">
+              <span style="font-size:7.5px;color:var(--muted);white-space:nowrap">10 380 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:8px">
+              <span style="font-size:7.5px;color:var(--muted);white-space:nowrap">5 190 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:8px">
+              <span style="font-size:7.5px;color:var(--muted);white-space:nowrap">0 zł</span>
+            </div>
+          </div>
+
+          <!-- Obszar wykresu -->
+          <div style="flex:1;border-left:2px solid var(--navy);border-bottom:2px solid var(--navy);position:relative;padding:0 12px">
+
+            <!-- Linie siatki -->
+            <div style="position:absolute;left:0;right:0;bottom:33.3%;border-top:1px dashed rgba(0,0,0,.08)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:66.6%;border-top:1px dashed rgba(0,0,0,.08)"></div>
+
+            <!-- Słupki -->
+            <div style="display:flex;align-items:flex-end;height:100%;gap:8px">
+
+              <!-- M3: 8.3% -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:7.5px;color:var(--slate);font-weight:600;margin-bottom:3px;white-space:nowrap">1 298 zł</div>
+                <div style="width:100%;height:8.3%;background:linear-gradient(180deg,#52b788,#40916c);border-radius:2px 2px 0 0;min-height:5px"></div>
+              </div>
+              <!-- M6: 16.7% -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:7.5px;color:var(--slate);font-weight:600;margin-bottom:3px;white-space:nowrap">2 595 zł</div>
+                <div style="width:100%;height:16.7%;background:linear-gradient(180deg,#52b788,#40916c);border-radius:2px 2px 0 0"></div>
+              </div>
+              <!-- M12: 33.3% — Rok 1 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:7.5px;color:var(--green);font-weight:700;margin-bottom:3px;white-space:nowrap">5 190 zł</div>
+                <div style="width:100%;height:33.3%;background:linear-gradient(180deg,#2d9a5f,#1b6b40);border-radius:2px 2px 0 0;position:relative">
+                  <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--green);font-weight:700;white-space:nowrap;background:#f8f7f4;padding:0 2px">Rok 1</div>
+                </div>
+              </div>
+              <!-- M18: 50% -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:7.5px;color:var(--slate);font-weight:600;margin-bottom:3px;white-space:nowrap">7 785 zł</div>
+                <div style="width:100%;height:50%;background:linear-gradient(180deg,#2a5a8c,#1a3a5c);border-radius:2px 2px 0 0"></div>
+              </div>
+              <!-- M24: 66.7% — Rok 2 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:7.5px;color:var(--navy);font-weight:700;margin-bottom:3px;white-space:nowrap">10 380 zł</div>
+                <div style="width:100%;height:66.7%;background:linear-gradient(180deg,#1a4a7a,#0d2a4a);border-radius:2px 2px 0 0;position:relative">
+                  <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--navy);font-weight:700;white-space:nowrap;background:#f8f7f4;padding:0 2px">Rok 2</div>
+                </div>
+              </div>
+              <!-- M36: 100% — Rok 3 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+                <div style="font-size:8px;color:var(--navy);font-weight:700;margin-bottom:3px;white-space:nowrap">15 570 zł</div>
+                <div style="width:100%;height:100%;background:linear-gradient(180deg,#0D1F3C,#0a1828);border-radius:2px 2px 0 0;position:relative">
+                  <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--navy);font-weight:700;white-space:nowrap;background:#f8f7f4;padding:0 2px">Rok 3</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Etykiety osi X -->
+        <div style="display:flex;padding-left:62px;margin-bottom:10px;margin-top:4px">
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--muted)">M3</div>
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--muted)">M6</div>
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--green);font-weight:700">M12</div>
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--muted)">M18</div>
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--navy);font-weight:700">M24</div>
+          <div style="flex:1;text-align:center;font-size:8px;color:var(--navy);font-weight:700">M36</div>
+        </div>
+
+        <!-- Legenda kolorów -->
+        <div style="display:flex;gap:18px;align-items:center;padding:6px 0 8px 62px;margin-bottom:2px">
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:14px;height:8px;background:linear-gradient(180deg,#52b788,#40916c);border-radius:1px"></div><span style="font-size:8px;color:var(--muted)">M3–M12 (Rok 1)</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:14px;height:8px;background:linear-gradient(180deg,#2a5a8c,#1a3a5c);border-radius:1px"></div><span style="font-size:8px;color:var(--muted)">M18–M24 (Rok 2)</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:14px;height:8px;background:linear-gradient(180deg,#0D1F3C,#0a1828);border-radius:1px"></div><span style="font-size:8px;color:var(--muted)">M36 (Rok 3)</span></div>
+        </div>
+        <!-- Milestony -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)">
+          <div style="background:var(--off);padding:12px 16px;display:flex;align-items:center;gap:12px">
+            <div style="width:30px;height:30px;background:#2d9a5f;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:9px;color:#fff;font-weight:700">R1</span>
+            </div>
+            <div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Rok 1 · M12</div>
+              <div style="font-size:18px;font-weight:700;color:var(--navy);line-height:1">5 190,14 zł</div>
+            </div>
+          </div>
+          <div style="background:var(--off);padding:12px 16px;display:flex;align-items:center;gap:12px">
+            <div style="width:30px;height:30px;background:#1a3a5c;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:9px;color:#fff;font-weight:700">R2</span>
+            </div>
+            <div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Rok 2 · M24</div>
+              <div style="font-size:18px;font-weight:700;color:var(--navy);line-height:1">10 380,28 zł</div>
+            </div>
+          </div>
+          <div style="background:#0D1F3C;padding:12px 16px;display:flex;align-items:center;gap:12px">
+            <div style="width:30px;height:30px;background:var(--gold);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:9px;color:#fff;font-weight:700">R3</span>
+            </div>
+            <div>
+              <div style="font-size:8px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Rok 3 · M36</div>
+              <div style="font-size:18px;font-weight:700;color:var(--gold);line-height:1">15 570,42 zł</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /flex:1 -->
+    </div>
+
+    <p class="disc" style="margin-top:8px;margin-bottom:0">Dane mają charakter szacunkowy (1 pracownik, wariant PLUS, stałe parametry ZUS 2026). Wyniki mogą się różnić w zależności od struktury zatrudnienia i zmian legislacyjnych.</p>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 7 — WARIANTY ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">05. Warianty modelu</div><div class="title">Wybierz Wariant dla Swojej Firmy</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 7/13</div>
+  </div>
+  <div class="pb">
+    <p class="lead">Oferujemy dwa warianty. Rekomendujemy <strong>Eliton Prime™ PLUS</strong> — niższy koszt obsługi, szybsze wdrożenie i polisa D&amp;O dla Zarządu już w pakiecie.</p>
+
+    <table class="vt">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Eliton Prime™ PLUS<br><span style="font-size:8.5px;font-weight:400;opacity:.85;letter-spacing:.03em">★ Rekomendowany</span></th>
+          <th>Eliton Prime™ STANDARD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Opłata za obsługę EBS</td><td class="hl"><strong>26%*</strong> wartości świadczeń</td><td>28–31%* wartości świadczeń</td></tr>
+        <tr><td>Czas wdrożenia</td><td class="hl"><strong>do 14 dni</strong> (priorytet)</td><td>4–6 tygodni</td></tr>
+        <tr><td>Oferta ważna od daty kalkulacji</td><td class="hl"><strong style="color:var(--red)">14 dni</strong></td><td>bezterminowo</td></tr>
+        <tr><td>Indywidualna kalkulacja kosztów</td><td class="hl yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Uchwała Zarządu + dokumentacja</td><td class="hl yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Szkolenie działu kadr i księgowości</td><td class="hl yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Opieka przy kontrolach ZUS / PIP</td><td class="hl yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Dodatkowe +4% świadczenia rzeczowe dla pracownika</td><td class="hl yes">✓ finansowane przez SP</td><td class="no">—</td></tr>
+        <tr><td>Polisa D&amp;O Leadenhall (Zarząd)</td><td class="hl yes">✓ w pakiecie</td><td class="no">—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box-navy">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+        <div>
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px">W wariancie PLUS — Polisa D&amp;O Leadenhall LW020/D&amp;O/01</div>
+          <p style="font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.65;margin-bottom:10px">Chroni: członków zarządu, rady nadzorczej, prokurentów, głównych księgowych oraz ich małżonków i spadkobierców. Klauzule A+B obligatoryjne (A = odpowiedzialność osobista Zarządu, B = refundacja przez spółkę).</p>
+          <p style="font-size:11.5px;color:rgba(255,255,255,.42)">Ochrona retroaktywna · Trigger claims made<br>3 lata (obecni D&amp;O) / 10 lat (byli D&amp;O)</p>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,.07);padding-left:26px">
+          <div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-bottom:7px">Suma gwarancyjna</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:32px;color:var(--gold2);line-height:1;margin-bottom:6px">500 tys.–30 mln zł</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.35)">W pakiecie · bez dopłat<br>Dopasowywana do skali ryzyka</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-gold">
+      <div style="font-size:9.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:7px">Odpłatnie — Indywidualna Opinia Prawna Kancelarii Żuk Pośpiech</div>
+      <p style="font-size:13px;color:var(--slate);line-height:1.65">Klienci Eliton Prime™ mogą nabyć certyfikowaną opinię Kancelarii Radców Prawnych i Doradców Podatkowych <strong>Żuk Pośpiech Sp. k.</strong> (Katowice) — obejmującą pełną analizę skutków wdrożenia dla Twojej Spółki: ZUS (§2 ust. 1 pkt 26), PIT, KUP CIT (art. 15 ust. 1 uCIT).<br><span style="font-size:11px;color:var(--muted)">Zamówienia przez Stratton Prime: biuro@stratton-prime.pl</span></p>
+    </div>
+    <p class="disc">* Opłata za obsługę EBS naliczana od wartości nominalnej świadczeń — nie od wartości składek ZUS. Wariant PLUS dostępny przy podjęciu decyzji w ciągu 14 dni od daty kalkulacji (do 21.03.2026).</p>
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 6 — HARMONOGRAM ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">06. Harmonogram wdrożenia</div><div class="title">Proces i Warunki</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 8/13</div>
+  </div>
+  <div class="pb" style="padding:0;display:flex;flex-direction:column">
+
+    <!-- GÓRNA CZĘŚĆ: 2 kolumny — Harmonogram | Warunki -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);flex-shrink:0">
+
+      <!-- LEWA: Harmonogram -->
+      <div style="background:var(--white);padding:24px 26px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:700;color:var(--navy)">Harmonogram</div>
+          <span class="pill-g">Czas realizacji: 4 tygodnie</span>
+        </div>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot">1</div><div class="tl-line"></div></div>
+            <div class="tl-body">
+              <div class="tl-tag">Tydzień 1 · Faza I</div>
+              <div class="tl-title">Audyt i Przygotowanie</div>
+              <p class="tl-text">Analiza listy płac, weryfikacja struktury zatrudnienia, przygotowanie uchwały Zarządu (§2 ust. 1 pkt 26 Rozp. MPiPS) i wzorów aneksów pracowniczych.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot">2</div><div class="tl-line"></div></div>
+            <div class="tl-body">
+              <div class="tl-tag">Tydzień 2 · Faza II</div>
+              <div class="tl-title">Komunikacja i Wdrożenie</div>
+              <p class="tl-text">Akceptacja aneksów z personelem, dystrybucja materiałów informacyjnych oraz konfiguracja profili w ekosystemie EBS.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot">3</div><div class="tl-line"></div></div>
+            <div class="tl-body">
+              <div class="tl-tag">Tydzień 3 · Faza III</div>
+              <div class="tl-title">Start Operacyjny</div>
+              <p class="tl-text">Pierwsze Vouchery EBS trafiają do pracowników. Od tego momentu naliczane są oszczędności.</p>
+              <div class="tl-badge">Start generowania oszczędności</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot fill">4</div><div class="tl-line"></div></div>
+            <div class="tl-body">
+              <div class="tl-tag">Tydzień 4+ · Faza IV (ciągła)</div>
+              <div class="tl-title">Obsługa i Utrzymanie</div>
+              <p class="tl-text">Bieżące zarządzanie platformą, miesięczne raportowanie, monitoring zmian legislacyjnych i pełna opieka prawna przez cały okres współpracy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRAWA: Warunki współpracy -->
+      <div style="background:var(--off);padding:24px 26px;display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px">Warunki współpracy</div>
+
+        <!-- Umowa + Wypowiedzenie -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Umowa</div>
+            <div style="font-family:'Libre Baskerville',serif;font-size:18px;color:var(--navy);line-height:1.2">Czas<br>nieokreślony</div>
+          </div>
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Wypowiedzenie</div>
+            <div style="font-family:'Libre Baskerville',serif;font-size:18px;color:var(--navy);line-height:1.2">1<br>miesiąc</div>
+          </div>
+        </div>
+
+        <!-- Opłata -->
+        <div style="background:rgba(176,144,32,.08);border-left:3px solid var(--gold);padding:14px 16px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:5px">Wartość dla firmy</div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px">Opłata od wartości uruchomionych świadczeń</div>
+          <div style="font-size:11px;color:var(--slate);line-height:1.55">Naliczana od faktycznej wartości wdrożonych świadczeń — nie od deklarowanych oszczędności.</div>
+        </div>
+
+        <!-- Polisa -->
+        <div style="background:var(--white);border-left:3px solid var(--navy);padding:14px 16px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">Bezpieczeństwo</div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy)">Polisa D&amp;O Leadenhall — do 30 mln zł</div>
+          <div style="font-size:11px;color:var(--slate);margin-top:3px;line-height:1.5">Ochrona Zarządu, prokurentów i głównych księgowych w zakresie odpowiedzialności cywilnej.</div>
+        </div>
+
+        <!-- Michał Zawadzki — pod Polisą -->
+        <div style="background:var(--navy);padding:16px 18px;margin-top:1px">
+          <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(212,175,90,.45);margin-bottom:10px">Twój opiekun handlowy</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="width:38px;height:38px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(212,175,90,.25)">
+              <span style="font-size:13px;color:var(--gold2);font-weight:700">MZ</span>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:var(--white)">Michał Zawadzki</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:1px">Opiekun Wdrożeniowy · Stratton Prime</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:10px;display:flex;flex-direction:column;gap:5px">
+            <div style="font-size:10px;color:rgba(255,255,255,.55)">✉ <span style="color:rgba(255,255,255,.8)">m.zawadzki@stratton-prime.pl</span></div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55)">✆ <span style="color:rgba(255,255,255,.8)">+48 730 268 668</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOLNY PASEK: Agnieszka — pełna szerokość -->
+    <div style="border-top:1px solid var(--border)">
+
+      <!-- Agnieszka — foto + dane z marginesami -->
+      <div style="background:var(--off);display:grid;grid-template-columns:150px 1fr;gap:0;margin:0 48px">
+        <div style="overflow:hidden;min-height:150px;border-right:1px solid var(--border)"><img src="data:image/jpeg;base64,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" style="width:150px;height:100%;object-fit:cover;object-position:center top;display:block"></div>
+        <div style="padding:16px 20px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:5px">Zespół wdrożeniowy</div>
+          <div style="font-size:15px;font-weight:700;color:var(--navy)">Agnieszka Cięciara</div>
+          <div style="font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:3px 0 10px">Dyrektor ds. Wdrożeń · HR i Payroll</div>
+          <p style="font-size:11px;color:var(--slate);line-height:1.6;margin-bottom:10px">Wieloletnia praktyka w zarządzaniu procesami płacowymi. Dba o Precyzję Operacyjną — od konfiguracji systemów po bezbłędne rozliczenia. Zapewnia spokój działom HR i księgowości klienta.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="border-left:2px solid var(--gold);padding-left:8px">
+              <div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Tydzień 1–2</div>
+              <div style="font-size:10px;color:var(--slate);line-height:1.4">Audyt, uchwała Zarządu, aneksy, dokumentacja EBS.</div>
+            </div>
+            <div style="border-left:2px solid var(--navy);padding-left:8px">
+              <div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:2px">Od tygodnia 3+</div>
+              <div style="font-size:10px;color:var(--slate);line-height:1.4">Raporty oszczędności, monitoring legislacyjny.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 7 — DOŚWIADCZENIE ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">07. Doświadczenie i Zaufanie</div><div class="title">Dlaczego Stratton Prime</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 9/13</div>
+  </div>
+  <div class="pb" style="padding:0;display:flex;flex-direction:column">
+
+    <!-- BLOK 1 — Radosław Żuk: zdjęcie po lewej, dane po prawej -->
+    <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="overflow:hidden;min-height:160px;border-right:1px solid var(--border)"><img src="data:image/jpeg;base64,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" style="width:180px;height:100%;object-fit:cover;object-position:center top;display:block"></div>
+      <div style="padding:22px 28px;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">◈ Za bezpieczeństwo prawne oferty odpowiada</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:22px;color:var(--navy);margin-bottom:2px">Radosław Żuk</div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Radca Prawny · Doradca Podatkowy</div>
+        <p style="font-size:12px;color:var(--slate);line-height:1.65;margin-bottom:10px;max-width:560px">Specjalista w zakresie prawa ubezpieczeń społecznych i prawa podatkowego. Wieloletnie doświadczenie w obsłudze kontroli ZUS i postępowań podatkowych dla klientów MŚP i korporacji. Autor niezależnej analizy prawno-podatkowej modelu Eliton Prime™ (luty 2026).</p>
+        <div style="display:flex;gap:24px">
+          <span style="font-size:10px;color:var(--muted)">Nr RP: <strong style="color:var(--navy)">[do uzupełnienia]</strong></span>
+          <span style="font-size:10px;color:var(--muted)">Nr DP: <strong style="color:var(--navy)">[do uzupełnienia]</strong></span>
+          <span style="font-size:10px;color:var(--muted)">Kancelaria Żuk Pośpiech Sp. k. · kzp.law</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOK 2 — Cytat z analizy -->
+    <div style="padding:22px 28px;border-left:4px solid var(--gold);border-bottom:1px solid var(--border);background:var(--gold3);flex-shrink:0">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Niezależna analiza prawno-podatkowa · luty 2026</div>
+      <p style="font-family:'Libre Baskerville',serif;font-size:14.5px;color:var(--navy);line-height:1.8;font-style:italic;margin:0 0 8px">"Przy spełnieniu warunków formalnych wdrożenia nie zachodzą podstawy do kwestionowania modelu Eliton Prime™ przez organy ZUS ani podatkowe."</p>
+      <div style="font-size:10px;color:var(--muted)">Analiza dostępna do wglądu na etapie due diligence</div>
+    </div>
+
+    <!-- BLOK 3 — Dlaczego Stratton Prime: 3 kolumny -->
+    <div style="background:var(--navy);padding:22px 28px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:16px">Dlaczego Stratton Prime?</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:28px;height:28px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:12px;font-weight:700;color:var(--white)">1</span></div>
+          <div><div style="font-size:12.5px;font-weight:600;color:var(--white);margin-bottom:4px">Doświadczenie</div><div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.6">Wieloletnia praktyka w restrukturyzacji kosztów pracowniczych — klienci z sektorów produkcji, usług i handlu.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:28px;height:28px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:12px;font-weight:700;color:var(--white)">2</span></div>
+          <div><div style="font-size:12.5px;font-weight:600;color:var(--white);margin-bottom:4px">Technologia</div><div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.6">Autorska platforma EBS — automatyzacja i pełna transparentność rozliczeń dla kadr i księgowości.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:28px;height:28px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:12px;font-weight:700;color:var(--white)">3</span></div>
+          <div><div style="font-size:12.5px;font-weight:600;color:var(--white);margin-bottom:4px">Kompleksowość</div><div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.6">Jeden partner odpowiedzialny za audyt, wdrożenie, obsługę prawną i technologię — zero przełączeń.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOK 4 — Zakres wsparcia prawnego: 4 kafelki -->
+    <div style="background:var(--off);padding:22px 28px;flex:1">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:14px">Zakres wsparcia prawnego dla klientów Stratton Prime</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)">
+        <div style="background:var(--white);padding:12px 14px">
+          <div style="font-size:18px;margin-bottom:6px">§</div>
+          <div style="font-size:11.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Obsługa kontroli</div>
+          <div style="font-size:10px;color:var(--slate);line-height:1.5">ZUS, PIP i KAS — po udzieleniu pełnomocnictwa, pełna reprezentacja. (BEZPŁATNIE)</div>
+        </div>
+        <div style="background:var(--white);padding:12px 14px">
+          <div style="font-size:18px;margin-bottom:6px">D&amp;O</div>
+          <div style="font-size:11.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Polisa D&amp;O</div>
+          <div style="font-size:10px;color:var(--slate);line-height:1.5">Leadenhall — do 30 mln zł. Ochrona Zarządu i wdrożonego rozwiązania.</div>
+        </div>
+        <div style="background:var(--white);padding:12px 14px">
+          <div style="font-size:18px;margin-bottom:6px">↻</div>
+          <div style="font-size:11.5px;font-weight:600;color:var(--navy);margin-bottom:4px">Monitoring zmian</div>
+          <div style="font-size:10px;color:var(--slate);line-height:1.5">Bieżący nadzór legislacyjny — klient informowany przy każdej zmianie przepisów.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 8 — FAQ ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">08. Kluczowe kwestie</div><div class="title">Pytania i Odpowiedzi</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 10/13</div>
+  </div>
+  <div class="pb">
+    <div class="faq-item">
+      <div class="faq-q">Na jakiej podstawie prawnej działa model i jak jest potwierdzona jego legalność?</div>
+      <p class="faq-a">Model oparty jest na §2 ust. 1 pkt 26 Rozp. MPiPS z 18.12.1998 r. — przepisie nieprzerwanie obowiązującym od 28 lat. Legalność potwierdzają: interpretacja ZUS DI/100000/43/620/2023, wyrok SN II UK 337/09 oraz niezależna analiza Kancelarii Żuk Pośpiech (luty 2026). <span style="color:var(--gold);font-weight:600">→ Pełna analiza prawna: Przewodnik Prawny Eliton Prime™, str. 3–6.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Czy oszczędności pozwalają sfinansować podwyżki?</div>
+      <p class="faq-a">Tak. W wariancie PLUS Stratton Prime dofinansowuje +4% wartości świadczeń rzeczowych (voucher EBS) dla pracownika z własnych środków — nie obciąża to budżetu pracodawcy. Pracownik otrzymuje wyższe świadczenie rzeczowe, koszt pracodawcy mimo to spada. <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 3.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Czy model obejmuje umowy zlecenie?</div>
+      <p class="faq-a">Tak — §5 ust. 2 pkt 2 Rozp. MPiPS wprost rozszerza zwolnienie ZUS na zleceniobiorców. Wystarczy prosta Instrukcja przyznawania świadczeń (art. 353¹ KC) — potwierdzona interpretacją ZUS DI/100000/43/620/2023. <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 5–6.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Czy wartość vouchera EBS jest przychodem pracownika? Jak to wpływa na PIT?</div>
+      <p class="faq-a">Tak — voucher jest przychodem ze stosunku pracy (art. 12 uPIT) opodatkowanym na zasadach ogólnych. Model obniża podstawę ZUS, nie zwalnia z PIT — pracownik płaci podatek od wartości vouchera na zasadach ogólnych. Pracodawca dolicza wartość vouchera do podstawy zaliczki PIT i wykazuje w PIT-11. <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 9–10.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Jak model wpływa na pracę księgowości?</div>
+      <p class="faq-a">Minimalnie. Dostarczamy gotowe schematy księgowe. Usługa dokumentowana jest jedną notą księgową miesięcznie — nie fakturą VAT, ponieważ voucher jest bonem MPV (art. 8b ustawy o VAT). Platforma EBS eksportuje raporty CSV i PDF gotowe do ujęcia w PIT-11. <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 10–11.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Co w sytuacji kontroli ZUS, PIP lub KAS?</div>
+      <p class="faq-a"><strong>Tarcza Ochronna™.</strong> Radcowie prawni Kancelarii Żuk Pośpiech obsługują postępowania kontrolne w ramach umowy. Model posiada kompletną ścieżkę audytową: uchwała Zarządu, zindywidualizowane przypisanie świadczeń i logi EBS. <span style="color:var(--gold);font-weight:600">→ Szczegóły ryzyk: Przewodnik Prawny, str. 12–13.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Co się stanie, jeśli przepisy się zmienią?</div>
+      <p class="faq-a">Dział Prawny Stratton Prime monitoruje zmiany legislacyjne na bieżąco. W razie istotnej zmiany informujemy klientów i dostosowujemy model — lub umożliwiamy rozwiązanie umowy z 1-miesięcznym wypowiedzeniem, bez jakichkolwiek kar. <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 13.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Jak wygląda proces uzyskania zgody pracownika? Co jeśli pracownik odmówi?</div>
+      <p class="faq-a">Zmiana wymaga podpisania aneksu przez pracownika — uczestnictwo jest dobrowolne. Stratton Prime przygotowuje wzory aneksów i materiały informacyjne. Pracownik, który odmówi, pozostaje na dotychczasowych warunkach — jego wynagrodzenie zasadnicze nie może spaść poniżej 4&nbsp;806 zł (minimum 2026). <span style="color:var(--gold);font-weight:600">→ Szczegóły: Przewodnik Prawny, str. 8.</span></p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Jakie są warunki wypowiedzenia umowy ze Stratton Prime?</div>
+      <p class="faq-a">Umowa na czas nieokreślony z 1-miesięcznym wypowiedzeniem. Brak kar umownych i dodatkowych opłat poza wynagrodzeniem za obsługę EBS. Warunki dostępne do wglądu przed podpisaniem. <span style="color:var(--gold);font-weight:600">→ Wzór umowy dostępny przed podpisaniem — zapytaj opiekuna.</span></p>
+    </div>
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 11 — OŚ PROCESU + KOSZT ZWŁOKI ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">11. Gdzie jesteś teraz</div><div class="title">Twoja Droga do Pierwszych Oszczędności</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 11/13</div>
+  </div>
+  <div class="pb">
+
+    <p class="lead">Poniżej widać pełny proces od pierwszego kontaktu do wygenerowania pierwszych oszczędności. <strong>Jesteś teraz na etapie Decyzji</strong> — wszystkie poprzednie kroki zostały wykonane. Dalsze działanie zależy wyłącznie od Ciebie.</p>
+
+    <!-- PROCESS AXIS -->
+    <div style="margin-bottom:10px;padding-top:38px">
+      <div class="proc-axis">
+
+        <div class="proc-step">
+          <div class="proc-circle done">✓</div>
+          <div class="proc-label done">Analiza<br>potrzeb</div>
+          <div class="proc-sub">Zidentyfikowaliśmy<br>potencjał</div>
+        </div>
+
+        <div class="proc-step">
+          <div class="proc-circle done">✓</div>
+          <div class="proc-label done">Kalkulacja<br>indywidualna</div>
+          <div class="proc-sub">Na podstawie<br>Twojej listy płac</div>
+        </div>
+
+        <div class="proc-step" style="position:relative">
+          <div class="proc-badge-now">Jesteś tutaj</div>
+          <div class="proc-circle active">→</div>
+          <div class="proc-label active">Decyzja</div>
+          <div class="proc-sub" style="color:var(--gold);font-weight:600">Ważna do<br>21.03.2026</div>
+        </div>
+
+        <div class="proc-step">
+          <div class="proc-circle future">4</div>
+          <div class="proc-label future">Podpisanie<br>umowy</div>
+          <div class="proc-sub">Autenti<br>e-podpis</div>
+        </div>
+
+        <div class="proc-step">
+          <div class="proc-circle future">5</div>
+          <div class="proc-label future">Wdrożenie<br>dokumentacji</div>
+          <div class="proc-sub">Uchwała,<br>aneksy</div>
+        </div>
+
+        <div class="proc-step">
+          <div class="proc-circle future">6</div>
+          <div class="proc-label future">Start<br>EBS</div>
+          <div class="proc-sub">Pierwsze<br>Vouchery EBS</div>
+        </div>
+
+        <div class="proc-step">
+          <div class="proc-circle future" style="border-color:var(--green);color:var(--green)">zł</div>
+          <div class="proc-label future" style="color:var(--green)">Pierwsze<br>oszczędności</div>
+          <div class="proc-sub" style="color:var(--green)">+432,51 zł<br>miesięcznie</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background:var(--green2);border:1px solid var(--green);border-left:4px solid var(--green);padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;gap:16px">
+      <span style="font-size:22px;color:var(--green)">✓</span>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--green)">Krok 2 z 7 — gotowe</div>
+        <div style="font-size:12px;color:var(--slate)">Analiza potrzeb i kalkulacja indywidualna są gotowe. Następny krok to Twoja decyzja — potem wszystko realizujemy my.</div>
+      </div>
+    </div>
+
+    <h3 class="sh">Ile kosztuje Cię każdy miesiąc zwłoki?</h3>
+    <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która pozostaje niezrealizowana — środki trafiają do systemu danin publicznych w wyższej niż możliwa wysokości.</p>
+
+    <div class="cod">
+      <div class="cod-cell">
+        <div class="cod-period">1 miesiąc zwłoki</div>
+        <div class="cod-amount">−432,51 zł</div>
+        <div class="cod-label">strata netto</div>
+      </div>
+      <div class="cod-cell">
+        <div class="cod-period">3 miesiące zwłoki</div>
+        <div class="cod-amount">−1 297,53 zł</div>
+        <div class="cod-label">strata netto</div>
+      </div>
+      <div class="cod-cell">
+        <div class="cod-period">6 miesięcy zwłoki</div>
+        <div class="cod-amount">−2 595,06 zł</div>
+        <div class="cod-label">strata netto</div>
+      </div>
+      <div class="cod-cell">
+        <div class="cod-period">12 miesięcy zwłoki</div>
+        <div class="cod-amount">−5 190,14 zł</div>
+        <div class="cod-label">strata netto</div>
+      </div>
+    </div>
+
+    <div class="box-red">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:6px">Ważne — termin oferty Wariantu PLUS</div>
+      <p style="font-size:13px;color:var(--ink);line-height:1.65">Wariant <strong>PLUS</strong> (niższy koszt obsługi, D&amp;O Leadenhall w pakiecie, wdrożenie w 14 dni) jest dostępny przez <strong>14 dni od daty tej kalkulacji</strong>, tj. do <strong>21.03.2026</strong>. Po tym terminie obowiązuje wyłącznie wariant STANDARD.</p>
+    </div>
+
+    <div style="background:var(--off);border:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Następna strona</div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy)">Pełny rozkład wartości — skąd pochodzi każda złotówka oszczędności →</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:right;flex-shrink:0">Decyzja i kontakt<br>na ostatniej stronie</div>
+    </div>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 10 — SKĄD RÓŻNICA: ROZKŁAD OSZCZĘDNOŚCI ══════════════════ -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-left"><div class="tag">10. Rozkład wartości</div><div class="title">Skąd Różnica? Pełny Rozkład Wartości</div></div>
+    <div class="ph-right">DATA: 9.03.2026<br>STRONA 12/13</div>
+  </div>
+  <div class="pb">
+
+    <p class="lead">Obniżenie podstawy wymiaru ZUS o 2 044,15 zł uruchamia <strong>cztery strumienie wartości</strong>. Poniżej pełny rozkład każdej złotówki — skąd każda pochodzi i dokąd trafia.</p>
+
+    <!-- WATERFALL DIAGRAM — wizualny rozkład -->
+    <div style="margin-bottom:24px">
+
+      <!-- Wiersz nagłówkowy -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:2px solid var(--navy);padding-bottom:8px;margin-bottom:0">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Element</div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Co to oznacza</div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-align:right">Kwota / m-c</div>
+      </div>
+
+      <!-- Wiersz 1 — efekt strukturalny -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:1px solid var(--border);padding:12px 0;align-items:start">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--navy)">Efekt strukturalny</div>
+          <div style="font-size:10px;color:var(--muted)">Zamiana części brutto na Voucher EBS</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--slate);padding-right:16px;line-height:1.5">Wynagrodzenie zasadnicze spada o 2 044,15 zł, w zamian pojawia się Voucher EBS o wartości 1 639,92 zł. Różnica 404,23 zł to oszczędność wynikająca z tego, że voucher nie wchodzi w podstawę ZUS — pracownik otrzymuje ekwiwalentną wartość świadczeń.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:20px;color:var(--green);font-weight:700">+404,23 zł</span>
+          <div style="font-size:9px;color:var(--muted)">efekt zamiany</div>
+        </div>
+      </div>
+
+      <!-- Wiersz 1b — ZUS pracodawcy -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:1px solid var(--border);padding:12px 0;align-items:start">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--navy)">ZUS pracodawcy</div>
+          <div style="font-size:10px;color:var(--muted)">§2 ust. 1 pkt 26 — niższa podstawa</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--slate);padding-right:16px;line-height:1.5">Składki ZUS pracodawcy (emerytalna, rentowa, wypadkowa) liczone od niższego brutto 4 805,99 zł zamiast 6 850,14 zł. Voucher EBS jest z tych składek wyłączony z mocy prawa.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:20px;color:var(--green);font-weight:700">+418,64 zł</span>
+          <div style="font-size:9px;color:var(--muted)">ZUS pracodawcy</div>
+        </div>
+      </div>
+
+      <!-- Wiersz 2 — podwyżka netto pracownika -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:1px solid var(--border);padding:12px 0;background:rgba(212,175,90,.04);align-items:start">
+        <div style="padding-left:14px;border-left:3px solid var(--gold)">
+          <div style="font-size:11px;font-weight:700;color:var(--navy)">Podwyżka świadczeń rzeczowych pracownika</div>
+          <div style="font-size:10px;color:var(--muted)">+4% w formie vouchera EBS · finansowane przez SP</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--slate);padding-right:16px;line-height:1.5">Pracownik dostaje o 55,77 zł więcej w formie świadczenia rzeczowego (voucher EBS) każdego miesiąca — nie jako gotówkę na konto. Finansowane przez Stratton Prime w ramach modelu PLUS — nie obciąża budżetu pracodawcy.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:20px;color:var(--gold);font-weight:700">−55,77 zł</span>
+          <div style="font-size:9px;color:var(--muted)">do pracownika</div>
+        </div>
+      </div>
+
+      <!-- Wiersz 3 — bonus administracyjny -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:1px solid var(--border);padding:12px 0;align-items:start">
+        <div style="padding-left:14px;border-left:3px solid var(--gold)">
+          <div style="font-size:11px;font-weight:700;color:var(--navy)">Bonus dla działu kadr/księgowości</div>
+          <div style="font-size:10px;color:var(--muted)">2% wartości świadczeń · finansowany przez SP</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--slate);padding-right:16px;line-height:1.5">Pracownicy kadr i księgowości obsługujący wdrożenie EBS otrzymują miesięczny bonus za prowadzenie dokumentacji i rozliczeń. Wynosi 2% wartości świadczeń (27,88 zł) i jest w całości finansowany przez Stratton Prime — nie przez pracodawcę.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:20px;color:var(--gold);font-weight:700">−27,88 zł</span>
+          <div style="font-size:9px;color:var(--muted)">do kadr i księg.</div>
+        </div>
+      </div>
+
+      <!-- Wiersz 4 — opłata EBS -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;border-bottom:1px solid var(--border);padding:12px 0;align-items:start">
+        <div style="padding-left:14px;border-left:3px solid var(--red)">
+          <div style="font-size:11px;font-weight:700;color:var(--navy)">Opłata za obsługę EBS</div>
+          <div style="font-size:10px;color:var(--muted)">26% wartości nominalnej świadczeń</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--slate);padding-right:16px;line-height:1.5">Wynagrodzenie Stratton Prime za technologię, obsługę prawną, wdrożenie, dokumentację i bieżące utrzymanie platformy EBS. Płatna przez pracodawcę. Jedyna pozycja kosztowa po stronie klienta.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:20px;color:var(--red);font-weight:700">−362,48 zł</span>
+          <div style="font-size:9px;color:var(--muted)">koszt obsługi</div>
+        </div>
+      </div>
+
+      <!-- Wiersz SUMA -->
+      <div style="display:grid;grid-template-columns:220px 1fr 110px;gap:0;background:var(--navy);padding:14px 16px;margin-top:1px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--gold2)">Potencjalna oszczędność pracodawcy (po odliczeniu wszystkich kosztów)</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35)">Szacunkowy zysk netto w budżecie firmy</div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.55);padding-right:16px;line-height:1.5">Cztery strumienie wartości zsumowane: dwa oszczędnościowe (+404,23 i +418,64 zł) minus trzy wypływy do pracownika, kadr i Stratton Prime. Pracodawca zatrzymuje ponad połowę wygenerowanej wartości.</div>
+        <div style="text-align:right">
+          <span style="font-family:'Libre Baskerville',serif;font-size:26px;color:var(--gold2);font-weight:700">+432,51 zł</span>
+          <div style="font-size:9px;color:rgba(255,255,255,.35)">miesięcznie</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PODZIAŁ GRAFICZNY -->
+    <h3 class="sh">Jak jest podzielona wygenerowana wartość?</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:var(--border);margin-bottom:20px">
+      <div style="background:var(--green2);padding:18px 16px;text-align:center;border-top:3px solid var(--green)">
+        <div style="font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:6px">Pracodawca</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:26px;color:var(--green);line-height:1;margin-bottom:4px">+432,51 zł</div>
+        <div style="font-size:10.5px;color:var(--slate)">Oszczędność netto po wszystkich kosztach</div>
+        <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--green)">oszczędność netto</div>
+      </div>
+      <div style="background:var(--off);padding:18px 16px;text-align:center;border-top:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Pracownik</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:26px;color:var(--gold);line-height:1;margin-bottom:4px">55,77 zł</div>
+        <div style="font-size:10.5px;color:var(--slate)">Wzrost wartości świadczeń rzeczowych co miesiąc</div>
+        <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--gold)">wzrost netto / m-c</div>
+      </div>
+      <div style="background:var(--off);padding:18px 16px;text-align:center;border-top:3px solid var(--gold)">
+        <div style="font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Kadry / Księgowość</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:26px;color:var(--gold);line-height:1;margin-bottom:4px">27,88 zł</div>
+        <div style="font-size:10.5px;color:var(--slate)">Bonus administracyjny za obsługę EBS</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">finansowane przez SP</div>
+        <div style="margin-top:6px;font-size:10px;font-weight:600;color:var(--gold)">bonus miesięczny</div>
+      </div>
+      <div style="background:var(--navy);padding:18px 16px;text-align:center;border-top:3px solid rgba(255,255,255,.2)">
+        <div style="font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(212,175,90,.6);margin-bottom:6px">Stratton Prime (opłata)</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:26px;color:var(--gold2);line-height:1;margin-bottom:4px">362,48 zł</div>
+        <div style="font-size:10.5px;color:rgba(255,255,255,.4)">Technologia, prawo, wdrożenie, utrzymanie</div>
+        <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--gold2)">opłata za usługę</div>
+      </div>
+    </div>
+
+    <div class="box-gold">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Wniosek: model jest zaprojektowany tak, żeby wygrały trzy strony</div>
+      <p style="font-size:13px;color:var(--slate);line-height:1.7">Pracodawca zatrzymuje ponad połowę wygenerowanej wartości jako oszczędność netto. Pracownik dostaje realnie wyższe świadczenia rzeczowe (voucher EBS) każdego miesiąca — bez obciążenia budżetu firmy. Kadry otrzymują bonus za dodatkową pracę administracyjną. Wszystkie trzy strony zyskują realnie — z jednej puli ZUS, która wcześniej trafiała wyłącznie do systemu ubezpieczeń.</p>
+    </div>
+
+    <p class="disc">Rozkład wartości obliczony dla 1 pracownika przy wynagrodzeniu brutto 6 850,14 zł. Wariant PLUS. Podwyżka i bonus dla kadr finansowane ze środków Stratton Prime — nie stanowią kosztu pracodawcy. Pełna kalkulacja dostępna na życzenie.</p>
+
+  </div>
+  <div class="pf"><strong>STRATTON PRIME SP. Z O.O.</strong><span>POUFNE © 2026</span></div>
+</div>
+
+<!-- ══════════════════ STR 11 — HOOK (full dark) ══════════════════ -->
+<div class="page hook-page">
+  <div class="hook-body">
+
+    <div>
+      <div class="hook-tag">Wizja po wdrożeniu · Strona 13</div>
+      <h2 class="hook-headline">
+        Jak będzie wyglądać<br>Twoja firma za <em>rok</em>?
+      </h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.55);max-width:540px;line-height:1.8;margin-bottom:36px">To nie jest pytanie retoryczne. Poniżej — konkretne liczby i zmiany, które nastąpią w Twojej firmie po wdrożeniu modelu Eliton Prime™. Przy Twoich aktualnych parametrach płacowych.</p>
+    </div>
+
+    <div class="hook-vision">
+      <div class="hook-vis-cell">
+        <div class="hook-vis-period"><span>Miesiąc 1</span></div>
+        <div class="hook-vis-amount" style="color:var(--green)">+432,51 zł</div>
+        <p class="hook-vis-text">Przy prawidłowym wdrożeniu oszczędności mogą pojawić się już od pierwszego cyklu płacowego. Pracownik może otrzymać +4% w formie świadczenia rzeczowego (voucher EBS) w wariancie PLUS. Zarząd objęty polisą D&amp;O Leadenhall.</p>
+      </div>
+      <div class="hook-vis-cell">
+        <div class="hook-vis-period"><span>Miesiąc 12</span></div>
+        <div class="hook-vis-amount">+5 190,14 zł</div>
+        <p class="hook-vis-text">Szacowana roczna oszczędność skumulowana — do dyspozycji firmy w zależności od faktycznych wyników wdrożenia.</p>
+      </div>
+      <div class="hook-vis-cell">
+        <div class="hook-vis-period"><span>Miesiąc 36</span></div>
+        <div class="hook-vis-amount">+15 570,42 zł</div>
+        <p class="hook-vis-text">Trzy lata wdrożenia. Łączna oszczędność, która została w firmie zamiast trafić do ZUS. Bez żadnych zmian struktury zatrudnienia.</p>
+      </div>
+    </div>
+
+    <div class="hook-cta-block">
+      <div class="hook-cta-left">
+        <div class="hook-cta-eyebrow">Trzy kroki do pierwszych oszczędności</div>
+        <div class="hook-cta-title">Podejmij decyzję. Przeprowadzimy wdrożenie.</div>
+        <div class="hook-cta-steps">
+          <div class="hook-cta-step"><div class="n">1</div>E-mail z potwierdzeniem</div>
+          <div class="hook-cta-step"><div class="n">2</div>Podpis elektroniczny (Autenti)</div>
+          <div class="hook-cta-step"><div class="n">3</div>Realizujemy wdrożenie w ciągu 14 dni</div>
+        </div>
+      </div>
+      <div class="hook-cta-right">
+        <div class="hook-deadline">
+          <div class="hook-deadline-label">Oferta PLUS ważna do</div>
+          <div class="hook-deadline-date">21.03.2026</div>
+          <div class="hook-deadline-sub">14 dni od kalkulacji</div>
+        </div>
+        <div class="hook-contact">
+          <strong>Michał Zawadzki</strong><br>
+          m.zawadzki@stratton-prime.pl<br>
+          +48 730 268 668
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="hook-pf">
+    <span>STRATTON PRIME SP. Z O.O. · NIP: 5842867357 · KRS: 0001169520 · REGON: 541537557 · ul. Nowy Świat 42/44, 80-299 Gdańsk · biuro@stratton-prime.pl · +48 730 268 668</span>
+    <span>POUFNE © 2026</span>
+  </div>
+  <!-- DISCLAIMER + RODO — czytelna sekcja na białym tle -->
+  <div style="background:#f8f7f4;border-top:3px solid #0D1F3C;padding:20px 80px 24px;position:relative;z-index:1">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:960px">
+      <div>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#0D1F3C;margin-bottom:6px">Nota prawna</div>
+        <p style="font-size:9px;color:#444;line-height:1.75;margin:0">Niniejszy dokument ma charakter informacyjny i marketingowy. Kalkulacje finansowe sporządzono na podstawie danych przekazanych przez Klienta i mają charakter szacunkowy — rzeczywiste wyniki mogą się różnić od prezentowanych. Dokument nie stanowi porady prawnej ani podatkowej w rozumieniu ustawy z dnia 5 lipca 1996 r. o doradztwie podatkowym (t.j. Dz.U. 2021 poz. 2117). Wyniki wdrożenia mogą się różnić w zależności od indywidualnej sytuacji Klienta, struktury zatrudnienia i zmian legislacyjnych. Stratton Prime Sp. z o.o. rekomenduje uzyskanie indywidualnej opinii prawno-podatkowej przed podjęciem decyzji opartych wyłącznie na niniejszym dokumencie.</p>
+      </div>
+      <div>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#0D1F3C;margin-bottom:6px">Ochrona danych osobowych (RODO)</div>
+        <p style="font-size:9px;color:#444;line-height:1.75;margin:0">Administratorem Państwa danych osobowych jest Stratton Prime Sp. z o.o., ul. Nowy Świat 42/44, 80-299 Gdańsk, NIP 5842867357, KRS 0001169520, REGON 541537557. Dane przetwarzane są w celu przygotowania i realizacji oferty handlowej (art. 6 ust. 1 lit. b RODO) oraz w prawnie uzasadnionym interesie administratora (art. 6 ust. 1 lit. f RODO). Przysługuje Państwu prawo dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia oraz wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa). Szczegółowa polityka prywatności: <strong>stratton-prime.pl/rodo</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

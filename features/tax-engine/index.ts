@@ -9,6 +9,10 @@ import { znajdzBruttoDlaNetto } from './logic/grossUp';
 export { DEFAULT_CONFIG } from './constants';
 export { znajdzBruttoDlaNetto };
 
+export const calculateCommission = (swiadczenieNetto: number, prowizjaProc: number) => {
+  return swiadczenieNetto * (prowizjaProc / 100);
+};
+
 // ==================== WARIANTY OBLICZEŃ (ORKIESTRACJA) ====================
 
 export const obliczWariantStandard = (pracownik: Pracownik, stawkaWypadkowa: number, config: Config): WynikWariantuStandard => {

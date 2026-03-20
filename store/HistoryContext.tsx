@@ -10,13 +10,30 @@ interface HistoryContextType {
 
 const HistoryContext = createContext<HistoryContextType | undefined>(undefined);
 
+const SCHEMA_VERSION = 1;
+const HISTORY_KEY = 'kalkulator_historia';
+
 export const HistoryProvider = ({ children }: { children?: ReactNode }) => {
   const [historia, setHistoria] = useState<ZapisanaKalkulacja[]>(() => {
-    const saved = localStorage.getItem('kalkulator_historia');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (!saved) return [];
+      const storedVersion = localStorage.getItem(`${HISTORY_KEY}_v`);
+      if (storedVersion && Number(storedVersion) !== SCHEMA_VERSION) {
+        console.warn('History schema version mismatch, clearing stored history');
+        return [];
+      }
+      return JSON.parse(saved);
+    } catch {
+      console.warn('Failed to load history from localStorage');
+      return [];
+    }
   });
 
-  useEffect(() => { localStorage.setItem('kalkulator_historia', JSON.stringify(historia)); }, [historia]);
+  useEffect(() => {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(historia));
+    localStorage.setItem(`${HISTORY_KEY}_v`, String(SCHEMA_VERSION));
+  }, [historia]);
 
   const deleteFromHistory = (id: string) => {
     setHistoria(prev => prev.filter(h => h.id !== id));

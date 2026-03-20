@@ -23,6 +23,16 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              'vendor-react': ['react', 'react-dom'],
+              'vendor-pdf': ['@react-pdf/renderer', 'jspdf', 'pdf-lib'],
+            }
+          }
+        }
       }
     };
 });

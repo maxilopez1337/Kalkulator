@@ -2,25 +2,23 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Pracownik } from '../../entities/employee/model';
 import { Plus, ArrowDown, X, Trash, FileText, Check, ArrowRight, Filter } from '../../common/Icons';
-import { useAppStore } from '../../store/AppContext';
+import { useEmployees, useCompany, useConfirm } from '../../store/AppContext';
 import { parseExcelData, ImportRow } from '../../utils/excelParser';
 import { obliczWiek } from '../../shared/utils/dates';
+import { Modal } from '../../shared/ui/Modal';
 import { excelGenerator } from '../../services/excelGenerator';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/ui/Button';
+import { pl } from '../../shared/i18n/pl';
 
 interface ImportModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-declare global {
-    interface Window {
-        XLSX: any;
-        ExcelJS: any;
-    }
-}
-
 export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
-    const { setPracownicy, pracownicy, config } = useAppStore();
+    const { setPracownicy, pracownicy } = useEmployees();
+    const { config } = useCompany();
+    const { confirmDialog } = useConfirm();
     const [importRows, setImportRows] = useState<ImportRow[]>([]);
     const [fileName, setFileName] = useState<string>('');
     const [dragActive, setDragActive] = useState(false);
@@ -56,11 +54,11 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
 
     if (!isOpen) return null;
 
-    const onImport = (nowiPracownicy: any[]) => {
+    const handleImport = (nowiPracownicy: Pracownik[]) => {
         setPracownicy([...pracownicy, ...nowiPracownicy]);
     };
 
-    const handleUpdateRow = (index: number, field: keyof Pracownik, value: any) => {
+    const handleUpdateRow = (index: number, field: keyof Pracownik, value: Pracownik[keyof Pracownik]) => {
         setImportRows(prev => {
             const newRows = [...prev];
             const currentRow = { ...newRows[index] }; 
@@ -98,8 +96,8 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
         });
     };
 
-    const handleDeleteSelected = () => {
-        if (confirm(`Czy na pewno usunąć zaznaczone wiersze (${selectedIndices.size})?`)) {
+    const handleDeleteSelected = async (): Promise<void> => {
+        if (await confirmDialog(pl.confirms.deleteSelectedRows(selectedIndices.size), { variant: 'danger' })) {
             setImportRows(prev => prev.filter((_, i) => !selectedIndices.has(i)));
             setSelectedIndices(new Set());
         }
@@ -149,13 +147,13 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
 
     const handleConfirmImport = () => {
         const validRows = importRows.filter(r => r.isValid).map(r => r.data as Pracownik);
-        onImport(validRows);
+        handleImport(validRows);
         onClose();
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
-            <div className="bg-white rounded-xl w-full max-w-[1400px] h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-[1400px]" height="md:h-[90vh]">
+            <div className="flex flex-col h-full">
                 
                 {/* 1. Header Area */}
                 <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white">
@@ -291,8 +289,8 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                     )}
                                     {importRows.length > 0 && (
                                         <button
-                                            onClick={() => {
-                                                if (window.confirm('Czy na pewno usunąć wszystkich pracowników z listy importu?')) {
+                                            onClick={async () => {
+                                                if (await confirmDialog(pl.confirms.clearImportList, { variant: 'danger' })) {
                                                     setImportRows([]);
                                                     setSelectedIndices(new Set());
                                                 }
@@ -439,22 +437,20 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                         {importRows.length > 0 && <span>Upewnij się, że dane są poprawne przed importem.</span>}
                     </div>
                     <div className="flex gap-4">
-                        <button onClick={onClose} className="px-6 py-2.5 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl transition-all">
-                            Anuluj
-                        </button>
-                        <button 
-                            onClick={handleConfirmImport} 
+                        <ButtonSecondary onClick={onClose}>
+                            {pl.buttons.cancel}
+                        </ButtonSecondary>
+                        <ButtonPrimary
+                            onClick={handleConfirmImport}
                             disabled={stats.valid === 0}
-                            className={`px-8 py-2.5 font-bold text-white rounded-xl shadow-lg transition-all flex items-center gap-2
-                                ${stats.valid > 0 ? 'bg-slate-900 hover:bg-slate-800 hover:shadow-xl hover:-translate-y-0.5' : 'bg-slate-300 cursor-not-allowed'}
-                            `}
+                            icon={<Check />}
                         >
-                            <Check /> Importuj {stats.valid > 0 && `(${stats.valid})`}
-                        </button>
+                            Importuj {stats.valid > 0 && `(${stats.valid})`}
+                        </ButtonPrimary>
                     </div>
                 </div>
 
             </div>
-        </div>
+        </Modal>
     );
 };

@@ -3,12 +3,6 @@
 import { Firma } from '../../../entities/company/model';
 import { GlobalneWyniki } from '../../../entities/calculation/model';
 
-declare global {
-    interface Window {
-        ExcelJS: any;
-    }
-}
-
 interface GeneratorOptions {
     firma: Firma;
     wyniki: GlobalneWyniki;
@@ -51,7 +45,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     
     // Nagłówek Raportu (B2)
     wsDash.mergeCells('B2:F2');
-    wsDash.getCell('B2').value = `Ilustracja finansowa oszczędności po wdrożeniu modelu Eliton Prime PLUS dla firmy : ${firma.nazwa || 'FIRMA'}`;
+    wsDash.getCell('B2').value = `Ilustracja finansowa oszczędności po wdrożeniu modelu Eliton Prime™ PLUS dla firmy : ${firma.nazwa || 'FIRMA'}`;
     wsDash.getCell('B2').font = { size: 16, bold: true, color: { argb: 'FF0F172A' } };
     
     wsDash.getCell('B3').value = `Data symulacji: ${new Date().toLocaleDateString()}`;
@@ -80,7 +74,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
 
     // 2. Nowy Koszt (C5)
     const cellC5 = wsDash.getCell(`C${kpiRow}`);
-    cellC5.value = "Koszt po wdrożeniu modelu Eliton Prime PLUS (msc)";
+    cellC5.value = "Koszt po wdrożeniu modelu Eliton Prime™ PLUS (msc)";
     cellC5.alignment = centerAlignment;
     cellC5.font = { size: 10, color: { argb: 'FF64748B' } }; // Styl etykiety
 
@@ -116,7 +110,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
 
     // Tabela porównawcza (Wiersz 9) - ZMIANA NAGŁÓWKÓW C9 i D9
     const tableRow = 9;
-    const headers = ['Kategoria', 'Aktualny system wynagradzania', 'Model Eliton Prime PLUS', 'Różnica'];
+    const headers = ['Kategoria', 'Aktualny system wynagradzania', 'Eliton Prime™ PLUS', 'Różnica'];
     headers.forEach((h, i) => {
         const cell = wsDash.getCell(tableRow, 2 + i);
         cell.value = h;
@@ -182,38 +176,38 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     addDashboardRow("ZUS Pracodawcy", statsStandard.zus, statsStratton.zus, currentRow++);
     
     // 3. Opłata Success Fee (B12) - ZMIANA ETYKIETY
-    addDashboardRow("Opłata Success Fee za obsługę modelu", 0, feeCost, currentRow++);
+    addDashboardRow(`Opłata serwisowa EBS\n${prowizjaProc}% wartości nominalnej świadczeń`, 0, feeCost, currentRow++);
     
     // 4. Elementy Modelu PLUS (Jeśli dotyczy)
     if (isPlus) {
         // Podwyżka Systemowa (B13) - ZMIANA ETYKIETY
-        addDashboardRow("Podwyżka finansowana w (Stratton 4%)", 0, { formula: "'Kalkulator Podwyżek'!$O$6" }, currentRow++, false, {
+        addDashboardRow("+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime", 0, { formula: "'Kalkulator Podwyżek'!$V$6" }, currentRow++, false, {
             font: { color: { argb: 'FF059669' }, italic: true }, // Green Text
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFECFDF5' } } // Green BG
         });
 
         // Bonus Administracyjny (B14) - ZMIANA ETYKIETY
-        addDashboardRow("Bonus dla administracji w (Stratton 2%)", 0, { formula: "'Kalkulator Podwyżek'!$O$7" }, currentRow++, false, {
+        addDashboardRow("Bonus dla administracji w (Stratton 2%)", 0, { formula: "'Kalkulator Podwyżek'!$V$11" }, currentRow++, false, {
             font: { color: { argb: 'FF1E40AF' }, italic: true }, // Blue Text
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEFF6FF' } } // Blue BG
         });
 
         // Wstaw do D14 wartość z O14 arkusza Kalkulator Podwyżek
-        wsDash.getCell('D14').value = { formula: "'Kalkulator Podwyżek'!O11" };
+        wsDash.getCell('D14').value = { formula: "'Kalkulator Podwyżek'!V11" };
     }
 
     // 5. Budżet na dodatkowe podwyżki (B15) - ZMIANA ETYKIETY
     // Suma z kolumny I (która jest teraz edytowalną podwyżką)
-    addDashboardRow("Budżet na dodatkowe podwyżki od pracodawcy", 0, { formula: "'Kalkulator Podwyżek'!$O$8" }, currentRow++, false, {
+    addDashboardRow("Budżet na dodatkowe podwyżki od pracodawcy", 0, { formula: "'Kalkulator Podwyżek'!$V$7" }, currentRow++, false, {
         font: { color: { argb: 'FFD97706' }, italic: true }, // Amber Text
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFBEB' } } // Amber BG
     });
     // Wstaw do D15 wartość z O7 arkusza Kalkulator Podwyżek
-    wsDash.getCell('D15').value = { formula: "'Kalkulator Podwyżek'!O7" };
+    wsDash.getCell('D15').value = { formula: "'Kalkulator Podwyżek'!V7" };
 
     // SUMA CAŁKOWITA
     const totalRowIdx = currentRow;
-    wsDash.getCell(`B${totalRowIdx}`).value = "CAŁKOWITY KOSZT";
+    wsDash.getCell(`B${totalRowIdx}`).value = "CAŁKOWITY KOSZT BRUTTO PRACODAWCY";
     wsDash.getCell(`B${totalRowIdx}`).font = { bold: true };
     
     wsDash.getCell(`C${totalRowIdx}`).value = { formula: `SUM(C${tableRow+1}:C${totalRowIdx-1})` };
@@ -273,12 +267,14 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
         'Obecne\nNetto', 
         'Nowa Baza\n(ZUS)', 
         'Świadczenie\n(Benefit)', 
-        isPlusVariant ? 'Podwyżka Finansowana\n(Stratton 4%)' : 'Podwyżka Finansowana\n(4%)',
+        '+4% Świadczeń\nrzeczowych EBS',
         'Bonus dla działu Księgowo - Kadrowego\n(2% - wypłacane od Stratton)', 
         'Oszczędność Firmy\n(Na czysto)', // KOLUMNA H
         'Podwyżka Dodatkowa\n(Edytowalna)', // KOLUMNA I
         'NOWE ŁĄCZNE\nNETTO PRACOWNIKA', // KOLUMNA J
-        'ZMIANA\n(ZYSK PRACOWNIKA)' // KOLUMNA K
+        'ZMIANA\n(ZYSK PRACOWNIKA)', // KOLUMNA K
+        'MODEL DOCELOWY\nBRUTTO ŁĄCZNE', // KOLUMNA L
+        'NOWE ŁĄCZNE\nBRUTTO (1mc)', // KOLUMNA M
     ];
 
     simHeaders.forEach((h, i) => {
@@ -320,10 +316,11 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
             wsSim.getCell(`I${r}`).value = 0;
             wsSim.getCell(`J${r}`).value = w.standard.netto;
             wsSim.getCell(`K${r}`).value = 0;
-            wsSim.getCell(`L${r}`).value = 0; // Kolumna L dla studenta
-            
+            wsSim.getCell(`L${r}`).value = w.podzial.pit.lacznyPrzychod || 0;
+            wsSim.getCell(`M${r}`).value = w.podzial.pit.lacznyPrzychod || 0; // Studenci bez zmian
+
             // Szare tło dla studentów
-            for(let cCode = 65; cCode <= 76; cCode++) { // A-L
+            for(let cCode = 65; cCode <= 77; cCode++) { // A-M
                 wsSim.getCell(`${String.fromCharCode(cCode)}${r}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
             }
         } else {
@@ -377,8 +374,24 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
         wsSim.getCell(`K${r}`).value = { formula: `J${r}-C${r}` };
         wsSim.getCell(`K${r}`).font = { bold: true, color: { argb: 'FF059669' } };
 
+        // KOLUMNA L: Obecne Brutto
+        // ZMIENNE DO NOWYCH FORMUL Z NODE
+        const kupVal = w.standard.kup || 0;
+        let kzpVal = parseFloat(w.pracownik.pit2 || '0'); // Pobrane wprost z Ewidencji Osobowej (Step 2)
+        if (isNaN(kzpVal)) kzpVal = 0;
+        const zusSpoVal = w.podzial.zasadnicza.zusPracownik?.suma || 0;
+
+        wsSim.getCell(`L${r}`).value = w.podzial.pit.lacznyPrzychod || 0;
+        wsSim.getCell(`L${r}`).font = { color: { argb: 'FF475569' } };
+
+        // M: NOWE BRUTTO
+        // Zależne od dodanej podwyżki w Kolumnie I. Ponieważ świadczenie nie ma ZUS, brutto przyrasta o (I / 0.88).
+        // A podwyżka systemowa i benefity są już w "Baza Brutto Łączne", więc wystarczy dodać "I / 0.88".
+        wsSim.getCell(`M${r}`).value = { formula: `L${r}+((I${r}+F${r})/0.88)` };
+        wsSim.getCell(`M${r}`).font = { bold: true, color: { argb: 'FFDB2777' } }; // Różowy/Magenta
+
         // Formatowanie walutowe
-        for (let c = 3; c <= 12; c++) { // C do L
+        for (let c = 3; c <= 13; c++) { // C do M
             wsSim.getCell(r, c).numFmt = '#,##0.00';
             wsSim.getCell(r, c).border = { bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } } };
         }
@@ -390,9 +403,9 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     wsSim.getCell(`B${sumRow}`).font = { bold: true };
     wsSim.getCell(`B${sumRow}`).alignment = { horizontal: 'right' };
 
-    for (let c = 3; c <= 12; c++) { // Kolumny C do L
+    for (let c = 3; c <= 13; c++) { // C do M
         // Pomijamy kolumnę L w sumowaniu
-        if (c <= 11) {
+        if (c <= 11 || c === 13) {
             const colLetter = String.fromCharCode(64 + c);
             wsSim.getCell(`${colLetter}${sumRow}`).value = { formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})` };
             wsSim.getCell(`${colLetter}${sumRow}`).font = { bold: true };
@@ -439,10 +452,11 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     wsSim.getColumn('J').width = 18; // Total
     wsSim.getColumn('K').width = 14; // Gain
     wsSim.getColumn('L').width = 18; // Individual Input
+    wsSim.getColumn('M').width = 20;
 
-    // --- PODSUMOWANIE BUDŻETU (Po prawej stronie - PRZESUNIĘTE NA N/O) ---
-    const summaryStartCol = 'N'; 
-    const summaryValueCol = 'O';
+    // --- PODSUMOWANIE BUDŻETU (Po prawej stronie) ---
+    const summaryStartCol = 'O'; 
+    const summaryValueCol = 'P';
     const sumStartRow = 5;
 
     // Tytuł Panelu
@@ -453,14 +467,14 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     sumTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF334155' } };
     sumTitle.alignment = { horizontal: 'center', vertical: 'middle' };
 
-    // Wiersz 1: Podwyżki Systemowe (Kolumna F) -> Adres O6
-    wsSim.getCell(`${summaryStartCol}${sumStartRow+1}`).value = isPlusVariant ? "Podwyżki finansowana (Stratton 4%)" : "Podwyżki finasowana (4%)";
+    // Wiersz 1: Podwyżki Systemowe
+    wsSim.getCell(`${summaryStartCol}${sumStartRow+1}`).value = "+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime";
     wsSim.getCell(`${summaryStartCol}${sumStartRow+1}`).font = { size: 10, color: { argb: 'FF059669' }, bold: true };
     wsSim.getCell(`${summaryValueCol}${sumStartRow+1}`).value = { formula: `SUM(F${dataStartRow}:F${dataEndRow})` };
     wsSim.getCell(`${summaryValueCol}${sumStartRow+1}`).numFmt = styles.currency;
 
-    // Wiersz 2: Bonus Administracyjny (Kolumna G) -> Adres O7
-    // N7O7: Dodatkowa Podwyżka (od Pracodawca)
+    // Wiersz 2: Bonus Administracyjny
+    // U7V7: Dodatkowa Podwyżka (od Pracodawca)
     wsSim.getCell(`${summaryStartCol}${sumStartRow+2}`).value = "Dodatkowa Podwyżka (od Pracodawca)";
     wsSim.getCell(`${summaryStartCol}${sumStartRow+2}`).font = { size: 10, bold: true, color: { argb: 'FFD97706' } };
     wsSim.getCell(`${summaryValueCol}${sumStartRow+2}`).value = { formula: `SUM(I${dataStartRow}:I${dataEndRow})` };
@@ -468,7 +482,7 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     wsSim.getCell(`${summaryValueCol}${sumStartRow+2}`).font = { bold: true };
     wsSim.getCell(`${summaryValueCol}${sumStartRow+2}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFBEB' } };
 
-    // N8O8: ŁĄCZNA PULA NA PODWYŻKI
+    // U8V8: ŁĄCZNA PULA NA PODWYŻKI
     wsSim.getCell(`${summaryStartCol}${sumStartRow+3}`).value = "ŁĄCZNA PULA NA PODWYŻKI";
     wsSim.getCell(`${summaryStartCol}${sumStartRow+3}`).font = { bold: true };
     wsSim.getCell(`${summaryStartCol}${sumStartRow+3}`).border = { top: { style: 'double' } };
@@ -478,14 +492,14 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     wsSim.getCell(`${summaryValueCol}${sumStartRow+3}`).border = { top: { style: 'double' } };
 
 
-    // N11:O11 - Suma bonusu 2% z kolumny G (od G5 do ostatniego pracownika)
-    wsSim.getCell('N11').value = 'Bonus dla działu kadrowo księgowego 2% ';
-    wsSim.getCell('N11').font = { bold: true, color: { argb: 'FF1E40AF' }, size: 10 };
-    wsSim.getCell('O11').value = { formula: `SUM(G${dataStartRow}:G${dataEndRow})` };
-    wsSim.getCell('O11').numFmt = styles.currency;
-    wsSim.getCell('O11').font = { bold: true, color: { argb: 'FF1E40AF' }, size: 11 };
-    wsSim.getColumn('N').width = 35;
-    wsSim.getColumn('O').width = 20;
+    // O11:P11 - Suma bonusu 2% z kolumny G (od G5 do ostatniego pracownika)
+    wsSim.getCell('O11').value = 'Bonus dla działu kadrowo księgowego 2% ';
+    wsSim.getCell('O11').font = { bold: true, color: { argb: 'FF1E40AF' }, size: 10 };
+    wsSim.getCell('P11').value = { formula: `SUM(G${dataStartRow}:G${dataEndRow})` };
+    wsSim.getCell('P11').numFmt = styles.currency;
+    wsSim.getCell('P11').font = { bold: true, color: { argb: 'FF1E40AF' }, size: 11 };
+    wsSim.getColumn('O').width = 40;
+    wsSim.getColumn('P').width = 20;
 
     // --- ZAPIS PLIKU ---
     const buffer = await workbook.xlsx.writeBuffer();

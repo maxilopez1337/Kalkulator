@@ -3,12 +3,6 @@ import { GlobalneWyniki } from '../../../entities/calculation/model';
 import { Pracownik } from '../../../entities/employee/model';
 import { STANDARD_TABLE_CONFIG, SPLIT_TABLE_CONFIG } from '../results/excelTableConfigs';
 
-declare global {
-    interface Window {
-        ExcelJS: any;
-    }
-}
-
 interface GeneratorOptions {
     firma: Firma;
     pracownicy: Pracownik[];
@@ -106,8 +100,8 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
         { header: 'Wiek', key: 'wiek', width: 10 },
         { header: 'Rodzaj umowy ETAT/ZLECENIE', key: 'typUmowy', width: 25 },
         { header: 'Płeć K/M', key: 'plec', width: 10 },
-        { header: 'Koszty uzyskania przychodu', key: 'kup', width: 25 },
-        { header: 'Kwota zmniejszająca podatek', key: 'pit2', width: 25 },
+        { header: 'Koszty uzyskania przychodu', key: 'kup', width: 25, style: { numFmt: styles.currencyPlain } },
+        { header: 'Kwota zmniejszająca podatek', key: 'pit2', width: 25, style: { numFmt: styles.currencyPlain } },
         { header: 'Składki ZUS zleceniobiorcy', key: 'trybZus', width: 25 },
         { header: 'Podatek zleceniobiorcy', key: 'podatek', width: 25 }
     ];
@@ -121,10 +115,10 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
             wiek: calculateAge(p.dataUrodzenia),
             typUmowy: p.typUmowy === 'UOP' ? 'ETAT' : 'ZLECENIE',
             plec: p.plec || '',
-            kup: p.kupTyp,
-            pit2: p.pit2,
+            kup: p.kupTyp === 'PODWYZSZONE' ? 300 : (p.kupTyp === 'STANDARD' ? 250 : 0),
+              pit2: parseFloat(p.pit2) || 0,
             trybZus: p.trybSkladek,
-            podatek: p.ulgaMlodych ? 'Ulga dla młodych' : p.pitMode
+              podatek: p.ulgaMlodych ? 'Ulga dla młodych (0)' : ((p.pitMode === 'AUTO' || p.pitMode as string === 'ZASADY_OGOLNE') ? 'Zasady ogólne (12%)' : p.pitMode)
         });
     });
 
@@ -332,45 +326,54 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
     });
 
     // ============================================================================
-    // ARKUSZ 4: PORÓWNANIE (STRATTON VS STANDARD VS RÓŻNICA) 
+    // ARKUSZ 4: PORÓWNANIE (STRATTON VS STANDARD VS RÓŻNICA)
     // ============================================================================
     const wsCompare = workbook.addWorksheet('4. Porównanie Szczegółowe');
     const compColumns = [
-        { header: 'Wariant', key: 'wariant', width: 15 },
+        { header: 'STRATTON', key: 'wariant', width: 15 },
         { header: 'ID Pracownika', key: 'id', width: 25 },
         { header: 'Etat / Zlecenie', key: 'etatZlecenie', width: 15 },
         { header: 'Łączna wartość wynagrodzenia netto', key: 'laczneNetto', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Wynagrodzenie w formie pieniężnej netto', key: 'pienieznaNetto', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Dodatek STRATTON netto', key: 'strattonNetto', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Dodatek STRATTON brutto', key: 'strattonBrutto', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Łączna wartość brutto na umowie', key: 'laczneBrutto', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Zaliczka na podatek dochodowy (PIT) od kwoty brutto', key: 'pitZaliczka', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'DO WYPŁATY wynagrodzenie w formie pieniężnej', key: 'doWyplatyGotowka', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'DO WYPŁATY przychód STRATTON', key: 'doWyplatyStratton', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'DO WYPŁATY suma świadczeń', key: 'doWyplatySuma', width: 15, style: { numFmt: styles.currencyPlain, font: { bold: true } } },
-        { header: 'Łączny koszt pracodawcy (BRUTTO BRUTTO)', key: 'koszt', width: 15, style: { numFmt: styles.currencyPlain, font: { bold: true } } },
-        { header: 'Podstawa do naliczenia składek ZUS', key: 'podstZus', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Składki Emerytalne (pracownika)', key: 'ePracownik', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Składki Rentowe (pracownika)', key: 'rPracownik', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Składki Chorobowe (pracownika)', key: 'cPracownik', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Składki społeczne pracownika (suma)', key: 'spolecznePracownik', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Dodatek STRATTON netto', key: 'strattonNetto', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Łączna wartość brutto na Ustawie', key: 'laczneBrutto', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Zaliczka na podatek dochodowy od kwoty brutto', key: 'pitZaliczka', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'DO WYPŁATY wynagrodzenie w formnie pieniężnej', key: 'doWyplGotowka', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'DO WYPŁATY przychód STRATTON', key: 'doWyplStratton', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'DO WYPŁATY suma świadczeń', key: 'doWyplSuma', width: 15, style: { numFmt: styles.currencyPlain, font: { bold: true } } },
+        { header: 'Łączny koszt wynagrodzenia (BRUTTO BRUTTO)', key: 'koszt', width: 15, style: { numFmt: styles.currencyPlain, font: { bold: true } } },
+        { header: 'Podstawa do naliczenia składek', key: 'podstZus', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Składki Emerytalne', key: 'ePracownik', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Składki Rentowe', key: 'rPracownik', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Składki Chorobowe', key: 'cPracownik', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Składki społeczne pracownika', key: 'spolecznePracownik', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Składka Zdrowotna', key: 'zdrowotna', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Suma składek ZUS pracownika', key: 'zusPracownikSuma', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Suma składek pracownika', key: 'zusPracownikSuma', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Podstawa opodatkowania', key: 'podstPit', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Stawka podatku', key: 'stawkaPit', width: 15 },
         { header: 'Kwota podatku', key: 'kwotaPit', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'Potrącenie STRATTON', key: 'potracenieStratton', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Emerytalna (pracodawcy)', key: 'ePracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Rentowa (pracodawcy)', key: 'rPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Wypadkowa (pracodawcy)', key: 'wPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Emerytalna', key: 'ePracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Rentowa', key: 'rPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Wypadkowa', key: 'wPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'FP', key: 'fpPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
         { header: 'FGŚP', key: 'fgspPracodawca', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Suma składek ZUS pracodawcy', key: 'zusPracodawcaSuma', width: 15, style: { numFmt: styles.currencyPlain } },
-        { header: 'Łączna SUMA składek pracownika i pracodawcy', key: 'zusSumaCalkowita', width: 15, style: { numFmt: styles.currencyPlain } }
+        { header: 'Suma składek pracodawcy', key: 'zusPracodawcaSuma', width: 15, style: { numFmt: styles.currencyPlain } },
+        { header: 'Łączna SUMA składek ZUS Pracownik i Pracodawca', key: 'zusSumaCalkowita', width: 15, style: { numFmt: styles.currencyPlain } }
     ];
     wsCompare.columns = compColumns;
 
-    applySegmentedHeaders(wsCompare, 'segmented');
+    wsCompare.spliceRows(1, 0, []);
+    wsCompare.getCell('A1').value = 'Dane wejsciowe';
+    wsCompare.mergeCells('A1:C1');
+
+    wsCompare.getRow(2).eachCell((c) => { 
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF475569' } };
+        c.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+        c.alignment = { wrapText: true, vertical: 'middle', horizontal: 'center' };
+        c.border = { bottom: { style: 'thin' } };
+    });
 
     const compareTotalsStratton = Array(compColumns.length).fill(0);
     const compareTotalsStandard = Array(compColumns.length).fill(0);
@@ -381,139 +384,254 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
         const std = w.standard;
         const podz = w.podzial;
 
-        const pracownikString = `${w.pracownik.imie} ${w.pracownik.nazwisko}`.trim() || `Pracownik ${w.pracownik.id}`;
+        const pracownikString = w.pracownik.imie ? w.pracownik.imie + ' ' + w.pracownik.nazwisko : 'Pracownik ' + w.pracownik.id;
         let etatZlecenie = w.pracownik.typUmowy === 'UOP' ? 'Etat' : 'Zlecenie';
 
-        const strPienieznaNetto = isStudent ? std.netto : podz.zasadnicza.netto;
-        const strStrattonNetto = isStudent ? 0 : podz.swiadczenie.netto;
-        const strStrattonBrutto = isStudent ? 0 : podz.swiadczenie.brutto;
-        const strLaczneBrutto = isStudent ? std.brutto : podz.zasadnicza.brutto;
-        const strPitZaliczka = isStudent ? std.pit : podz.zasadnicza.pit; 
-        const strDoWyplGotowka = isStudent ? std.netto : podz.zasadnicza.netto;
-        const strDoWyplStratton = isStudent ? 0 : podz.swiadczenie.netto;
-        const strDoWyplSuma = isStudent ? std.netto : podz.doWyplaty;
-        const strKoszt = isStudent ? std.kosztPracodawcy : podz.kosztPracodawcy;
-        const strPodstZus = isStudent ? std.podstawaZus : podz.zasadnicza.podstawaZus;
-        const strEPracownik = isStudent ? std.zusPracownik.emerytalna : podz.zasadnicza.zusPracownik.emerytalna;
-        const strRPracownik = isStudent ? std.zusPracownik.rentowa : podz.zasadnicza.zusPracownik.rentowa;
-        const strCPracownik = isStudent ? std.zusPracownik.chorobowa : podz.zasadnicza.zusPracownik.chorobowa;
-        const strSpolecznePrac = isStudent ? std.zusPracownik.suma : podz.zasadnicza.zusPracownik.suma;
-        const strZdrowotna = isStudent ? 0 : podz.zasadnicza.zdrowotna;
-        const strZusPracownikSuma = strSpolecznePrac + strZdrowotna;
-        const strPodstPit = isStudent ? std.podstawaPit : podz.pit.podstawa;
-        const strStawkaPit = isStudent ? std.stawkaPit + '%' : podz.pit.stawka + '%';
-        const strKwotaPit = isStudent ? std.pit : podz.pit.kwota;
-        const strPotracenieStratton = isStudent ? 0 : 1.00; // Potrącenie STRATTON stałe 1 zł
-        const strEPracodawca = isStudent ? std.zusPracodawca.emerytalna : podz.zasadnicza.zusPracodawca.emerytalna;
-        const strRPracodawca = isStudent ? std.zusPracodawca.rentowa : podz.zasadnicza.zusPracodawca.rentowa;
-        const strWPracodawca = isStudent ? std.zusPracodawca.wypadkowa : podz.zasadnicza.zusPracodawca.wypadkowa;
-        const strFPPracodawca = isStudent ? std.zusPracodawca.fp : podz.zasadnicza.zusPracodawca.fp;
-        const strFGSPPracodawca = isStudent ? std.zusPracodawca.fgsp : podz.zasadnicza.zusPracodawca.fgsp;
-        const strZusPracodawcaSuma = isStudent ? std.zusPracodawca.suma : podz.zasadnicza.zusPracodawca.suma;
-        const strZusCalkowita = strZusPracownikSuma + strZusPracodawcaSuma;
+        const sLaczneNetto = std.netto;
+        const sPienieznaNetto = std.netto;
+        const sStrattonNetto = 0;
+        const sStrattonBrutto = 0;
+        const sLaczneBrutto = std.brutto;
+        const sPitZaliczka = std.pit;
+        const sDoWyplGotowka = std.netto;
+        const sDoWyplStratton = 0;
+        const sDoWyplSuma = std.netto;
+        const sKoszt = std.kosztPracodawcy;
+        const sPodstZus = std.podstawaZus;
+        const sEPrac = std.zusPracownik.emerytalna;
+        const sRPrac = std.zusPracownik.rentowa;
+        const sCPrac = std.zusPracownik.chorobowa;
+        const sSpoleczne = isStudent ? 0 : std.zusPracownik.suma;
+        const sZdrowotna = isStudent ? 0 : std.zdrowotna;
+        const sZusPracownikSuma = sSpoleczne + sZdrowotna;
+        const sPodstPit = std.podstawaPit;
+        const sKwotaPit = std.pit;
+        const sPotracenieStratton = 0;
+        const sEPracodawca = std.zusPracodawca.emerytalna;
+        const sRPracodawca = std.zusPracodawca.rentowa;
+        const sWPracodawca = std.zusPracodawca.wypadkowa;
+        const sFp = std.zusPracodawca.fp;
+        const sFgsp = std.zusPracodawca.fgsp;
+        const sZusPracodawcaSuma = std.zusPracodawca.suma;
+        const sZusSumaCalkowita = sZusPracownikSuma + sZusPracodawcaSuma + sKwotaPit;
 
-        const stdPienieznaNetto = std.netto;
-        const stdStrattonNetto = 0;
-        const stdStrattonBrutto = 0;
-        const stdLaczneBrutto = std.brutto;
-        const stdPitZaliczka = std.pit;
-        const stdDoWyplGotowka = std.netto;
-        const stdDoWyplStratton = 0;
-        const stdDoWyplSuma = std.netto;
-        const stdKoszt = std.kosztPracodawcy;
-        const stdPodstZus = std.podstawaZus;
-        const stdEPracownik = std.zusPracownik.emerytalna;
-        const stdRPracownik = std.zusPracownik.rentowa;
-        const stdCPracownik = std.zusPracownik.chorobowa;
-        const stdSpolecznePrac = std.zusPracownik.suma;
-        const stdZdrowotna = isStudent ? 0 : std.zdrowotna;
-        const stdZusPracownikSuma = stdSpolecznePrac + stdZdrowotna;
-        const stdPodstPit = std.podstawaPit;
-        const stdStawkaPit = std.stawkaPit + '%';
-        const stdKwotaPit = std.pit;
-        const stdPotracenieStratton = 0;
-        const stdEPracodawca = std.zusPracodawca.emerytalna;
-        const stdRPracodawca = std.zusPracodawca.rentowa;
-        const stdWPracodawca = std.zusPracodawca.wypadkowa;
-        const stdFPPracodawca = std.zusPracodawca.fp;
-        const stdFGSPPracodawca = std.zusPracodawca.fgsp;
-        const stdZusPracodawcaSuma = std.zusPracodawca.suma;
-        const stdZusCalkowita = stdZusPracownikSuma + stdZusPracodawcaSuma;
+        wsCompare.addRow({
+            wariant: '1 ETAT',
+            id: pracownikString,
+            etatZlecenie: etatZlecenie,
+            laczneNetto: sLaczneNetto,
+            pienieznaNetto: sPienieznaNetto,
+            strattonBrutto: sStrattonBrutto,
+            strattonNetto: sStrattonNetto,
+            laczneBrutto: sLaczneBrutto,
+            pitZaliczka: sPitZaliczka,
+            doWyplGotowka: sDoWyplGotowka,
+            doWyplStratton: sDoWyplStratton,
+            doWyplSuma: sDoWyplSuma,
+            koszt: sKoszt,
+            podstZus: sPodstZus,
+            ePracownik: sEPrac,
+            rPracownik: sRPrac,
+            cPracownik: sCPrac,
+            spolecznePracownik: sSpoleczne,
+            zdrowotna: sZdrowotna,
+            zusPracownikSuma: sZusPracownikSuma,
+            podstPit: sPodstPit,
+            stawkaPit: std.stawkaPit + '%',
+            kwotaPit: sKwotaPit,
+            potracenieStratton: sPotracenieStratton,
+            ePracodawca: sEPracodawca,
+            rPracodawca: sRPracodawca,
+            wPracodawca: sWPracodawca,
+            fpPracodawca: sFp,
+            fgspPracodawca: sFgsp,
+            zusPracodawcaSuma: sZusPracodawcaSuma,
+            zusSumaCalkowita: sZusSumaCalkowita
+        });
 
-        const rowStr = [
-            'STRATTON', pracownikString, etatZlecenie, std.netto, strPienieznaNetto, strStrattonNetto, strStrattonBrutto,
-            strLaczneBrutto, strPitZaliczka, strDoWyplGotowka, strDoWyplStratton, strDoWyplSuma, strKoszt, strPodstZus,
-            strEPracownik, strRPracownik, strCPracownik, strSpolecznePrac, strZdrowotna, strZusPracownikSuma, strPodstPit,
-            strStawkaPit, strKwotaPit, strPotracenieStratton, strEPracodawca, strRPracodawca, strWPracodawca, strFPPracodawca,
-            strFGSPPracodawca, strZusPracodawcaSuma, strZusCalkowita
-        ];
+        // ================= STRATTON ROW ==================
+        const pPienieznaNetto = isStudent ? std.netto : podz.zasadnicza.netto;
+        const pStrattonNetto = isStudent ? 0 : podz.swiadczenie.netto;
+        const pLaczneNetto = pPienieznaNetto + pStrattonNetto;
+        const pStrattonBrutto = isStudent ? 0 : podz.swiadczenie.brutto;
+        const pLaczneBrutto = isStudent ? std.brutto : podz.pit.lacznyPrzychod;
+        const pPitZaliczka = isStudent ? std.pit : podz.pit.kwota;
+        const pPotracenieStratton = isStudent ? 0 : 1.00;
+        const pDoWyplGotowka = podz.doWyplatyGotowka;
+        const pDoWyplStratton = pStrattonNetto;
+        const pDoWyplSuma = pDoWyplGotowka + pDoWyplStratton;
+        const pKoszt = isStudent ? std.kosztPracodawcy : podz.kosztPracodawcy;
+        const pPodstZus = isStudent ? std.podstawaZus : podz.zasadnicza.podstawaZus;
+        const pEPrac = isStudent ? std.zusPracownik.emerytalna : podz.zasadnicza.zusPracownik.emerytalna;
+        const pRPrac = isStudent ? std.zusPracownik.rentowa : podz.zasadnicza.zusPracownik.rentowa;
+        const pCPrac = isStudent ? std.zusPracownik.chorobowa : podz.zasadnicza.zusPracownik.chorobowa;
+        const pSpoleczne = isStudent ? std.zusPracownik.suma : podz.zasadnicza.zusPracownik.suma;
+        const pZdrowotna = isStudent ? 0 : podz.zasadnicza.zdrowotna;
+        const pZusPracownikSuma = pSpoleczne + pZdrowotna;
+        const pPodstPit = isStudent ? std.podstawaPit : podz.pit.podstawa;
+        const pKwotaPit = pPitZaliczka;
+        const pEPracodawca = isStudent ? std.zusPracodawca.emerytalna : podz.zasadnicza.zusPracodawca.emerytalna;
+        const pRPracodawca = isStudent ? std.zusPracodawca.rentowa : podz.zasadnicza.zusPracodawca.rentowa;
+        const pWPracodawca = isStudent ? std.zusPracodawca.wypadkowa : podz.zasadnicza.zusPracodawca.wypadkowa;
+        const pFp = isStudent ? std.zusPracodawca.fp : podz.zasadnicza.zusPracodawca.fp;
+        const pFgsp = isStudent ? std.zusPracodawca.fgsp : podz.zasadnicza.zusPracodawca.fgsp;
+        const pZusPracodawcaSuma = isStudent ? std.zusPracodawca.suma : podz.zasadnicza.zusPracodawca.suma;
+        const pZusSumaCalkowita = pZusPracownikSuma + pZusPracodawcaSuma + pKwotaPit;
 
-        const rowStd = [
-            'STANDARD', '', '', std.netto, stdPienieznaNetto, stdStrattonNetto, stdStrattonBrutto,
-            stdLaczneBrutto, stdPitZaliczka, stdDoWyplGotowka, stdDoWyplStratton, stdDoWyplSuma, stdKoszt, stdPodstZus,
-            stdEPracownik, stdRPracownik, stdCPracownik, stdSpolecznePrac, stdZdrowotna, stdZusPracownikSuma, stdPodstPit,
-            stdStawkaPit, stdKwotaPit, stdPotracenieStratton, stdEPracodawca, stdRPracodawca, stdWPracodawca, stdFPPracodawca,
-            stdFGSPPracodawca, stdZusPracodawcaSuma, stdZusCalkowita
-        ];
+        wsCompare.addRow({
+            wariant: 'STRATTON',
+            id: pracownikString,
+            etatZlecenie: etatZlecenie,
+            laczneNetto: pLaczneNetto,
+            pienieznaNetto: pPienieznaNetto,
+            strattonBrutto: pStrattonBrutto,
+            strattonNetto: pStrattonNetto,
+            laczneBrutto: pLaczneBrutto,
+            pitZaliczka: pPitZaliczka,
+            doWyplGotowka: pDoWyplGotowka,
+            doWyplStratton: pDoWyplStratton,
+            doWyplSuma: pDoWyplSuma,
+            koszt: pKoszt,
+            podstZus: pPodstZus,
+            ePracownik: pEPrac,
+            rPracownik: pRPrac,
+            cPracownik: pCPrac,
+            spolecznePracownik: pSpoleczne,
+            zdrowotna: pZdrowotna,
+            zusPracownikSuma: pZusPracownikSuma,
+            podstPit: pPodstPit,
+            stawkaPit: (isStudent ? std.stawkaPit : podz.pit.stawka) + '%',
+            kwotaPit: pKwotaPit,
+            potracenieStratton: pPotracenieStratton,
+            ePracodawca: pEPracodawca,
+            rPracodawca: pRPracodawca,
+            wPracodawca: pWPracodawca,
+            fpPracodawca: pFp,
+            fgspPracodawca: pFgsp,
+            zusPracodawcaSuma: pZusPracodawcaSuma,
+            zusSumaCalkowita: pZusSumaCalkowita
+        });
 
-        const formatDiff = (strVal: number, stdVal: number) => strVal - stdVal;
-        const rowDiff = [
-            'RÓŻNICA', '', '', 0, formatDiff(strPienieznaNetto, stdPienieznaNetto), formatDiff(strStrattonNetto, stdStrattonNetto),
-            formatDiff(strStrattonBrutto, stdStrattonBrutto), formatDiff(strLaczneBrutto, stdLaczneBrutto), formatDiff(strPitZaliczka, stdPitZaliczka),
-            formatDiff(strDoWyplGotowka, stdDoWyplGotowka), formatDiff(strDoWyplStratton, stdDoWyplStratton), formatDiff(strDoWyplSuma, stdDoWyplSuma),
-            formatDiff(strKoszt, stdKoszt), formatDiff(strPodstZus, stdPodstZus), formatDiff(strEPracownik, stdEPracownik),
-            formatDiff(strRPracownik, stdRPracownik), formatDiff(strCPracownik, stdCPracownik), formatDiff(strSpolecznePrac, stdSpolecznePrac),
-            formatDiff(strZdrowotna, stdZdrowotna), formatDiff(strZusPracownikSuma, stdZusPracownikSuma), formatDiff(strPodstPit, stdPodstPit),
-            '', formatDiff(strKwotaPit, stdKwotaPit), formatDiff(strPotracenieStratton, stdPotracenieStratton), formatDiff(strEPracodawca, stdEPracodawca),
-            formatDiff(strRPracodawca, stdRPracodawca), formatDiff(strWPracodawca, stdWPracodawca), formatDiff(strFPPracodawca, stdFPPracodawca),
-            formatDiff(strFGSPPracodawca, stdFGSPPracodawca), formatDiff(strZusPracodawcaSuma, stdZusPracodawcaSuma), formatDiff(strZusCalkowita, stdZusCalkowita)
-        ];
+        // ================= DIFF ROW ==================
+        const dLaczneNetto = pLaczneNetto - sLaczneNetto;
+        const dPienieznaNetto = pPienieznaNetto - sPienieznaNetto;
+        const dStrattonBrutto = pStrattonBrutto - sStrattonBrutto;
+        const dStrattonNetto = pStrattonNetto - sStrattonNetto;
+        const dLaczneBrutto = pLaczneBrutto - sLaczneBrutto;
+        const dPitZaliczka = pPitZaliczka - sPitZaliczka;
+        const dDoWyplGotowka = pDoWyplGotowka - sDoWyplGotowka;
+        const dDoWyplStratton = pDoWyplStratton - sDoWyplStratton;
+        const dDoWyplSuma = pDoWyplSuma - sDoWyplSuma;
+        const dKoszt = pKoszt - sKoszt;
+        const dPodstZus = pPodstZus - sPodstZus;
+        const dEPrac = pEPrac - sEPrac;
+        const dRPrac = pRPrac - sRPrac;
+        const dCPrac = pCPrac - sCPrac;
+        const dSpoleczne = pSpoleczne - sSpoleczne;
+        const dZdrowotna = pZdrowotna - sZdrowotna;
+        const dZusPracownikSuma = pZusPracownikSuma - sZusPracownikSuma;
+        const dPodstPit = pPodstPit - sPodstPit;
+        const dKwotaPit = pKwotaPit - sKwotaPit;
+        const dPotracenieStratton = pPotracenieStratton - sPotracenieStratton;
+        const dEPracodawca = pEPracodawca - sEPracodawca;
+        const dRPracodawca = pRPracodawca - sRPracodawca;
+        const dWPracodawca = pWPracodawca - sWPracodawca;
+        const dFp = pFp - sFp;
+        const dFgsp = pFgsp - sFgsp;
+        const dZusPracodawcaSuma = pZusPracodawcaSuma - sZusPracodawcaSuma;
+        const dZusSumaCalkowita = pZusSumaCalkowita - sZusSumaCalkowita;
 
-        for(let i=3; i<rowStr.length; i++) {
-            if (i !== 21 && typeof rowStr[i] === 'number') { // 21 = stawkaPit
-                compareTotalsStratton[i] += rowStr[i] as number;
-                compareTotalsStandard[i] += rowStd[i] as number;
-                compareTotalsDiff[i] += rowDiff[i] as number;
-            }
+        const rowValuesStd = [sLaczneNetto, sPienieznaNetto, sStrattonBrutto, sStrattonNetto, sLaczneBrutto, sPitZaliczka, sDoWyplGotowka, sDoWyplStratton, sDoWyplSuma, sKoszt, sPodstZus, sEPrac, sRPrac, sCPrac, sSpoleczne, sZdrowotna, sZusPracownikSuma, sPodstPit, 0, sKwotaPit, sPotracenieStratton, sEPracodawca, sRPracodawca, sWPracodawca, sFp, sFgsp, sZusPracodawcaSuma, sZusSumaCalkowita];
+        const rowValuesStr = [pLaczneNetto, pPienieznaNetto, pStrattonBrutto, pStrattonNetto, pLaczneBrutto, pPitZaliczka, pDoWyplGotowka, pDoWyplStratton, pDoWyplSuma, pKoszt, pPodstZus, pEPrac, pRPrac, pCPrac, pSpoleczne, pZdrowotna, pZusPracownikSuma, pPodstPit, 0, pKwotaPit, pPotracenieStratton, pEPracodawca, pRPracodawca, pWPracodawca, pFp, pFgsp, pZusPracodawcaSuma, pZusSumaCalkowita];
+        const rowValuesDiff = [dLaczneNetto, dPienieznaNetto, dStrattonBrutto, dStrattonNetto, dLaczneBrutto, dPitZaliczka, dDoWyplGotowka, dDoWyplStratton, dDoWyplSuma, dKoszt, dPodstZus, dEPrac, dRPrac, dCPrac, dSpoleczne, dZdrowotna, dZusPracownikSuma, dPodstPit, 0, dKwotaPit, dPotracenieStratton, dEPracodawca, dRPracodawca, dWPracodawca, dFp, dFgsp, dZusPracodawcaSuma, dZusSumaCalkowita];
+
+        for(let i=0; i<rowValuesStd.length; i++) {
+            compareTotalsStandard[i+3] += rowValuesStd[i];
+            compareTotalsStratton[i+3] += rowValuesStr[i];
+            compareTotalsDiff[i+3] += rowValuesDiff[i];
         }
 
-        const r1 = wsCompare.addRow(rowStr);
-        r1.eachCell((c: any) => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } }; });
-        
-        const r2 = wsCompare.addRow(rowStd);
-        r2.eachCell((c: any) => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } }; });
-        
-        const r3 = wsCompare.addRow(rowDiff);
-        r3.eachCell((c: any) => { c.fill = styles.diffFill; c.font = styles.diffFont; });
+        const diffRow = wsCompare.addRow({
+            wariant: 'RÓŻNICA',
+            id: pracownikString,
+            etatZlecenie: etatZlecenie,
+            laczneNetto: dLaczneNetto,
+            pienieznaNetto: dPienieznaNetto,
+            strattonBrutto: dStrattonBrutto,
+            strattonNetto: dStrattonNetto,
+            laczneBrutto: dLaczneBrutto,
+            pitZaliczka: dPitZaliczka,
+            doWyplGotowka: dDoWyplGotowka,
+            doWyplStratton: dDoWyplStratton,
+            doWyplSuma: dDoWyplSuma,
+            koszt: dKoszt,
+            podstZus: dPodstZus,
+            ePracownik: dEPrac,
+            rPracownik: dRPrac,
+            cPracownik: dCPrac,
+            spolecznePracownik: dSpoleczne,
+            zdrowotna: dZdrowotna,
+            zusPracownikSuma: dZusPracownikSuma,
+            podstPit: dPodstPit,
+            stawkaPit: '',
+            kwotaPit: dKwotaPit,
+            potracenieStratton: dPotracenieStratton,
+            ePracodawca: dEPracodawca,
+            rPracodawca: dRPracodawca,
+            wPracodawca: dWPracodawca,
+            fpPracodawca: dFp,
+            fgspPracodawca: dFgsp,
+            zusPracodawcaSuma: dZusPracodawcaSuma,
+            zusSumaCalkowita: dZusSumaCalkowita
+        });
+
+        diffRow.eachCell((c) => {
+            c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF00008B' } };
+            c.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+        });
     });
 
-    const sr1 = wsCompare.addRow(['SUMA STRATTON', '', '', ...compareTotalsStratton.slice(3)]);
-    sr1.getCell(22).value = ''; // clear stawkaPit
-    sr1.eachCell((c: any) => { c.fill = styles.sumsRowFill; c.font = styles.sumsRowFont; });
+    const sum1 = wsCompare.addRow(['1 ETAT', 'SUMA', '', ...compareTotalsStandard.slice(3)]);
+    sum1.getCell(22).value = '';
+    const sum2 = wsCompare.addRow(['STRATTON', 'SUMA', '', ...compareTotalsStratton.slice(3)]);
+    sum2.getCell(22).value = '';
+    const sum3 = wsCompare.addRow(['RÓŻNICA', 'SUMA', '', ...compareTotalsDiff.slice(3)]);
+    sum3.getCell(22).value = '';
 
-    const sr2 = wsCompare.addRow(['SUMA STANDARD', '', '', ...compareTotalsStandard.slice(3)]);
-    sr2.getCell(22).value = '';
-    sr2.eachCell((c: any) => { c.fill = styles.sumsRowFill; c.font = styles.sumsRowFont; });
+    [sum1, sum2, sum3].forEach(r => {
+        r.eachCell((c, colNumber) => {
+            if(r === sum3) {
+                 c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF00008B' } };
+                 c.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+            } else {
+                 c.fill = styles.sumsRowFill;
+                 c.font = styles.sumsRowFont;
+            }
+        });
+    });
 
-    const sr3 = wsCompare.addRow(['SUMA RÓŻNICA', '', '', ...compareTotalsDiff.slice(3)]);
-    sr3.getCell(22).value = '';
-    sr3.eachCell((c: any) => { c.fill = styles.diffFill; c.font = styles.diffFont; });
-
-
-    // ============================================================================
     // ARKUSZ 5: PODSUMOWANIE z Kroku 6 
     // ============================================================================
     const wsPodsumowanie = workbook.addWorksheet('5. Podsumowanie (Krok 6)');
     wsPodsumowanie.columns = [
         { header: 'KATEGORIA KOSZTOWA', key: 'kategoria', width: 50 },
         { header: 'OBECNIE (STANDARD)', key: 'standard', width: 25, style: { numFmt: styles.currencyPlain } },
-        { header: activeModel === 'PRIME' ? 'MODEL ELITON PRIME PLUS' : 'MODEL ELITON STANDARD', key: 'eliton', width: 35, style: { numFmt: styles.currencyPlain } },
+        { header: activeModel === 'PRIME' ? 'Eliton Prime™ PLUS' : 'Eliton Prime™', key: 'eliton', width: 35, style: { numFmt: styles.currencyPlain } },
         { header: 'ZMIANA', key: 'roznica', width: 20, style: { numFmt: styles.currencyPlain } }
     ];
 
     applySegmentedHeaders(wsPodsumowanie, 'podsumowanie');
 
-    const totalProvision = wyniki.podsumowanie.prowizja;
+    
+      // Wstawiamy info z kroku podsumowanie
+      const totalProvision = wyniki.podsumowanie.prowizja;
+      wsPodsumowanie.addRow(['* Szczegółowe zestawienie i różnice dla poszczególnych pracowników znajdują się w arkuszu "4. Porównanie Szczegółowe".']);
+      const wsPodLastRow = wsPodsumowanie.lastRow;
+      if (wsPodLastRow) {
+          const infoCell = wsPodLastRow.getCell(1);
+          infoCell.font = { italic: true, color: { argb: 'FF64748B' } };
+      }
+      wsPodsumowanie.addRow([]);
     const baseBenefitNetto = prowizjaProc > 0 ? totalProvision / (prowizjaProc / 100) : 0;
     const includeRaises = activeModel === 'PRIME';
     const raiseAmount = includeRaises ? baseBenefitNetto * 0.04 : 0;
@@ -551,7 +669,7 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
         return row;
     };
 
-    addSummaryRow('Wynagrodzenie Brutto\r\nZ UMOWY', stdBrutto, strBrutto);
+    addSummaryRow('Wynagrodzenie pracowników Brutto\r\nZ UMOWY', stdBrutto, strBrutto);
     addSummaryRow('ZUS Pracodawcy\r\nEMERYTALNA, RENTOWA, WYP.', stdZusPracodawca, strZusPracodawca);
     addSummaryRow('ZUS Pracownika\r\nSPOŁECZNE + ZDROWOTNE', stdZusPracown, strZusPracown);
     
@@ -563,13 +681,13 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
 
     wsPodsumowanie.addRow({}); // spacer
 
-    addSummaryRow('Opłata Success Fee\r\nZA OBSŁUGĘ MODELU ELITON PRIME (NALICZANA OD ŚWIADCZENIA NETTO)', null, feeAmount, feeAmount);
+    addSummaryRow(`Opłata serwisowa EBS\r\n${prowizjaProc}% wartości nominalnej świadczeń`, null, feeAmount, feeAmount);
 
     if (adminAmount > 0) {
         addSummaryRow('Bonus dla Działu Księgowo-Kadrowego\r\nwyliczany od świadczenia netto\r\n2% WYPŁACANE PRZEZ STRATTON', null, adminAmount, adminAmount);
     }
     if (includeRaises && raiseAmount > 0) {
-        addSummaryRow('Dodatkowa podwyżka wynagrodzenia dla pracowników\r\nwyliczana od świadczenia netto\r\n4% FINANSOWANE PRZEZ STRATTON', null, raiseAmount, raiseAmount);
+        addSummaryRow('Dodatkowa podwyżka wynagrodzenia dla pracowników\r\nwyliczana od świadczenia netto\r\n+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime', null, raiseAmount, raiseAmount);
     }
 
     wsPodsumowanie.addRow({}); // spacer
@@ -580,7 +698,7 @@ export const generateFullHistoryExcel = async ({ firma, pracownicy, wyniki, prow
     const oszczednosc = stdKosztMiesiac - strKosztMiesiac; // Zwykle Standard - Eliton (dodatnia oszczędność na zielono)
 
     const sumRow = wsPodsumowanie.addRow({
-        kategoria: 'CAŁKOWITY KOSZT\r\nPracodawcy (Miesięcznie)',
+        kategoria: 'CAŁKOWITY KOSZT BRUTTO PRACODAWCY\r\n(Miesięcznie)',
         standard: stdKosztMiesiac,
         eliton: strKosztMiesiac,
         roznica: -oszczednosc // tak zeby pokazalo "-2000" tak jak na screenie

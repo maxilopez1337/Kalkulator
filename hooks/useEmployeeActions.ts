@@ -22,7 +22,7 @@ export const useEmployeeActions = () => {
             typUmowy: 'UOP',
             trybSkladek: 'PELNE',
             choroboweAktywne: true,
-            pit2: '300',
+            pit2: String(config.pit.kwotaZmniejszajacaMies),
             ulgaMlodych: false,
             kupTyp: 'STANDARD',
             nettoDocelowe: 5000,
@@ -75,7 +75,7 @@ export const useEmployeeActions = () => {
                     
                     updated.ulgaMlodych = isMlody;
                     if (isMlody) {
-                        updated.pit2 = '0';
+                        updated.pit2 = '300';
                         updated.pitMode = 'FLAT_0';
                     } else {
                         if (updated.pitMode === 'FLAT_0') updated.pitMode = 'AUTO';
@@ -95,7 +95,7 @@ export const useEmployeeActions = () => {
             if (field === 'typUmowy') {
                 if (value === 'UZ') {
                     updated.kupTyp = 'PROC_20';
-                    updated.trybSkladek = 'PELNE';
+                    updated.trybSkladek = 'BEZ_CHOROBOWEJ';
                     updated.nettoZasadnicza = config.minimalnaKwotaUZ.zasadniczaNetto;
                 } else {
                     updated.kupTyp = 'STANDARD';
@@ -106,7 +106,23 @@ export const useEmployeeActions = () => {
                 const isExempt = czyZwolnionyZFpFgsp(updated.dataUrodzenia, updated.plec, config);
                 updated.skladkaFP = !isExempt;
                 updated.skladkaFGSP = !isExempt;
-                updated.choroboweAktywne = true;
+                updated.choroboweAktywne = value !== 'UZ';
+                // Przelicz ulgę dla młodych na podstawie aktualnej daty urodzenia
+                if (updated.dataUrodzenia) {
+                    const wiek = obliczWiek(updated.dataUrodzenia);
+                    const isMlody = wiek < config.pit.ulgaMlodziMaxWiek;
+                    updated.ulgaMlodych = isMlody;
+                    updated.pitMode = isMlody ? 'FLAT_0' : (updated.pitMode === 'FLAT_0' ? 'AUTO' : updated.pitMode);
+                }
+            }
+
+            // 2b. Logika: Ręczna zmiana checkboxa ulgaMlodych → sync pitMode
+            if (field === 'ulgaMlodych') {
+                if (value === true) {
+                    updated.pitMode = 'FLAT_0';
+                } else {
+                    if (updated.pitMode === 'FLAT_0') updated.pitMode = 'AUTO';
+                }
             }
 
             // 3. Logika: Zmiana Trybu Składek (MASTER SWITCH)

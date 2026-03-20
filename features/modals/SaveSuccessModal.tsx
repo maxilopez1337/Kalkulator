@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Check, Home, ArrowRight, Save, Download } from '../../common/Icons';
+import { Modal } from '../../shared/ui/Modal';
 
 interface Props {
     isOpen: boolean;
@@ -13,8 +14,7 @@ export const SaveSuccessModal = ({ isOpen, onClose, onExit, onDownload }: Props)
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-slate-900/60 flex items-center justify-center z-[100] p-4 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform scale-100 animate-in zoom-in-95 duration-200">
+        <Modal isOpen={isOpen} onClose={onClose} size="small" maxWidth="max-w-md" zIndex="z-[100]">
                 
                 <div className="bg-emerald-500 p-6 text-white flex flex-col items-center text-center">
                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-lg text-emerald-600 animate-in zoom-in spin-in-12 duration-500">
@@ -77,7 +77,6 @@ export const SaveSuccessModal = ({ isOpen, onClose, onExit, onDownload }: Props)
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
+        </Modal>
     );
 };

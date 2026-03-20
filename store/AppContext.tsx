@@ -1,7 +1,12 @@
 
 import React, { ReactNode } from 'react';
 import { ZapisanaKalkulacja } from '../entities/history/model';
-import { offerPdfGenerator } from '../services/offerPdfGenerator';
+import { Pracownik } from '../entities/employee/model';
+import { offerPdfV3Generator } from '../services/offerPdfV3Generator';
+import { offerLegalizacjaPremiiGenerator } from '../services/offerLegalizacjaPremii/generator';
+import { obliczWariantStandard, obliczWariantPodzial } from '../features/tax-engine';
+import { generateFullHistoryExcel } from '../features/steps/summary/generateFullHistoryExcel';
+import { ConfirmProvider, useConfirm } from './ConfirmContext';
 
 // Import Contexts using explicit relative paths
 import { CompanyProvider, useCompany } from './CompanyContext';
@@ -16,22 +21,25 @@ export { useEmployees } from './EmployeeContext';
 export { useHistory } from './HistoryContext';
 export { useCalculation } from './CalculationContext';
 export { useNotification } from './NotificationContext';
+export { useConfirm } from './ConfirmContext';
 
 // Main App Provider
 export const AppProvider = ({ children }: { children?: ReactNode }) => {
   return (
-    <NotificationProvider>
-      <CompanyProvider>
-        <EmployeeProvider>
-          <HistoryProvider>
-            {/* CalculationProvider depends on Company and Employee contexts */}
-            <CalculationProvider>
-              {children}
-            </CalculationProvider>
-          </HistoryProvider>
-        </EmployeeProvider>
-      </CompanyProvider>
-    </NotificationProvider>
+    <ConfirmProvider>
+      <NotificationProvider>
+        <CompanyProvider>
+          <EmployeeProvider>
+            <HistoryProvider>
+              {/* CalculationProvider depends on Company and Employee contexts */}
+              <CalculationProvider>
+                {children}
+              </CalculationProvider>
+            </HistoryProvider>
+          </EmployeeProvider>
+        </CompanyProvider>
+      </NotificationProvider>
+    </ConfirmProvider>
   );
 };
 
@@ -42,6 +50,7 @@ export const useAppStore = () => {
   const history = useHistory();
   const calculation = useCalculation();
   const notification = useNotification();
+  const { confirmDialog } = useConfirm();
 
   const saveToHistory = (): ZapisanaKalkulacja | null => {
     if (employees.pracownicy.length === 0) {
@@ -69,8 +78,8 @@ export const useAppStore = () => {
     return newEntry;
   };
 
-  const loadFromHistory = (item: ZapisanaKalkulacja): boolean => {
-    if (confirm(`Wczytać kalkulację dla firmy ${item.nazwaFirmy}? Bieżące niezapisane zmiany zostaną utracone.`)) {
+  const loadFromHistory = async (item: ZapisanaKalkulacja): Promise<boolean> => {
+    if (await confirmDialog(`Wczytać kalkulację dla firmy ${item.nazwaFirmy}? Bieżące niezapisane zmiany zostaną utracone.`)) {
       company.setFirma(item.dane.firma);
       employees.setPracownicy(item.dane.pracownicy);
       company.setConfig(item.dane.config);
@@ -82,26 +91,28 @@ export const useAppStore = () => {
   };
 
   // Nowa funkcja do ładowania z pliku JSON (z opcją pominięcia confirm dla uploadu pliku)
-  const loadBackup = (data: any, skipConfirm: boolean = false): boolean => {
+  const loadBackup = async (data: ZapisanaKalkulacja | Pracownik[] | unknown, skipConfirm: boolean = false): Promise<boolean> => {
       try {
-          // 1. Walidacja formatu 'ZapisanaKalkulacja' (Pełny stan z wrapperem 'dane')
-          if (data && data.dane && data.dane.firma && Array.isArray(data.dane.pracownicy)) {
-              if (!skipConfirm && !confirm(`Wczytać kopię zapasową dla firmy ${data.nazwaFirmy || 'Bez nazwy'}?`)) return false;
+          // 1. Walidacja formatu 'ZapisanaKalkulacja'
+          const asKalkulacja = data as ZapisanaKalkulacja;
+          if (asKalkulacja && asKalkulacja.dane && asKalkulacja.dane.firma && Array.isArray(asKalkulacja.dane.pracownicy)) {
+              if (!skipConfirm && !await confirmDialog(`Wczytać kopię zapasową dla firmy ${asKalkulacja.nazwaFirmy || 'Bez nazwy'}?`)) return false;
               
-              company.setFirma(data.dane.firma);
-              employees.setPracownicy(data.dane.pracownicy);
-              if (data.dane.config) company.setConfig(data.dane.config);
-              if (data.dane.prowizjaProc) calculation.setProwizjaProc(data.dane.prowizjaProc);
+              company.setFirma(asKalkulacja.dane.firma);
+              employees.setPracownicy(asKalkulacja.dane.pracownicy);
+              if (asKalkulacja.dane.config) company.setConfig(asKalkulacja.dane.config);
+              if (asKalkulacja.dane.prowizjaProc) calculation.setProwizjaProc(asKalkulacja.dane.prowizjaProc);
               
               notification.notify('Przywrócono kopię zapasową.', 'success');
               return true;
           }
           
-          // 2. Walidacja formatu 'Surowa tablica pracowników' (Gdyby ktoś wgrał samą listę JSON)
-          if (Array.isArray(data) && data.length > 0 && data[0].imie) {
-               if (!skipConfirm && !confirm(`Plik wygląda na listę ${data.length} pracowników (bez ustawień firmy). Zaimportować?`)) return false;
-               employees.setPracownicy(data);
-               notification.notify(`Zaimportowano ${data.length} pracowników z pliku.`, 'success');
+          // 2. Walidacja formatu 'Surowa tablica pracowników'
+          const asPracownicy = data as Pracownik[];
+          if (Array.isArray(asPracownicy) && asPracownicy.length > 0 && asPracownicy[0].imie) {
+               if (!skipConfirm && !await confirmDialog(`Plik wygląda na listę ${asPracownicy.length} pracowników (bez ustawień firmy). Zaimportować?`)) return false;
+               employees.setPracownicy(asPracownicy);
+               notification.notify(`Zaimportowano ${asPracownicy.length} pracowników z pliku.`, 'success');
                return true;
           }
 
@@ -114,15 +125,45 @@ export const useAppStore = () => {
       }
   };
 
-  // Uproszczona funkcja delegująca do serwisu
-  const generateOffer = (item: ZapisanaKalkulacja) => {
-      offerPdfGenerator.generateOfferPDF(item);
-      notification.notify('Generowanie PDF...', 'info');
+  const generateOfferElitonPrimePlus = (item: ZapisanaKalkulacja) => {
+      offerPdfV3Generator.generateOfferPDF(item);
+      notification.notify('Generowanie oferty Eliton Prime™ PLUS...', 'info');
+  };
+
+  const generateLegalizacjaPremii = (item: ZapisanaKalkulacja) => {
+      offerLegalizacjaPremiiGenerator.generateOfferPDF(item);
+      notification.notify('Generowanie oferty Legalizacja Premii...', 'info');
   };
 
   const generateExcelFromHistory = (item: ZapisanaKalkulacja) => {
-      console.log("Export excel for", item.id);
-      notification.notify('Funkcja eksportu historii w przygotowaniu.', 'info');
+      const { firma, pracownicy, config, prowizjaProc } = item.dane;
+      const szczegoly = pracownicy.map(p => {
+          const standard = obliczWariantStandard(p, firma.stawkaWypadkowa, config);
+          const podzial = obliczWariantPodzial(p, firma.stawkaWypadkowa, p.nettoZasadnicza, config);
+          return { pracownik: p, standard, podzial, oszczednosc: standard.kosztPracodawcy - podzial.kosztPracodawcy };
+      });
+      const sumaNettoSwiadczen = szczegoly.reduce((acc, w) => acc + w.podzial.swiadczenie.netto, 0);
+      const sumaKosztStandard = szczegoly.reduce((acc, w) => acc + w.standard.kosztPracodawcy, 0);
+      const sumaKosztPodzial = szczegoly.reduce((acc, w) => acc + w.podzial.kosztPracodawcy, 0);
+      const oszczednoscBrutto = sumaKosztStandard - sumaKosztPodzial;
+      const prowizja = sumaNettoSwiadczen * (prowizjaProc / 100);
+      const oszczednoscNetto = oszczednoscBrutto - prowizja;
+      const wyniki = {
+          szczegoly,
+          podsumowanie: {
+              sumaKosztStandard,
+              sumaKosztPodzial,
+              sumaBruttoSwiadczen: szczegoly.reduce((acc, w) => acc + w.podzial.swiadczenie.brutto, 0),
+              sumaNettoSwiadczen,
+              oszczednoscBrutto,
+              prowizja,
+              oszczednoscNetto,
+              oszczednoscRoczna: oszczednoscNetto * 12,
+              sredniaOszczednoscNaEtat: pracownicy.length > 0 ? oszczednoscNetto / pracownicy.length : 0
+          }
+      };
+      generateFullHistoryExcel({ firma, pracownicy, wyniki, prowizjaProc, activeModel: 'PRIME' });
+      notification.notify('Generowanie Excel z historii...', 'info');
   };
 
   // Funkcja tworząca plik JSON (baza plikowa)
@@ -148,7 +189,8 @@ export const useAppStore = () => {
     saveToHistory,
     loadFromHistory,
     loadBackup,
-    generateOffer,
+    generateOfferElitonPrimePlus,
+    generateLegalizacjaPremii,
     generateExcelFromHistory,
     downloadCalculation
   };

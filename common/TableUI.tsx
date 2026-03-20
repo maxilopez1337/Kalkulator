@@ -10,6 +10,45 @@ export const TableContainer = ({ children, className = '', ...props }: React.Com
     </div>
 );
 
+/** Collapsible group header — D365 grid column band pattern */
+export const ThGroup = ({
+    children,
+    className = '',
+    expanded,
+    onToggle,
+    ...props
+}: React.ComponentPropsWithoutRef<'th'> & {
+    expanded?: boolean;
+    onToggle?: () => void;
+}) => (
+    <th
+        className={`px-2 py-1.5 bg-slate-50 text-[10px] font-bold uppercase tracking-wider border-b border-r whitespace-nowrap text-center select-none transition-colors ${
+            onToggle ? 'cursor-pointer hover:brightness-95 active:brightness-90' : ''
+        } ${className}`}
+        onClick={onToggle}
+        role={onToggle ? 'button' : undefined}
+        tabIndex={onToggle ? 0 : undefined}
+        aria-expanded={onToggle ? expanded : undefined}
+        title={onToggle ? (expanded ? 'Zwiń grupę' : 'Rozwiń grupę') : undefined}
+        onKeyDown={onToggle ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); } } : undefined}
+        {...props}
+    >
+        <span className="flex items-center justify-center gap-1">
+            {children}
+            {onToggle !== undefined && (
+                <svg
+                    className={`w-2.5 h-2.5 shrink-0 transition-transform duration-200 opacity-50 ${
+                        expanded ? '' : '-rotate-90'
+                    }`}
+                    viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth={2}
+                >
+                    <path d="M1 1l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            )}
+        </span>
+    </th>
+);
+
 export const Thead = ({ children, className = '', ...props }: React.ComponentPropsWithoutRef<'thead'>) => (
     <thead className={`bg-slate-50 sticky top-0 z-10 shadow-sm ${className}`} {...props}>
         {children}

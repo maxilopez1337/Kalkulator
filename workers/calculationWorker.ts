@@ -38,20 +38,23 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
         const sumaKosztStandard = szczegoly.reduce((acc, w) => acc + w.standard.kosztPracodawcy, 0);
         const sumaKosztPodzial = szczegoly.reduce((acc, w) => acc + w.podzial.kosztPracodawcy, 0);
         const sumaBruttoSwiadczen = szczegoly.reduce((acc, w) => acc + w.podzial.swiadczenie.brutto, 0);
+        const sumaNettoSwiadczen = szczegoly.reduce((acc, w) => acc + w.podzial.swiadczenie.netto, 0);
         
         const oszczednoscBrutto = sumaKosztStandard - sumaKosztPodzial;
-        const prowizja = sumaBruttoSwiadczen * (prowizjaProc / 100);
+        const prowizja = sumaNettoSwiadczen * (prowizjaProc / 100);
         const oszczednoscNetto = oszczednoscBrutto - prowizja;
 
         const podsumowanie = {
             sumaKosztStandard,
             sumaKosztPodzial,
             sumaBruttoSwiadczen,
+            sumaNettoSwiadczen,
             oszczednoscBrutto,
             prowizja,
             oszczednoscNetto,
             oszczednoscRoczna: oszczednoscNetto * 12,
-            sredniaOszczednoscNaEtat: pracownicy.length > 0 ? oszczednoscNetto / pracownicy.length : 0
+            sredniaOszczednoscNaEtat: pracownicy.length > 0 ? oszczednoscNetto / pracownicy.length : 0,
+            sumaNettoZasadnicze: pracownicy.reduce((acc, p) => acc + (p.nettoZasadnicza || 0), 0)
         };
 
         // 3. Odesłanie wyników do wątku głównego

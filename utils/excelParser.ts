@@ -205,8 +205,8 @@ export const parseExcelData = (rows: any[], config: Config): ImportRow[] => {
             }
         }
 
-        // 8. PIT-2 (Kwota zmniejszająca)
-        let pit2 = '300';
+        // 8. PIT-2 (Kwota zmniejszająca) — domyślna z konfiguracji
+        let pit2 = String(config.pit.kwotaZmniejszajacaMies);
         const valPit2 = parseFloat(String(colH_Pit2));
         if (!isNaN(valPit2)) pit2 = String(valPit2);
         

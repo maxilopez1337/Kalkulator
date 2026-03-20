@@ -20,9 +20,9 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
     // 1. Uruchamiamy silnik, by dostać pełną kalkulację STANDARDOWĄ na 1 miesiąc
     const wynik = obliczWariantStandard(pracownik, stawkaWypadkowa, config);
 
-    // Parametry podatkowe (Polski Ład)
-    const PROG_PODATKOWY = 120000;
-    const KWOTA_WOLNA_ROCZNIE = 30000;
+    // Parametry podatkowe z konfiguracji
+    const PROG_PODATKOWY = config.pit.prog1Limit;
+    const KWOTA_WOLNA_ROCZNIE = config.pit.kwotaWolnaRoczna;
     
     // Obliczamy miesięczną kwotę zmniejszającą wziętą prosto z deklaracji pracownika
     const kwotaZmniejszajacaMiesiac = parseFloat(pracownik.pit2) || 0; 
@@ -31,15 +31,15 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
     // Podstawa opodatkowania w skali roku (przychód minus ZUS społeczny minus KUP)
     const rocznaPodstawa = wynik.podstawaPit * 12;
 
-    // Separacja dochodów dla dwóch progów (12% i 32%)
+    // Separacja dochodów dla dwóch progów
     const kwotaDoProgu = Math.min(rocznaPodstawa, PROG_PODATKOWY);
     const kwotaPowyzejProgu = Math.max(0, rocznaPodstawa - PROG_PODATKOWY);
 
     const przekroczenieProgu = rocznaPodstawa > PROG_PODATKOWY;
 
-    // Kwoty wpadające odpowiednio w PIT 12% i 32% (przed odjęciem ulgi)
-    const pit12 = kwotaDoProgu * 0.12;
-    const pit32 = kwotaPowyzejProgu * 0.32;
+    // Kwoty wpadające odpowiednio w stawkę I i II progu (przed odjęciem ulgi)
+    const pit12 = kwotaDoProgu * (config.pit.prog1Stawka / 100);
+    const pit32 = kwotaPowyzejProgu * (config.pit.prog2Stawka / 100);
 
     return {
       miesiecznaMaksym: wynik.brutto,

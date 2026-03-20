@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useMemo, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useMemo, useEffect, ReactNode } from 'react';
 import { GlobalneWyniki } from '../entities/calculation/model';
 import { useCompany } from './CompanyContext';
 import { useEmployees } from './EmployeeContext';
@@ -20,8 +20,6 @@ interface CalculationContextType {
   // Nowe pola do trwałego stanu widoku
   comparisonState: ComparisonState;
   setComparisonState: React.Dispatch<React.SetStateAction<ComparisonState>>;
-  
-  isCalculating: boolean;
 }
 
 const CalculationContext = createContext<CalculationContextType | undefined>(undefined);
@@ -30,26 +28,35 @@ export const CalculationProvider = ({ children }: { children?: ReactNode }) => {
   const { firma, config } = useCompany();
   const { pracownicy } = useEmployees();
   
-  // ZMIANA: Domyślna prowizja globalna ustawiona na 26% (zgodnie z domyślną kartą PRIME)
-  // To zapobiega nadpisaniu wartości inputa Prime (26%) wartością Standard (28%) przy synchronizacji.
-  const [prowizjaProc, setProwizjaProc] = useState(26);
+  // ZMIANA: Domyślna prowizja globalna pochodzi z config (zgodnie z domyślną kartą PRIME)
+  // To zapobiega nadpisaniu wartości inputa Prime wartością Standard przy synchronizacji.
+  const [prowizjaProc, setProwizjaProc] = useState(config.prowizja.plus);
   
-  // Inicjalizacja stanu UI - domyślnie Prime 26%
+  // Inicjalizacja stanu UI z wartości config
   const [comparisonState, setComparisonState] = useState<ComparisonState>({
       activeCard: 'PRIME',
-      customStandardRate: 28,
-      customPrimeRate: 26
+      customStandardRate: config.prowizja.standard,
+      customPrimeRate: config.prowizja.plus
   });
 
-  const [isCalculating, setIsCalculating] = useState(false);
+  // Synchronizacja stawek prowizji gdy config.prowizja zmienia się (np. przez ConfigModal)
+  useEffect(() => {
+      setComparisonState(prev => {
+          const newState = {
+              ...prev,
+              customStandardRate: config.prowizja.standard,
+              customPrimeRate: config.prowizja.plus
+          };
+          setProwizjaProc(prev.activeCard === 'PRIME' ? config.prowizja.plus : config.prowizja.standard);
+          return newState;
+      });
+  }, [config.prowizja.standard, config.prowizja.plus]);
 
   // Główna logika obliczeniowa - automatycznie reaguje na zmiany w innych kontekstach
   const wyniki = useMemo<GlobalneWyniki | null>(() => {
     if (pracownicy.length === 0) return null;
     
     // Opcjonalnie: Tutaj można wpiąć WebWorkera dla dużej liczby pracowników
-    // setIsCalculating(true);
-
     const szczegoly = pracownicy.map(p => {
         const standard = obliczWariantStandard(p, firma.stawkaWypadkowa, config);
         const podzial = obliczWariantPodzial(p, firma.stawkaWypadkowa, p.nettoZasadnicza, config);
@@ -79,7 +86,6 @@ export const CalculationProvider = ({ children }: { children?: ReactNode }) => {
         sredniaOszczednoscNaEtat: pracownicy.length > 0 ? oszczednoscNetto / pracownicy.length : 0
     };
 
-    // setIsCalculating(false);
     return { szczegoly, podsumowanie };
   }, [pracownicy, firma, config, prowizjaProc]);
 
@@ -89,8 +95,7 @@ export const CalculationProvider = ({ children }: { children?: ReactNode }) => {
         prowizjaProc, 
         setProwizjaProc, 
         comparisonState, 
-        setComparisonState, 
-        isCalculating 
+        setComparisonState 
     }}>
       {children}
     </CalculationContext.Provider>

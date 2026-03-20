@@ -33,7 +33,7 @@ export const DEFAULT_CONFIG: Config = {
     netto: 3605.85 // Wyliczone netto dla 4806 brutto
   },
   minimalnaKwotaUZ: {
-    zasadniczaNetto: 840.00 // Waloryzacja proporcjonalna dla modelu Podział
+    zasadniczaNetto: 2028.80 // Waloryzacja proporcjonalna dla modelu Podział
   },
   swiadczenie: {
     stawkaPit: 12,

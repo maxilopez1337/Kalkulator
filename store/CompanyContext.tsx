@@ -21,14 +21,21 @@ export const DEFAULT_FIRMA_STATE: Firma = {
   email: '',
   telefon: '',
   osobaKontaktowa: '',
+  opiekunNazwa: '',
+  opiekunEmail: '',
+  opiekunTelefon: '',
   okres: new Date().toISOString().slice(0, 7),
   stawkaWypadkowa: 1.67
 };
 
 export const CompanyProvider = ({ children }: { children?: ReactNode }) => {
   const [firma, setFirma] = useState<Firma>(() => {
-    const saved = localStorage.getItem('kalkulator_firma');
-    return saved ? JSON.parse(saved) : DEFAULT_FIRMA_STATE;
+    try {
+      const saved = localStorage.getItem('kalkulator_firma');
+      return saved ? JSON.parse(saved) : DEFAULT_FIRMA_STATE;
+    } catch {
+      return DEFAULT_FIRMA_STATE;
+    }
   });
 
   const [config, setConfig] = useState<Config>(() => {
@@ -37,6 +44,7 @@ export const CompanyProvider = ({ children }: { children?: ReactNode }) => {
       try {
         const parsed = JSON.parse(saved);
         // Deep merge with DEFAULT_CONFIG to ensure structure integrity
+        // minimalnaKwotaUZ zawsze pochodzi z DEFAULT_CONFIG (parametr systemowy)
         return {
           ...DEFAULT_CONFIG,
           ...parsed,
@@ -55,6 +63,15 @@ export const CompanyProvider = ({ children }: { children?: ReactNode }) => {
           pit: {
             ...DEFAULT_CONFIG.pit,
             ...(parsed.pit || {})
+          },
+          minimalnaKwotaUZ: DEFAULT_CONFIG.minimalnaKwotaUZ,
+          swiadczenie: {
+            ...DEFAULT_CONFIG.swiadczenie,
+            ...(parsed.swiadczenie || {})
+          },
+          prowizja: {
+            ...DEFAULT_CONFIG.prowizja,
+            ...(parsed.prowizja || {})
           }
         };
       } catch (e) {

@@ -109,7 +109,7 @@ export const RaiseSimulationMatrix = () => {
                         <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
                             <th className="py-4 px-6 text-indigo-700">Podwyżka Netto<br/><span className="text-[10px] font-normal text-slate-400">Na rękę (na pracownika)</span></th>
                             <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-slate-400">Standardowy (UoP)</span></th>
-                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-slate-400">W modelu Eliton Prime</span></th>
+                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-slate-400">W modelu Eliton Prime™</span></th>
                             <th className="py-4 px-6 text-right bg-emerald-50/50">Oszczędność Firmy<br/><span className="text-[10px] font-normal text-emerald-600/70">W każdym miesiącu</span></th>
                         </tr>
                     </thead>
@@ -160,7 +160,7 @@ export const RaiseSimulationMatrix = () => {
                 <div className="p-1 rounded-full bg-blue-100 text-blue-600 mt-0.5"><TrendingUp size={14} /></div>
                 <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
                     <strong className="text-slate-700">Dlaczego warto?</strong> Przyznając pracownikowi 500 zł podwyżki w klasycznym modelu, firma pokrywa narzut PIT i obustronnego ZUS-u dochodzący do 70% wartości podwyżki.
-                    W modelu Eliton Prime nowa kwota zasila strumień świadczenia rzeczowego, co oznacza zapłatę jedynie prowizji platformy i PIT. 
+                    W modelu Eliton Prime™ nowa kwota zasila strumień świadczenia rzeczowego, co oznacza zapłatę jedynie prowizji platformy i PIT. 
                     <strong className="text-slate-700 ml-1">Pracownik zarabia więcej, a budżet firmy pozostaje pod ścisłą kontrolą.</strong>
                 </p>
             </div>

@@ -5,20 +5,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Optymalizacji Wynagrodzeń</title>
+    <script>
+        /* Tailwind v3 CDN fallback config
+           Brand hex values mirror shared/config/colors.ts — update both when changing brand. */
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Brand navy (nav / dark panels)
+                        brand: '#001433',
+                        'brand-hover': '#00245b',
+                        // M365 interactive blue
+                        'sp-blue': '#0078d4',
+                        'sp-blue-hover': '#106ebe',
+                        'sp-blue-light': '#deecf9',
+                        'sp-blue-bg': '#eff6fc',
+                        // Semantic
+                        'sp-success': '#107c10',
+                        'sp-success-bg': '#e6f3e6',
+                        'sp-warning': '#d47500',
+                        'sp-warning-bg': '#fef3e6',
+                        'sp-danger': '#d83b01',
+                        'sp-danger-bg': '#fde7e2',
+                        // Surfaces
+                        'sp-canvas': '#f3f2f1',
+                        'sp-border': '#edebe9',
+                    }
+                }
+            }
+        };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        /* Tailwind v4 CDN custom colors */
+        @theme {
+            --color-brand: #001433;
+            --color-brand-hover: #00245b;
+            --color-sp-blue: #0078d4;
+            --color-sp-blue-hover: #106ebe;
+            --color-sp-blue-light: #deecf9;
+            --color-sp-blue-bg: #eff6fc;
+            --color-sp-success: #107c10;
+            --color-sp-success-bg: #e6f3e6;
+            --color-sp-warning: #d47500;
+            --color-sp-warning-bg: #fef3e6;
+            --color-sp-danger: #d83b01;
+            --color-sp-danger-bg: #fde7e2;
+            --color-sp-canvas: #f3f2f1;
+            --color-sp-border: #edebe9;
+        }
+    </style>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html {
+            height: 100dvh;
+            overflow: hidden;
+        }
         body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden;
             /* Dynamics 365 / Windows standard font stack */
             font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             background-color: #f3f2f1; /* Fluent Gray background */
         }
+        #root {
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Brand / semantic color fallbacks — works regardless of Tailwind CDN version */
+        .bg-brand { background-color: #001433 !important; }
+        .text-brand { color: #001433 !important; }
+        .border-brand { border-color: #001433 !important; }
+        .bg-brand-hover { background-color: #00245b !important; }
+        .hover\:bg-brand-hover:hover { background-color: #00245b !important; }
+        /* M365 interactive blue */
+        .bg-sp-blue { background-color: #0078d4 !important; }
+        .text-sp-blue { color: #0078d4 !important; }
+        .hover\:bg-sp-blue-hover:hover { background-color: #106ebe !important; }
+        .bg-sp-blue-light { background-color: #deecf9 !important; }
+        .bg-sp-blue-bg { background-color: #eff6fc !important; }
+        /* Semantic */
+        .text-sp-success { color: #107c10 !important; }
+        .bg-sp-success-bg { background-color: #e6f3e6 !important; }
+        .text-sp-warning { color: #d47500 !important; }
+        .bg-sp-warning-bg { background-color: #fef3e6 !important; }
+        .text-sp-danger { color: #d83b01 !important; }
+        .bg-sp-danger-bg { background-color: #fde7e2 !important; }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }

@@ -8,12 +8,6 @@ interface ReportData {
     prowizjaProc: number;
 }
 
-declare global {
-    interface Window {
-        ExcelJS: any;
-    }
-}
-
 const checkExcelJS = () => {
     if (!window.ExcelJS) {
         alert('Biblioteka ExcelJS nie jest załadowana.');
@@ -92,7 +86,7 @@ export const excelGenerator = {
 
         // Comparison Table
         const tableHeaderRow = wsSummary.getRow(9);
-        tableHeaderRow.values = ['', 'Kategoria', 'Aktualny system rozliczeń', 'Model Eliton Prime PLUS', 'Różnica'];
+        tableHeaderRow.values = ['', 'Kategoria', 'Aktualny system rozliczeń', 'Eliton Prime™ PLUS', 'Różnica'];
         ['B9', 'C9', 'D9', 'E9'].forEach(key => {
             const cell = wsSummary.getCell(key);
             cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
@@ -103,7 +97,7 @@ export const excelGenerator = {
         const rows = [
             { name: 'Wynagrodzenia Brutto', std: wyniki.szczegoly.reduce((acc, w) => acc + w.standard.brutto, 0), new: wyniki.szczegoly.reduce((acc, w) => acc + w.podzial.pit.lacznyPrzychod, 0) },
             { name: 'ZUS Pracodawcy', std: wyniki.szczegoly.reduce((acc, w) => acc + w.standard.zusPracodawca.suma, 0), new: wyniki.szczegoly.reduce((acc, w) => acc + w.podzial.zasadnicza.zusPracodawca.suma, 0) },
-            { name: 'Koszt Operacyjny (Prowizja)', std: 0, new: feeCost }
+            { name: `Opłata serwisowa EBS\n${prowizjaProc}% wartości nominalnej świadczeń`, std: 0, new: feeCost }
         ];
         if (isPlus) rows.push({ name: 'Budżet na dodatkowe podwyżki', std: 0, new: raiseCost });
 
@@ -124,7 +118,7 @@ export const excelGenerator = {
         });
 
         const totalRow = wsSummary.getRow(currentRowIdx);
-        totalRow.getCell(2).value = 'CAŁKOWITY KOSZT';
+        totalRow.getCell(2).value = 'CAŁKOWITY KOSZT BRUTTO PRACODAWCY';
         totalRow.getCell(3).value = standardTotal;
         totalRow.getCell(4).value = elitonTotal;
         totalRow.getCell(5).value = savingsMonth;
@@ -151,7 +145,7 @@ export const excelGenerator = {
         dTitle.value = 'SYMULACJA PODZIAŁU NADWYŻKI I PODWYŻEK';
         dTitle.font = { bold: true, size: 12, color: { argb: 'FF1E40AF' } };
 
-        const headers = ['LP', 'Imię i Nazwisko', 'Obecne\nNetto', 'Kwota NETTO\n(ZUS)', 'Świadczenie\n(Benefit bez ZUS)', 'Podwyżka\nSystemowa od STRATTON', 'Bonus\nAdministracyjny\n(2% - Budżet)', 'Podwyżka\nDodatkowa\n(Od Pracodawcy)', 'NOWE ŁĄCZNE\nNETTO PRACOWNIKA', 'ZMIANA\n(ZYSK PRACOWNIKA)'];
+        const headers = ['LP', 'Imię i Nazwisko', 'Obecne\nNetto', 'Kwota NETTO\n(ZUS)', 'Świadczenie\n(Benefit bez ZUS)', '+4% Świadczeń\nrzeczowych EBS', 'Bonus\nAdministracyjny\n(2% - Budżet)', 'Podwyżka\nDodatkowa\n(Od Pracodawcy)', 'NOWE ŁĄCZNE\nNETTO PRACOWNIKA', 'ZMIANA\n(ZYSK PRACOWNIKA)'];
         const headerRow = wsDetails.getRow(4);
         headerRow.height = 45;
         headers.forEach((h, i) => {

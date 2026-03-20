@@ -42,12 +42,12 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
     const baseBenefitNetto = prowizjaProc > 0 ? totalProvision / (prowizjaProc / 100) : 0;
     const includeRaises = activeModel === 'PRIME';
 
-    // Bonus admina 2% zawsze liczony, ale podwyżka 4% tylko dla PRIME
+    // Podwyżka 4% i bonus 2% tylko dla PRIME (PLUS)
     const raiseAmount = includeRaises ? baseBenefitNetto * 0.04 : 0;
-    const adminAmount = baseBenefitNetto * 0.02;
+    const adminAmount = includeRaises ? baseBenefitNetto * 0.02 : 0;
     const feeAmount = includeRaises
         ? Math.max(0, totalProvision - raiseAmount - adminAmount)
-        : Math.max(0, totalProvision - adminAmount);
+        : totalProvision;
 
     // --- CONFIG MOTYWU ---
     const theme = activeModel === 'PRIME' ? {
@@ -55,14 +55,14 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
         bgHighlight: "bg-amber-50/40",
         textHighlight: "text-amber-900",
         iconColor: "text-amber-500",
-        headerText: "Model Eliton PRIME+",
+        headerText: "Eliton Prime™ PLUS",
         badge: "bg-amber-100 text-amber-700 border-amber-200"
     } : {
         borderL: "border-l-4 border-l-blue-400",
         bgHighlight: "bg-blue-50/40",
         textHighlight: "text-blue-900",
         iconColor: "text-blue-500",
-        headerText: "Model Eliton STANDARD",
+        headerText: "Eliton Prime™",
         badge: "bg-blue-100 text-blue-700 border-blue-200"
     };
 
@@ -141,8 +141,8 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
             <div className="mt-auto bg-slate-900 text-white rounded-b-xl overflow-hidden">
                 <div className="grid grid-cols-12 items-center">
                     <div className="col-span-4 pl-6 py-5">
-                        <div className="text-sm font-bold uppercase tracking-widest text-slate-400">Całkowity Koszt</div>
-                        <div className="text-xs text-slate-500 mt-0.5">Pracodawcy (Miesięcznie)</div>
+                        <div className="text-sm font-bold uppercase tracking-widest text-slate-400">Całkowity Koszt Brutto Pracodawcy</div>
+                        <div className="text-xs text-slate-500 mt-0.5">(Miesięcznie)</div>
                     </div>
                     
                     <div className="col-span-3 px-4 py-5 text-right">
@@ -208,7 +208,7 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
 
             {/* DESKTOP BODY */}
             <div className="hidden md:block flex-1 overflow-auto">
-                {renderRow("Wynagrodzenie Brutto", "Z UMOWY", stats.standard.brutto, stats.stratton.brutto)}
+                {renderRow("Wynagrodzenie pracowników Brutto", "Z UMOWY", stats.standard.brutto, stats.stratton.brutto)}
                 {renderRow("ZUS Pracodawcy", "EMERYTALNA, RENTOWA, WYP.", stats.standard.zusPracodawca, stats.stratton.zusPracodawca)}
                 {renderRow("ZUS Pracownika", "SPOŁECZNE + ZDROWOTNE", stdZusPracownikaTotal, strZusPracownikaTotal)}
                 {renderRow("Netto Pracownika", "DO WYPŁATY (NA RĘKĘ)", stats.standard.netto, stats.stratton.netto, true)}
@@ -216,7 +216,7 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                 {/* Spacer */}
                 <div className="h-4 bg-slate-50/30 border-b border-slate-50"></div>
 
-                 {renderRow("Opłata Success Fee", "za obsługę modelu Eliton Prime (naliczana od świadczenia netto)",
+                 {renderRow("Opłata serwisowa EBS", `${prowizjaProc}% wartości nominalnej świadczeń`,
                      null, feeAmount, false, undefined, "text-slate-600 font-semibold", true)}
 
                 {/* Bonus admina 2% zawsze pokazuj */}
@@ -225,7 +225,7 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                 }
                 {/* Podwyżka 4% tylko dla PRIME */}
                 {includeRaises && raiseAmount > 0 && 
-                    renderRow("Dodatkowa podwyżka wynagrodzenia dla pracowników, wyliczana od świadczenia netto", "4% FINANSOWANE PRZEZ STRATTON", 0, raiseAmount, true, (s, n) => n, 'text-emerald-700 font-bold')
+                    renderRow("Dodatkowa podwyżka wynagrodzenia dla pracowników, wyliczana od świadczenia netto", "+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime", 0, raiseAmount, true, (s, n) => n, 'text-emerald-700 font-bold')
                 }
             </div>
 
@@ -236,13 +236,13 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
 
             {/* MOBILE VIEW */}
             <div className="md:hidden p-3 space-y-2">
-                <MobileRowCard label="Wynagrodzenie Brutto" subLabel="Z Umowy" valStd={stats.standard.brutto} valStr={stats.stratton.brutto} />
+                <MobileRowCard label="Wynagrodzenie pracowników Brutto" subLabel="Z Umowy" valStd={stats.standard.brutto} valStr={stats.stratton.brutto} />
                 <MobileRowCard label="ZUS Pracodawcy" subLabel="Koszt Firmy" valStd={stats.standard.zusPracodawca} valStr={stats.stratton.zusPracodawca} />
                 <MobileRowCard label="ZUS Pracownika" subLabel="Społeczne" valStd={stdZusPracownikaTotal} valStr={strZusPracownikaTotal} />
                 <MobileRowCard label="Netto Pracownika" subLabel="Na rękę" valStd={stats.standard.netto} valStr={stats.stratton.netto} customStrClass="text-blue-700" />
                 
                 <div className="my-2 border-t border-dashed border-slate-200"></div>
-                <MobileRowCard label="Opłata Serwisowa" subLabel="Faktura" valStd={null} valStr={feeAmount} />
+                <MobileRowCard label="Opłata serwisowa EBS" subLabel={`${prowizjaProc}% wartości nominalnej świadczeń`} valStd={null} valStr={feeAmount} />
                 {/* Bonus admina 2% zawsze pokazuj */}
                 {adminAmount > 0 && <MobileRowCard label="Bonus (2%)" subLabel="Dla działu księgowo-kadrowego" valStd={0} valStr={adminAmount} customStrClass="text-blue-700" customDiffCalc={(s,n) => n} />}
                 {/* Podwyżka 4% tylko dla PRIME */}

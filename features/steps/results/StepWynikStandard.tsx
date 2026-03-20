@@ -1,8 +1,14 @@
 
 import React, { useMemo, useState } from 'react';
-import { Calculator, Search, X, TrendingUp, Wallet, PieChart, Users, ArrowRight, ChevronDown, ChevronUp } from '../../../common/Icons';
+import { Calculator, TrendingUp, Wallet, PieChart, Users, ArrowRight, ChevronDown, ChevronUp } from '../../../common/Icons';
 import { ButtonSecondary } from '../../../shared/ui/Button';
+import { SectionLabel } from '../../../shared/ui/SectionLabel';
+import { KpiCard } from '../../../shared/ui/KpiCard';
+import { SearchInput } from '../../../shared/ui/SearchInput';
 import { Input } from '../../../shared/ui/Input';
+import { shadow } from '../../../common/theme';
+import { PageHeader } from '../../../shared/ui/PageHeader';
+import { DataTableToolbar } from '../../../shared/ui/DataTableToolbar';
 import { applyHeaderStyle, applyDataStyle, applyTotalStyle } from './excelStyles';
 import { useExcelExport } from '../../../hooks/useExcelExport';
 import { useAppStore } from '../../../store/AppContext';
@@ -11,26 +17,22 @@ import { useResultsFilter } from '../../../hooks/useResultsFilter';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { STANDARD_TABLE_CONFIG } from './excelTableConfigs';
 import { WynikPracownika } from '../../../entities/calculation/model';
-
-declare global {
-    interface Window {
-        XLSX: any;
-        ExcelJS: any;
-    }
-}
+import { Avatar } from '../../../shared/ui/Avatar';
 
 // --- MOBILE CARD COMPONENT ---
 const ResultCard: React.FC<{ item: WynikPracownika, standardKoszt: number }> = ({ item, standardKoszt }) => {
     const [expanded, setExpanded] = useState(false);
     
     return (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-200 active:scale-[0.99]">
+        <div className="bg-white rounded-md border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] overflow-hidden transition-all duration-200 active:scale-[0.99]">
             {/* Header */}
-            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setExpanded(!expanded)}>
+            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-slate-50 transition-colors" role="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-sm border border-slate-200">
-                        {item.pracownik.imie.charAt(0)}{item.pracownik.nazwisko.charAt(0)}
-                    </div>
+                    <Avatar
+                        name={item.pracownik.imie}
+                        surname={item.pracownik.nazwisko}
+                        colorClass="bg-slate-100 text-slate-500 border border-slate-200"
+                    />
                     <div>
                         <div className="font-bold text-slate-900 text-sm">{item.pracownik.imie} {item.pracownik.nazwisko}</div>
                         <div className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
@@ -49,11 +51,11 @@ const ResultCard: React.FC<{ item: WynikPracownika, standardKoszt: number }> = (
             {/* Key Metrics Row */}
             <div className="px-4 pb-4 grid grid-cols-2 gap-3">
                 <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">Koszt Całkowity</div>
+                    <SectionLabel className="mb-1">Koszt Całkowity</SectionLabel>
                     <div className="text-sm font-bold text-slate-700">{formatPLN(item.standard.kosztPracodawcy)}</div>
                 </div>
                 <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">Brutto</div>
+                    <SectionLabel className="mb-1">Brutto</SectionLabel>
                     <div className="text-sm font-bold text-slate-700">{formatPLN(item.standard.brutto)}</div>
                 </div>
             </div>
@@ -120,33 +122,33 @@ export const StepWynikStandard = () => {
     if (!wyniki || !stats) return null;
 
     const handleExport = () => {
-        const totalRow = {
-            lp: '',
-            name: 'SUMA CAŁKOWITA',
-            type: '',
-            netto: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.netto, 0),
-            brutto: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.brutto, 0),
-            koszt: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.kosztPracodawcy, 0),
-            podstZus: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.podstawaZus, 0),
-            emerytalnaPrac: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracownik.emerytalna, 0),
-            rentowaPrac: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracownik.rentowa, 0),
-            chorobowaPrac: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracownik.chorobowa, 0),
-            zusPrac: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracownik.suma, 0),
-            podstZdrow: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.podstawaZdrowotna, 0),
-            zdrowotna: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zdrowotna, 0),
-            sumaZusPrac: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracownik.suma + w.standard.zdrowotna, 0),
-            kup: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.kup, 0),
-            podstPit: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.podstawaPit, 0),
-            stawkaPit: '',
-            pit: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.pit, 0),
-            emerytalnaFirma: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.emerytalna, 0),
-            rentowaFirma: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.rentowa, 0),
-            wypadkowaFirma: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.wypadkowa, 0),
-            fp: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.fp, 0),
-            fgsp: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.fgsp, 0),
-            zusFirma: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.suma, 0),
-            sumaSkladek: filteredWyniki.reduce((acc:number, w:any) => acc + w.standard.zusPracodawca.suma + w.standard.zusPracownik.suma + w.standard.zdrowotna, 0)
-        };
+        const sums = filteredWyniki.reduce((acc, w) => {
+            const s = w.standard;
+            acc.netto += s.netto;
+            acc.brutto += s.brutto;
+            acc.koszt += s.kosztPracodawcy;
+            acc.podstZus += s.podstawaZus;
+            acc.emerytalnaPrac += s.zusPracownik.emerytalna;
+            acc.rentowaPrac += s.zusPracownik.rentowa;
+            acc.chorobowaPrac += s.zusPracownik.chorobowa;
+            acc.zusPrac += s.zusPracownik.suma;
+            acc.podstZdrow += s.podstawaZdrowotna;
+            acc.zdrowotna += s.zdrowotna;
+            acc.sumaZusPrac += s.zusPracownik.suma + s.zdrowotna;
+            acc.kup += s.kup;
+            acc.podstPit += s.podstawaPit;
+            acc.pit += s.pit;
+            acc.emerytalnaFirma += s.zusPracodawca.emerytalna;
+            acc.rentowaFirma += s.zusPracodawca.rentowa;
+            acc.wypadkowaFirma += s.zusPracodawca.wypadkowa;
+            acc.fp += s.zusPracodawca.fp;
+            acc.fgsp += s.zusPracodawca.fgsp;
+            acc.zusFirma += s.zusPracodawca.suma;
+            acc.sumaSkladek += s.zusPracodawca.suma + s.zusPracownik.suma + s.zdrowotna;
+            return acc;
+        }, { netto:0, brutto:0, koszt:0, podstZus:0, emerytalnaPrac:0, rentowaPrac:0, chorobowaPrac:0, zusPrac:0, podstZdrow:0, zdrowotna:0, sumaZusPrac:0, kup:0, podstPit:0, pit:0, emerytalnaFirma:0, rentowaFirma:0, wypadkowaFirma:0, fp:0, fgsp:0, zusFirma:0, sumaSkladek:0 });
+
+        const totalRow = { lp: '', name: 'SUMA CAŁKOWITA', type: '', stawkaPit: '', ...sums };
 
         exportToExcel({
             fileName: `Wynik_Standard_${firma.nazwa || 'Firma'}`,
@@ -191,78 +193,64 @@ export const StepWynikStandard = () => {
     };
 
     return (
-        <div className="animate-in fade-in zoom-in-95 duration-300 space-y-6">
-            
-            {/* 1. EXECUTIVE SUMMARY (KPIs) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative overflow-hidden">
-                    <div>
-                        <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Pracownicy</div>
-                        <div className="text-2xl font-bold text-slate-900">{filteredWyniki.length}</div>
-                    </div>
-                    <div className="p-3 bg-slate-50 rounded-lg text-slate-400"><Users /></div>
-                </div>
+        <div className="animate-in fade-in zoom-in-95 duration-300 h-full min-h-0 flex flex-col gap-2">
 
-                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
-                    <div>
-                        <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Netto dla Ludzi</div>
-                        <div className="text-2xl font-bold text-blue-900">{formatPLN(stats.netto)}</div>
-                    </div>
-                    <div className="p-3 bg-blue-50 rounded-lg text-blue-600"><Wallet /></div>
-                </div>
+            {/* DATA GRID CONTAINER */}
+            <div className={`bg-white rounded-md ${shadow.elevation8} border border-[#edebe9] overflow-hidden flex flex-col flex-1 min-h-0`}>
 
-                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
-                    <div>
-                        <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Obciążenia (ZUS+PIT)</div>
-                        <div className="text-2xl font-bold text-amber-900">{formatPLN(stats.podatki)}</div>
+                {/* D365 COMMAND BAR */}
+                <div className="flex items-stretch border-b border-[#edebe9] bg-white flex-shrink-0 h-[44px] overflow-hidden">
+                    {/* Title */}
+                    <div className="flex items-center gap-2 px-4 border-r border-[#edebe9] shrink-0">
+                        <div className="text-[#0078d4]"><TrendingUp /></div>
+                        <span className="text-[13px] font-semibold text-[#323130] whitespace-nowrap">Aktualny Koszt Zatrudnienia</span>
                     </div>
-                    <div className="p-3 bg-amber-50 rounded-lg text-amber-600"><PieChart /></div>
-                </div>
-
-                <div className="bg-slate-900 p-5 rounded-xl border border-slate-900 shadow-md flex items-center justify-between relative overflow-hidden text-white">
-                    <div>
-                        <div className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Koszt Całkowity</div>
-                        <div className="text-2xl font-bold">{formatPLN(stats.koszt)}</div>
+                    {/* KPI Stats */}
+                    <div className="flex items-stretch flex-1 overflow-x-auto scrollbar-hide">
+                        <div className="flex items-center gap-2 px-4 border-r border-[#edebe9] shrink-0">
+                            <Users className="w-3.5 h-3.5 text-[#a19f9d]" />
+                            <span className="text-[11px] text-[#605e5c]">Pracownicy:</span>
+                            <span className="text-[13px] font-semibold text-[#323130] tabular-nums">{filteredWyniki.length}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 border-r border-[#edebe9] shrink-0">
+                            <Wallet className="w-3.5 h-3.5 text-[#0078d4]" />
+                            <span className="text-[11px] text-[#605e5c] uppercase tracking-wide">Netto</span>
+                            <span className="text-[13px] font-semibold text-[#0078d4] tabular-nums">{formatPLN(stats.netto)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 border-r border-[#edebe9] shrink-0">
+                            <PieChart className="w-3.5 h-3.5 text-[#a19f9d]" />
+                            <span className="text-[11px] text-[#605e5c] uppercase tracking-wide">ZUS+PIT</span>
+                            <span className="text-[13px] font-semibold text-[#323130] tabular-nums">{formatPLN(stats.podatki)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 shrink-0">
+                            <TrendingUp className="w-3.5 h-3.5 text-[#0078d4]" />
+                            <span className="text-[11px] text-[#605e5c] uppercase tracking-wide">Koszt</span>
+                            <span className="text-[14px] font-bold text-[#0078d4] tabular-nums">{formatPLN(stats.koszt)}</span>
+                        </div>
                     </div>
-                    <div className="p-3 bg-white/10 rounded-lg text-white"><TrendingUp /></div>
-                </div>
-            </div>
-
-            {/* 2. DATA GRID CONTAINER */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)]">
-                
-                {/* Header */}
-                <div className="flex items-center gap-3 px-4 md:px-7 py-4 border-b border-slate-100 bg-slate-50/50 flex-shrink-0">
-                    <div className="p-2 bg-white rounded-lg shadow-sm text-slate-700"><Calculator /></div>
-                    <h2 className="text-base md:text-lg font-bold text-slate-900">Analiza Kosztów (As-Is)</h2>
-                    <div className="ml-auto flex gap-2">
-                         <ButtonSecondary size="sm" onClick={handleExport} icon={<Wallet />}>
-                             <span className="hidden md:inline">Eksportuj do Excel</span>
-                             <span className="md:hidden">Excel</span>
-                         </ButtonSecondary>
+                    {/* Export — D365 command button */}
+                    <div className="flex items-center border-l border-[#edebe9] px-3 shrink-0">
+                        <button
+                            onClick={handleExport}
+                            className="flex items-center gap-1.5 px-3 h-[30px] text-[12px] font-medium text-[#323130] bg-white border border-[#8a8886] hover:bg-[#f3f2f1] active:bg-[#edebe9] transition-colors whitespace-nowrap"
+                        >
+                            <Wallet className="w-3.5 h-3.5" />
+                            <span className="hidden md:inline">Eksportuj do Excel</span>
+                            <span className="md:hidden">Excel</span>
+                        </button>
                     </div>
                 </div>
 
                 {/* Search Toolbar */}
-                <div className="px-4 md:px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col xl:flex-row gap-4 justify-between items-center flex-shrink-0">
-                    
-                    {/* Search */}
-                    <div className="relative w-full xl:w-96">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Search /></div>
-                        <Input 
-                            type="text" 
-                            placeholder="Filtruj listę..." 
+                <DataTableToolbar
+                    search={
+                        <SearchInput
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 pr-10 py-2 text-sm bg-white"
+                            onChange={setSearchQuery}
+                            placeholder="Filtruj listę..."
                         />
-                        {searchQuery && (
-                            <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><X /></button>
-                        )}
-                    </div>
-                </div>
+                    }
+                />
 
                 {/* CONTENT: TABLE (Desktop) vs CARDS (Mobile) */}
                 <div className="flex-1 overflow-hidden relative">

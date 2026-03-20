@@ -9,12 +9,6 @@ interface ReportData {
     prowizjaProc: number;
 }
 
-declare global {
-    interface Window {
-        ExcelJS: any;
-    }
-}
-
 export const generateManagementReport = async ({ firma, wyniki, prowizjaProc }: ReportData) => {
     if (!window.ExcelJS) {
         alert('Biblioteka ExcelJS nie jest załadowana.');
@@ -92,7 +86,7 @@ export const generateManagementReport = async ({ firma, wyniki, prowizjaProc }: 
 
     // --- TABELA PORÓWNAWCZA (Row 9+) ---
     const tableHeaderRow = wsSummary.getRow(9);
-    tableHeaderRow.values = ['', 'Kategoria', 'Model Standard (As-Is)', 'Model Eliton (To-Be)', 'Różnica'];
+    tableHeaderRow.values = ['', 'Kategoria', 'Aktualny Koszt Zatrudnienia', 'Eliton Prime™ (Model Docelowy)', 'Różnica'];
     
     // Styl nagłówka tabeli
     ['B9', 'C9', 'D9', 'E9'].forEach(key => {
@@ -115,7 +109,7 @@ export const generateManagementReport = async ({ firma, wyniki, prowizjaProc }: 
             new: wyniki.szczegoly.reduce((acc, w) => acc + w.podzial.zasadnicza.zusPracodawca.suma, 0)
         },
         {
-            name: 'Koszt Operacyjny (Prowizja)',
+            name: `Opłata serwisowa EBS\n${prowizjaProc}% wartości nominalnej świadczeń`,
             std: 0,
             new: feeCost
         }
@@ -157,7 +151,7 @@ export const generateManagementReport = async ({ firma, wyniki, prowizjaProc }: 
 
     // TOTAL ROW
     const totalRow = wsSummary.getRow(currentRowIdx);
-    totalRow.getCell(2).value = 'CAŁKOWITY KOSZT';
+    totalRow.getCell(2).value = 'CAŁKOWITY KOSZT BRUTTO PRACODAWCY';
     totalRow.getCell(3).value = standardTotal;
     totalRow.getCell(4).value = elitonTotal;
     totalRow.getCell(5).value = savingsMonth;

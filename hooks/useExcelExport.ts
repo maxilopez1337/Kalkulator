@@ -1,12 +1,6 @@
 
 import { useCallback } from 'react';
 
-declare global {
-    interface Window {
-        ExcelJS: any;
-    }
-}
-
 interface ColumnDef {
     header: string;
     key: string;

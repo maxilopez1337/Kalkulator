@@ -8,6 +8,9 @@ export interface Firma {
   email?: string;
   telefon?: string;
   osobaKontaktowa?: string;
+  opiekunNazwa?: string;
+  opiekunEmail?: string;
+  opiekunTelefon?: string;
   okres: string;
   stawkaWypadkowa: number;
 }
