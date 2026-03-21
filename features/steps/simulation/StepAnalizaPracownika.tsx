@@ -1,10 +1,10 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { useCalculation, useCompany } from '../../../store/AppContext';
 import { formatPLN } from '../../../shared/utils/formatters';
-import { Download, Users, TrendingUp, ChevronDown, ChevronUp, TrendingDown, Check, DollarSign } from '../../../common/Icons';
+import { Users, TrendingDown, ChevronDown, ChevronUp, Check } from '../../../common/Icons';
 
 // ��� Month names ������������������������������������������������������������
-const MO = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Pa�','Lis','Gru'];
+const MO = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Pa\u017a','Lis','Gru'];
 
 // ��� PIT narastaj�co helper �������������������������������������������������
 // Oblicza zaliczk� PIT dla danego miesi�ca z uwzgl�dnieniem przekroczenia progu.
@@ -42,7 +42,7 @@ interface MonthRow {
     isIIProg: boolean;
 }
 interface EliMonthRow extends MonthRow {
-    s_brutto: number; // �wiadczenie brutto (ekwiwalent)
+    s_brutto: number; // Świadczenie brutto (ekwiwalent)
 }
 
 // ��� Component ��������������������������������������������������������������
@@ -56,7 +56,7 @@ export const StepAnalizaPracownika = () => {
     const [expanded, setExpanded]             = useState<Set<string | number>>(new Set());
 
     const p1Limit = config?.pit?.prog1Limit  ?? 120000;
-    // WA�NE: sta�e przechowuj� 12 i 32 (procent), zamieniamy na u�amki
+    // WAŻNE: stałe przechowują 12 i 32 (procent), zamieniamy na ułamki
     const p1Rate  = (config?.pit?.prog1Stawka ?? 12) / 100;
     const p2Rate  = (config?.pit?.prog2Stawka ?? 32) / 100;
 
@@ -222,22 +222,22 @@ export const StepAnalizaPracownika = () => {
                     <div>
                         <div className="flex items-center gap-2 mb-0.5">
                             <div className="w-1.5 h-6 bg-[#0078d4] rounded-sm shrink-0"></div>
-                            <h1 className="text-base font-bold text-slate-900 leading-tight">Analiza PIT-37 � Symulacja Podatku Pracownika</h1>
+                            <h1 className="text-base font-bold text-slate-900 leading-tight">Analiza PIT-37 – Symulacja Podatku Pracownika</h1>
                         </div>
-                        <p className="text-[11px] text-slate-500 pl-3.5">Model Tradycyjny vs. Eliton Prime� &nbsp;�&nbsp; Skala 12% / 32% (narastaj�co) &nbsp;�&nbsp; Miesi�c po miesi�cu &nbsp;�&nbsp; Pr�g II: 120 000 z�/rok</p>
+                        <p className="text-[11px] text-slate-500 pl-3.5">Model Tradycyjny vs. Eliton Prime™ &nbsp;·&nbsp; Skala 12% / 32% (narastająco) &nbsp;·&nbsp; Miesiąc po miesiącu &nbsp;·&nbsp; Próg II: 120 000 zł/rok</p>
                     </div>
                     {/* Global raise controls */}
                     <div className="flex items-center gap-2 flex-wrap shrink-0">
                         <div className="flex items-center gap-1.5 bg-[#eff6fc] border border-[#c8e1f7] rounded px-3 py-1.5">
-                            <span className="text-[10px] text-[#0078d4] font-bold uppercase tracking-wider whitespace-nowrap">Podwy�ka EBS netto:</span>
+                            <span className="text-[10px] text-[#0078d4] font-bold uppercase tracking-wider whitespace-nowrap">Podwyżka EBS netto:</span>
                             <input type="number" value={globalEBS} onChange={e => setGlobalEBS(e.target.value)}
-                                placeholder="0 z�"
+                                placeholder="0 zł"
                                 className="w-20 text-xs text-center bg-transparent border-none outline-none font-bold text-[#0078d4] placeholder-blue-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
                         </div>
                         <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded px-3 py-1.5">
-                            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider whitespace-nowrap">Podwy�ka Prac. netto:</span>
+                            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider whitespace-nowrap">Podwyżka Prac. netto:</span>
                             <input type="number" value={globalEmployer} onChange={e => setGlobalEmployer(e.target.value)}
-                                placeholder="0 z�"
+                                placeholder="0 zł"
                                 className="w-20 text-xs text-center bg-transparent border-none outline-none font-bold text-emerald-700 placeholder-emerald-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
                         </div>
                         <button onClick={applyGlobal}
@@ -253,11 +253,11 @@ export const StepAnalizaPracownika = () => {
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
                     {[
                         { label: 'Pracownicy', val: totals.n, cls: 'bg-white border-slate-200 text-slate-800', valCls: 'text-slate-900' },
-                        { label: 'PIT/rok � Tradycyjny', val: formatPLN(totals.stdRocznyPit), cls: 'bg-white border-rose-100', valCls: 'text-rose-700' },
-                        { label: 'PIT/rok � Eliton Prime�', val: formatPLN(totals.eliRocznyPit), cls: 'bg-white border-emerald-100', valCls: 'text-emerald-700' },
-                        { label: 'Oszcz�dno�� PIT (roczna)', val: `+${formatPLN(totals.pitOszczednosc)}`, cls: 'bg-emerald-50 border-emerald-200', valCls: 'text-emerald-800 font-black' },
-                        { label: 'W II progu � Tradycyjny', val: `${totals.stdIIProg} os.`, cls: 'bg-amber-50 border-amber-200', valCls: 'text-amber-800' },
-                        { label: 'W II progu � Eliton', val: `${totals.eliIIProg} os.`, cls: 'bg-white border-blue-200', valCls: 'text-blue-700' },
+                        { label: 'PIT/rok – Tradycyjny', val: formatPLN(totals.stdRocznyPit), cls: 'bg-white border-rose-100', valCls: 'text-rose-700' },
+                        { label: 'PIT/rok – Eliton Prime™', val: formatPLN(totals.eliRocznyPit), cls: 'bg-white border-emerald-100', valCls: 'text-emerald-700' },
+                        { label: 'Oszczędność PIT (roczna)', val: `+${formatPLN(totals.pitOszczednosc)}`, cls: 'bg-emerald-50 border-emerald-200', valCls: 'text-emerald-800 font-black' },
+                        { label: 'W II progu – Tradycyjny', val: `${totals.stdIIProg} os.`, cls: 'bg-amber-50 border-amber-200', valCls: 'text-amber-800' },
+                        { label: 'W II progu – Eliton', val: `${totals.eliIIProg} os.`, cls: 'bg-white border-blue-200', valCls: 'text-blue-700' },
                     ].map(kpi => (
                         <div key={kpi.label} className={`border rounded-md px-3 py-2 shadow-sm ${kpi.cls}`}>
                             <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-0.5">{kpi.label}</div>
@@ -279,13 +279,13 @@ export const StepAnalizaPracownika = () => {
                                         PRACOWNIK
                                     </th>
                                     <th colSpan={4} className="py-2 px-3 text-center text-[10px] font-bold tracking-wider bg-slate-700 text-white border-r border-white/20">
-                                        ? MODEL TRADYCYJNY (Standard PIT-37)
+                                        ▶ MODEL TRADYCYJNY (Standard PIT-37)
                                     </th>
                                     <th colSpan={6} className="py-2 px-3 text-center text-[10px] font-bold tracking-wider bg-[#005a9e] text-white border-r border-white/20">
-                                        ? ELITON PRIME� (Po Podziale Wynagrodzenia)
+                                        ★ ELITON PRIME™ (Po Podziale Wynagrodzenia)
                                     </th>
                                     <th colSpan={2} className="py-2 px-3 text-center text-[10px] font-bold tracking-wider bg-emerald-800 text-white">
-                                        ? WYNIK PODATKOWY
+                                        ✓ WYNIK PODATKOWY
                                     </th>
                                 </tr>
                                 {/* Column header row */}
@@ -297,24 +297,24 @@ export const StepAnalizaPracownika = () => {
                                     <th className="py-2.5 px-3 text-right font-semibold text-slate-600">Brutto</th>
                                     <th className="py-2.5 px-3 text-right font-semibold text-slate-600">Netto</th>
                                     <th className="py-2.5 px-3 text-right font-semibold text-rose-700 bg-rose-50/50">PIT avg/mies</th>
-                                    <th className="py-2.5 px-3 text-center font-semibold text-amber-700 bg-amber-50/50 border-r border-[#edebe9]">II Pr�g (STD)</th>
+                                    <th className="py-2.5 px-3 text-center font-semibold text-amber-700 bg-amber-50/50 border-r border-[#edebe9]">II Próg (STD)</th>
                                     {/* Eliton */}
                                     <th className="py-2.5 px-3 text-right font-semibold text-blue-700 bg-blue-50/30">Zasadnicze</th>
-                                    <th className="py-2.5 px-3 text-right font-semibold text-blue-700 bg-blue-50/30">�wiadczenie</th>
+                                    <th className="py-2.5 px-3 text-right font-semibold text-blue-700 bg-blue-50/30">Świadczenie</th>
                                     <th className="py-2.5 px-3 text-center font-semibold text-blue-900 bg-blue-100/60">
-                                        + Podwy�ka EBS<br/>
-                                        <span className="text-[9px] font-normal text-blue-600">(netto � auto brutto)</span>
+                                        + Podwyżka EBS<br/>
+                                        <span className="text-[9px] font-normal text-blue-600">(netto → auto brutto)</span>
                                     </th>
                                     <th className="py-2.5 px-3 text-center font-semibold text-emerald-900 bg-emerald-50/60">
-                                        + Podwy�ka Prac.<br/>
-                                        <span className="text-[9px] font-normal text-emerald-600">(netto � auto brutto)</span>
+                                        + Podwyżka Prac.<br/>
+                                        <span className="text-[9px] font-normal text-emerald-600">(netto → auto brutto)</span>
                                     </th>
                                     <th className="py-2.5 px-3 text-right font-semibold text-amber-800 bg-yellow-50">Nowe Netto</th>
                                     <th className="py-2.5 px-3 text-right font-semibold text-emerald-700 bg-emerald-50/50">PIT avg/mies</th>
-                                    <th className="py-2.5 px-3 text-center font-semibold text-amber-700 bg-amber-50/50 border-r border-[#edebe9]">II Pr�g (ELI)</th>
+                                    <th className="py-2.5 px-3 text-center font-semibold text-amber-700 bg-amber-50/50 border-r border-[#edebe9]">II Próg (ELI)</th>
                                     {/* Result */}
-                                    <th className="py-2.5 px-3 text-right font-semibold text-emerald-800 bg-emerald-50">? PIT / rok</th>
-                                    <th className="py-2.5 px-3 text-right font-semibold text-slate-600">�wiad. brutto (m1)</th>
+                                    <th className="py-2.5 px-3 text-right font-semibold text-emerald-800 bg-emerald-50">Δ PIT / rok</th>
+                                    <th className="py-2.5 px-3 text-right font-semibold text-slate-600">Świad. brutto (m1)</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#edebe9]">
@@ -323,7 +323,7 @@ export const StepAnalizaPracownika = () => {
                                         <td colSpan={16} className="py-16 text-center text-slate-400">
                                             <div className="flex flex-col items-center gap-2">
                                                 <Users className="w-8 h-8 opacity-30" />
-                                                <span className="text-sm font-medium">Brak danych. Przeprowad� kalkulacj� w poprzednich krokach.</span>
+                                                <span className="text-sm font-medium">Brak danych. Przeprowadź kalkulację w poprzednich krokach.</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -360,12 +360,12 @@ export const StepAnalizaPracownika = () => {
                                             <td className="py-2.5 px-3 text-center bg-amber-50/30 border-r border-[#edebe9]">
                                                 {row.stdIIProg
                                                     ? <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold border border-amber-200"><TrendingDown className="w-2.5 h-2.5" />Mies&nbsp;{row.stdIIProg}</span>
-                                                    : <span className="text-slate-300 text-[10px] font-bold">� I pr�g �</span>}
+                                                    : <span className="text-slate-300 text-[10px] font-bold">— I próg —</span>}
                                             </td>
                                             {/* Eliton */}
                                             <td className="py-2.5 px-3 text-right text-slate-600 bg-blue-50/20 tabular-nums">{formatPLN(row.zasadniczaNetto)}</td>
                                             <td className="py-2.5 px-3 text-right text-blue-700 font-medium bg-blue-50/30 tabular-nums">{formatPLN(row.baseSwiadczenieNetto)}</td>
-                                            {/* Podwy�ka EBS input */}
+                                            {/* Podwyżka EBS input */}
                                             <td className="py-1.5 px-2 bg-blue-100/40">
                                                 <div>
                                                     <input
@@ -380,7 +380,7 @@ export const StepAnalizaPracownika = () => {
                                                     )}
                                                 </div>
                                             </td>
-                                            {/* Podwy�ka Pracodawcy input */}
+                                            {/* Podwyżka Pracodawcy input */}
                                             <td className="py-1.5 px-2 bg-emerald-50/40">
                                                 <div>
                                                     <input
@@ -400,7 +400,7 @@ export const StepAnalizaPracownika = () => {
                                             <td className="py-2.5 px-3 text-center bg-amber-50/30 border-r border-[#edebe9]">
                                                 {row.eliIIProg
                                                     ? <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold border border-amber-200"><TrendingDown className="w-2.5 h-2.5" />Mies&nbsp;{row.eliIIProg}</span>
-                                                    : <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold border border-emerald-200"><Check className="w-2.5 h-2.5" />I pr�g</span>}
+                                                    : <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold border border-emerald-200"><Check className="w-2.5 h-2.5" />I próg</span>}
                                             </td>
                                             {/* Result */}
                                             <td className={`py-2.5 px-3 text-right font-black tabular-nums ${row.pitOszczednosc >= 0 ? 'text-emerald-800 bg-emerald-50' : 'text-rose-700 bg-rose-50'}`}>
@@ -421,8 +421,8 @@ export const StepAnalizaPracownika = () => {
                                                     <div className="px-6 py-4">
                                                         <div className="text-[10px] font-bold text-[#0078d4] uppercase tracking-widest mb-3 flex items-center gap-2">
                                                             <div className="w-2 h-2 rounded-full bg-[#0078d4]"></div>
-                                                            Zestawienie Miesi�c po Miesi�cu � {row.imie}
-                                                            <span className="ml-2 text-slate-400 font-normal normal-case">KZP (PIT-2): {formatPLN(row.kzp)}/mies &nbsp;�&nbsp; Pr�g II: {formatPLN(p1Limit)} dochodu narastaj�co</span>
+                                                            Zestawienie Miesiąc po Miesiącu – {row.imie}
+                                                            <span className="ml-2 text-slate-400 font-normal normal-case">KZP (PIT-2): {formatPLN(row.kzp)}/mies &nbsp;·&nbsp; Próg II: {formatPLN(p1Limit)} dochodu narastająco</span>
                                                         </div>
                                                         <div className="overflow-x-auto rounded-md border border-[#cce1f5]">
                                                             <table className="w-full border-collapse text-[11px] whitespace-nowrap">
@@ -433,24 +433,24 @@ export const StepAnalizaPracownika = () => {
                                                                             MODEL TRADYCYJNY
                                                                         </th>
                                                                         <th colSpan={5} className="py-2 px-3 text-center bg-[#004e96] text-white font-semibold border-l border-white/20">
-                                                                            ELITON PRIME�
+                                                                            ELITON PRIME™
                                                                         </th>
                                                                         <th className="py-2 px-3 text-center bg-emerald-800 text-white font-semibold border-l border-white/20">
-                                                                            ? PIT
+                                                                            Δ PIT
                                                                         </th>
                                                                     </tr>
                                                                     <tr className="bg-slate-100 border-b border-slate-200 text-slate-600 font-semibold">
-                                                                        <th className="py-2 px-3 text-left">�</th>
+                                                                        <th className="py-2 px-3 text-left">#</th>
                                                                         <th className="py-2 px-3 text-right">Brutto std</th>
                                                                         <th className="py-2 px-3 text-right text-rose-700">PIT std</th>
                                                                         <th className="py-2 px-3 text-right">Netto std</th>
-                                                                        <th className="py-2 px-3 text-right text-slate-400 border-r border-[#edebe9]">Narastaj�ce</th>
-                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-blue-700">Brutto ��cz.</th>
-                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-blue-600">�wiad. brutto</th>
+                                                                        <th className="py-2 px-3 text-right text-slate-400 border-r border-[#edebe9]">Narastające</th>
+                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-blue-700">Brutto łącz.</th>
+                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-blue-600">Świad. brutto</th>
                                                                         <th className="py-2 px-3 text-right bg-blue-50/50 text-emerald-700">PIT eli</th>
                                                                         <th className="py-2 px-3 text-right bg-blue-50/50">Netto eli</th>
-                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-slate-400 border-r border-[#edebe9]">Narastaj�ce</th>
-                                                                        <th className="py-2 px-3 text-right bg-emerald-50 text-emerald-700">Oszcz�dno��</th>
+                                                                        <th className="py-2 px-3 text-right bg-blue-50/50 text-slate-400 border-r border-[#edebe9]">Narastające</th>
+                                                                        <th className="py-2 px-3 text-right bg-emerald-50 text-emerald-700">Oszczędność</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody className="divide-y divide-slate-100">
@@ -506,9 +506,9 @@ export const StepAnalizaPracownika = () => {
                                                         </div>
                                                         {/* Info notes */}
                                                         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-slate-500">
-                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-amber-400 shrink-0"></span>Pod�wietlenie amber = miesi�c w II progu PIT (doch�d narastaj�co &gt; {formatPLN(p1Limit)})</span>
-                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-blue-400 shrink-0"></span>�wiadczenie brutto = ekwiwalent brutto utrzymuj�cy zadane netto po PIT (binary search)</span>
-                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-emerald-400 shrink-0"></span>? PIT &gt; 0 = mniejszy podatek w Eliton Prime� (oszcz�dno�� pracownika)</span>
+                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-amber-400 shrink-0"></span>Podświetlenie amber = miesiąc w II progu PIT (dochód narastająco &gt; {formatPLN(p1Limit)})</span>
+                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-blue-400 shrink-0"></span>Świadczenie brutto = ekwiwalent brutto utrzymujący zadane netto po PIT (binary search)</span>
+                                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-emerald-400 shrink-0"></span>Δ PIT &gt; 0 = mniejszy podatek w Eliton Prime™ (oszczędność pracownika)</span>
                                                         </div>
                                                     </div>
                                                 </td>
