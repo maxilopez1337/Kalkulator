@@ -1,4 +1,5 @@
 import type { SimulationParams } from '../types';
+import { printHtmlAsPdf } from '../../../shared/utils/printPdf';
 import { getV5Styles }               from './css5';
 import { generateCoverV5 }           from './00_Cover';
 import { generateMechanizmV5 }       from './01_Mechanizm';
@@ -47,17 +48,6 @@ ${generateCTAV5(p, validity, date)}
 
         const blob = new Blob([html], { type: 'text/html' });
         const url  = URL.createObjectURL(blob);
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        if (isMobile) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Analiza_Wstepna_${(p.firmaNazwa || 'oferta').replace(/[^a-z0-9]/gi, '_')}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        } else {
-            const win = window.open(url, '_blank');
-            if (win) win.focus();
-        }
+        printHtmlAsPdf(html, url);
     },
 };
