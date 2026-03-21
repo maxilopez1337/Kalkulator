@@ -567,7 +567,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                             className="w-full flex items-center justify-between p-4 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded-lg hover:bg-emerald-100 transition-all duration-200 group"
                         >
                             <div className="flex flex-col items-start">
-                                <span className="font-bold text-sm">Eksportuj Kalkulator Nadżków i Podſyżek</span>
+                                <span className="font-bold text-sm">Eksportuj Kalkulator Nadwyżek i Podwyżek</span>
                                 <span className="text-[10px] text-emerald-600/70">XLSX · Pełny raport analityczny</span>
                             </div>
                             <Download />
