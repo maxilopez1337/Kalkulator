@@ -1,7 +1,7 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { useCalculation, useCompany } from '../../../store/AppContext';
 import { formatPLN } from '../../../shared/utils/formatters';
-import { Download, Users, TrendingUp, ChevronDown, ChevronUp, TrendingDown, Check, DollarSign, ShieldCheck } from '../../../common/Icons';
+import { Download, Users, TrendingUp, ChevronDown, ChevronUp, TrendingDown, Check, DollarSign } from '../../../common/Icons';
 
 // ��� Month names ������������������������������������������������������������
 const MO = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Pa�','Lis','Gru'];
@@ -108,7 +108,7 @@ export const StepAnalizaPracownika = () => {
         const findSBrutto = (targetNetto: number, narastBefore: number): { s_brutto: number; pit: number; dochod: number } => {
             if (targetNetto <= 0) return { s_brutto: 0, pit: 0, dochod: 0 };
             let lo = totalSwNetto * 0.8;
-            let hi = Math.max(totalSwNetto * 6, 1000);
+            let hi = Math.max(totalSwNetto * 8, eliTargetNetto * 2, 5000);
             for (let i = 0; i < 64; i++) {
                 const mid    = (lo + hi) / 2;
                 const dochod = Math.max(0, z_brutto - z_zus + mid - z_kup);
@@ -127,7 +127,7 @@ export const StepAnalizaPracownika = () => {
         const eliMonths: EliMonthRow[] = [];
         let narastStd = 0, narastEli = 0;
         let stdIIProg: number | null = null, eliIIProg: number | null = null;
-        let ulgaUsedStd = 0, ulgaUsedEli = 0;
+        let ulgaUsedStd = 0, ulgaUsedEli = 0; // obie zmienne używane w pętli
 
         for (let m = 0; m < 12; m++) {
             // �� Standard month ����������������������������������������
@@ -154,7 +154,14 @@ export const StepAnalizaPracownika = () => {
                 const { s_brutto, pit, dochod } = findSBrutto(eliTargetNetto, narastEli);
                 const netto = z_brutto + s_brutto - z_zus - z_zdrow - pit;
                 const wasBelow = narastEli < p1Limit;
-                narastEli += dochod;
+                // Ulga młodych: limit roczny narastająco tak samo jak w Standard
+                let dochoEliTaxable = dochod;
+                if (hasUlga && ulgaUsedEli < ulgaLimit) {
+                    const canEx = Math.min(dochoEliTaxable, ulgaLimit - ulgaUsedEli);
+                    ulgaUsedEli += canEx;
+                    dochoEliTaxable = Math.max(0, dochoEliTaxable - canEx);
+                }
+                narastEli += dochoEliTaxable;
                 if (wasBelow && narastEli >= p1Limit && !eliIIProg) eliIIProg = m + 1;
                 eliMonths.push({ brutto: z_brutto + s_brutto, s_brutto, pit, netto, dochod, narastajace: narastEli, isIIProg: narastEli >= p1Limit });
             }
