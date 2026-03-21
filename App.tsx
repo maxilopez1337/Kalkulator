@@ -151,8 +151,8 @@ const App = () => {
     <div className={`${theme.layout.pageContainer} flex flex-col h-[100dvh] overflow-hidden`}>
       
       {/* HEADER - COMMAND BAR STYLE */}
-      <header className="flex justify-between items-center px-4 h-[48px] bg-brand text-white shadow-lg flex-shrink-0 z-30 transition-all w-full relative overflow-hidden">
-        {/* LEFT: BRAND & TOGGLE */}
+      <header className="flex flex-col justify-end px-4 bg-brand text-white shadow-lg flex-shrink-0 z-30 transition-all w-full relative" style={{ paddingTop: 'env(safe-area-inset-top)', minHeight: 'calc(48px + env(safe-area-inset-top))' }}>
+        <div className="flex justify-between items-center w-full h-[48px]">
         <div className="flex items-center gap-5 relative z-10">
             {/* Hamburger for Mobile */}
             <button 
@@ -226,6 +226,7 @@ const App = () => {
                 </div>
             </div>
         </div>
+        </div> {/* end inner 48px row */}
       </header>
 
       {/* WORKSPACE */}
