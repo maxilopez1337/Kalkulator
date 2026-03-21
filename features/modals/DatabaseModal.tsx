@@ -74,27 +74,23 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
       <div className="flex flex-col h-full bg-[#faf9f8] overflow-hidden">
 
         {/* ── M365 COMMAND BAR ─────────────────────────────────────────────── */}
-        <div className="flex items-center gap-4 px-6 py-3.5 border-b border-[#edebe9] bg-white shrink-0">
-          {/* Left: icon + title block */}
-          <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-sm bg-[#0078d4] flex items-center justify-center flex-shrink-0 shadow-sm">
-              <Database className="w-5 h-5 text-white" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-baseline gap-2.5">
-                <h2 className="text-[16px] font-semibold text-[#201f1e] leading-tight">Baza Ofert</h2>
-                <span className="text-[11px] text-[#a19f9d] font-medium">
-                  {historia.length} {historia.length === 1 ? 'kalkulacja' : 'kalkulacji'}
-                </span>
+        <div className="flex flex-col px-4 md:px-6 py-3 md:py-3.5 border-b border-[#edebe9] bg-white shrink-0 gap-2">
+          {/* Row 1: icon + title + close */}
+          <div className="flex items-center gap-3">
+            {/* Left: icon + title block */}
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-sm bg-[#0078d4] flex items-center justify-center flex-shrink-0 shadow-sm">
+                <Database className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </div>
-              <p className="text-[11px] text-[#a19f9d] leading-none mt-0.5">Historia kalkulacji i wygenerowanych propozycji</p>
-            </div>
-          </div>
-
-          {/* Right: search + close */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-80">
-              <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Szukaj po nazwie firmy..." />
+              <div className="min-w-0">
+                <div className="flex items-baseline gap-2">
+                  <h2 className="text-[15px] md:text-[16px] font-semibold text-[#201f1e] leading-tight">Baza Ofert</h2>
+                  <span className="text-[11px] text-[#a19f9d] font-medium">
+                    {historia.length} {historia.length === 1 ? 'kalkulacja' : 'kalkulacji'}
+                  </span>
+                </div>
+                <p className="hidden md:block text-[11px] text-[#a19f9d] leading-none mt-0.5">Historia kalkulacji i wygenerowanych propozycji</p>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -103,14 +99,47 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
               <X className="w-4 h-4" />
             </button>
           </div>
+          {/* Row 2: search (always visible) */}
+          <div className="w-full">
+            <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Szukaj po nazwie firmy..." />
+          </div>
         </div>
 
         {/* ── BODY ─────────────────────────────────────────────────────────── */}
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
 
-          {/* LEFT NAV — timeline pivot */}
-          <div className="w-[200px] bg-white border-r border-[#edebe9] flex flex-col overflow-y-auto shrink-0">
-            <div className="px-3 pt-4 pb-3 space-y-0.5">
+          {/* LEFT NAV — timeline pivot: horizontal on mobile, vertical on desktop */}
+          <div className="md:w-[200px] bg-white border-b md:border-b-0 md:border-r border-[#edebe9] shrink-0 overflow-x-auto md:overflow-y-auto">
+            {/* Mobile: horizontal chip strip */}
+            <div className="flex md:hidden flex-row gap-1 px-3 py-2">
+              <button
+                onClick={() => setSelectedMonth('ALL')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-[12px] rounded-full whitespace-nowrap transition-colors font-medium ${
+                  selectedMonth === 'ALL' ? 'bg-[#0078d4] text-white' : 'bg-[#f3f2f1] text-[#605e5c]'
+                }`}
+              >
+                Wszystkie
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                  selectedMonth === 'ALL' ? 'bg-white/30 text-white' : 'bg-[#edebe9] text-[#605e5c]'
+                }`}>{historia.length}</span>
+              </button>
+              {sortedMonths.map(monthKey => (
+                <button
+                  key={monthKey}
+                  onClick={() => setSelectedMonth(monthKey)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-[12px] rounded-full whitespace-nowrap transition-colors font-medium capitalize ${
+                    selectedMonth === monthKey ? 'bg-[#0078d4] text-white' : 'bg-[#f3f2f1] text-[#605e5c]'
+                  }`}
+                >
+                  {formatMonthLabel(monthKey)}
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                    selectedMonth === monthKey ? 'bg-white/30 text-white' : 'bg-[#edebe9] text-[#605e5c]'
+                  }`}>{groupedHistory[monthKey]?.length || 0}</span>
+                </button>
+              ))}
+            </div>
+            {/* Desktop: vertical nav */}
+            <div className="hidden md:flex flex-col px-3 pt-4 pb-3 space-y-0.5">
               <p className="text-[10px] font-bold text-[#a19f9d] uppercase tracking-widest px-3 pb-2">Oś czasu</p>
 
               <button
@@ -143,7 +172,7 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
                   }`}>{groupedHistory[monthKey]?.length || 0}</span>
                 </button>
               ))}
-            </div>
+            </div> {/* end desktop nav */}
           </div>
 
           {/* MAIN CANVAS */}
@@ -174,7 +203,7 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
                       </div>
 
                       {/* Cards grid — auto-fill to use all horizontal space */}
-                      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                         {items.map(item => {
                           const uzCount = item.dane.pracownicy.filter(p => p.typUmowy === 'UZ').length;
                           const uopCount = item.dane.pracownicy.filter(p => p.typUmowy === 'UOP').length;

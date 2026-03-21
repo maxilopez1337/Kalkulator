@@ -966,7 +966,17 @@ export const offerLegalizacjaPremiiGenerator = {
 
         const blob = new Blob([html], { type: 'text/html' });
         const url  = URL.createObjectURL(blob);
-        const win  = window.open(url, '_blank');
-        if (win) win.focus();
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Legalizacja_Premii_Eliton_Prime.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } else {
+            const win = window.open(url, '_blank');
+            if (win) win.focus();
+        }
     },
 };

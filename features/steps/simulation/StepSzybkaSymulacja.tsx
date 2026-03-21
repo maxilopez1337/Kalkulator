@@ -183,7 +183,7 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
     };
 
     return (
-        <div className="flex flex-col xl:flex-row h-full overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+        <div className="flex flex-col xl:flex-row xl:h-full xl:overflow-hidden overflow-y-auto animate-in fade-in zoom-in-95 duration-500">
             
             {/* LEFT PANEL: CONFIGURATION */}
             <div className="xl:w-[420px] bg-slate-900 text-white flex flex-col shrink-0 xl:min-h-0 border-r border-slate-800">
@@ -200,7 +200,7 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
                     </p>
                 </div>
 
-                <div className="p-5 space-y-5 flex-1 overflow-y-auto min-h-0 custom-scrollbar">
+                <div className="p-5 space-y-5 xl:flex-1 xl:overflow-y-auto xl:min-h-0 custom-scrollbar">
                     
                     {/* 1. PRACOWNICY */}
                     <div className="space-y-4">
@@ -372,7 +372,7 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
             </div>
 
             {/* RIGHT PANEL: VISUAL RESULTS */}
-            <div className="flex-1 bg-[#f3f2f1] p-4 md:p-5 overflow-hidden flex flex-col">
+            <div className="flex-1 bg-[#f3f2f1] p-4 md:p-5 xl:overflow-hidden overflow-y-auto flex flex-col">
                 
                 <div className="max-w-5xl mx-auto w-full flex flex-col gap-3 flex-1 min-h-0">
                     
