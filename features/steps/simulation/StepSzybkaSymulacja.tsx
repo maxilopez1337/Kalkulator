@@ -372,9 +372,9 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
             </div>
 
             {/* RIGHT PANEL: VISUAL RESULTS */}
-            <div className="flex-1 bg-[#f3f2f1] p-4 md:p-5 xl:overflow-hidden overflow-y-auto flex flex-col">
+            <div className="xl:flex-1 bg-[#f3f2f1] p-4 md:p-5 xl:overflow-hidden flex flex-col">
                 
-                <div className="max-w-5xl mx-auto w-full flex flex-col gap-3 flex-1 min-h-0">
+                <div className="max-w-5xl mx-auto w-full flex flex-col gap-3 xl:flex-1 xl:min-h-0">
                     
                     {/* 1. HERO KPI CARDS */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-shrink-0">
@@ -489,11 +489,11 @@ export const StepSzybkaSymulacja = ({ onTransfer }: Props) => {
                     </div>
 
                     {/* 3. BREAKDOWN TABLE */}
-                    <div className="bg-white rounded-md border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] overflow-hidden flex-1 min-h-0 flex flex-col">
+                    <div className="bg-white rounded-md border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] overflow-hidden xl:flex-1 xl:min-h-0 flex flex-col">
                         <div className="px-4 py-2.5 border-b border-[#edebe9] flex-shrink-0">
                             <span className="text-sm font-semibold text-slate-800">Zestawienie Kosztów</span>
                         </div>
-                        <div className="overflow-y-auto flex-1 min-h-0">
+                        <div className="xl:overflow-y-auto xl:flex-1 xl:min-h-0">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-[#f8f9fa] text-slate-500 text-xs uppercase font-semibold border-b border-[#edebe9]">
                                 <tr>
