@@ -312,7 +312,7 @@ const App = () => {
 
               {/* Scrollable Content Area - FIX: overflow-x-hidden to prevent horizontal scroll */}
               <div className={`flex-1 min-h-0 overflow-x-hidden w-full ${
-                  (currentStep === -1 || currentStep === -2 || currentStep === 2 || currentStep === 3)
+                  (currentStep === -1 || currentStep === -2 || currentStep === 2 || currentStep === 3 || currentStep === 6)
                     ? 'overflow-hidden'
                     : 'overflow-y-auto custom-scrollbar'
               }`}>
@@ -321,7 +321,7 @@ const App = () => {
                         ? 'h-full p-3 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full'
                         : currentStep === -2
                           ? 'h-full w-full'
-                          : (currentStep === 2 || currentStep === 3)
+                          : (currentStep === 2 || currentStep === 3 || currentStep === 6)
                             ? 'h-full min-h-0 w-full'
                             : (currentStep >= 0 ? 'min-h-full p-3 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full' : 'min-h-full w-full')
                   }`}>
