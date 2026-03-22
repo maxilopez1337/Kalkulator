@@ -105,20 +105,23 @@ export const StepAnalizaPracownika = () => {
         const eliTargetNetto = z_netto + totalSwNetto;
 
         // Binary search: znajdź s_brutto dla danego narastającego
-        const findSBrutto = (targetNetto: number, narastBefore: number): { s_brutto: number; pit: number; dochod: number } => {
+        // ulgaAvailable: ile jeszcze zwolnienia z PIT pozostało w tym miesiącu (art. 21 ust. 1 pkt 148)
+        const findSBrutto = (targetNetto: number, narastBefore: number, ulgaAvailable: number): { s_brutto: number; pit: number; dochod: number } => {
             if (targetNetto <= 0) return { s_brutto: 0, pit: 0, dochod: 0 };
             let lo = totalSwNetto * 0.8;
             let hi = Math.max(totalSwNetto * 8, eliTargetNetto * 2, 5000);
             for (let i = 0; i < 64; i++) {
-                const mid    = (lo + hi) / 2;
-                const dochod = Math.max(0, z_brutto - z_zus + mid - z_kup);
-                const pit    = calcPitMiesiac(dochod, narastBefore, p1Limit, p1Rate, p2Rate, kzp);
-                const netto  = z_brutto + mid - z_zus - z_zdrow - pit;
+                const mid         = (lo + hi) / 2;
+                const dochod      = Math.max(0, z_brutto - z_zus + mid - z_kup);
+                const taxable     = Math.max(0, dochod - ulgaAvailable);
+                const pit         = calcPitMiesiac(taxable, narastBefore, p1Limit, p1Rate, p2Rate, kzp);
+                const netto       = z_brutto + mid - z_zus - z_zdrow - pit;
                 if (netto < targetNetto) lo = mid; else hi = mid;
             }
-            const s_brutto = (lo + hi) / 2;
-            const dochod   = Math.max(0, z_brutto - z_zus + s_brutto - z_kup);
-            const pit      = calcPitMiesiac(dochod, narastBefore, p1Limit, p1Rate, p2Rate, kzp);
+            const s_brutto    = (lo + hi) / 2;
+            const dochod      = Math.max(0, z_brutto - z_zus + s_brutto - z_kup);
+            const taxable     = Math.max(0, dochod - ulgaAvailable);
+            const pit         = calcPitMiesiac(taxable, narastBefore, p1Limit, p1Rate, p2Rate, kzp);
             return { s_brutto, pit, dochod };
         };
 
@@ -151,17 +154,15 @@ export const StepAnalizaPracownika = () => {
             if (isStudent) {
                 eliMonths.push({ brutto: z_brutto + totalSwNetto, s_brutto: totalSwNetto, pit: 0, netto: eliTargetNetto, dochod: 0, narastajace: narastEli, isIIProg: false });
             } else {
-                const { s_brutto, pit, dochod } = findSBrutto(eliTargetNetto, narastEli);
+                // Ulga młodych (art. 21 ust. 1 pkt 148): obejmuje przychody z art. 12 ust. 1,
+                // czyli zarówno zasadnicze jak i świadczenie rzeczowe w ramach stosunku pracy.
+                const ulgaAvailable = hasUlga ? Math.max(0, ulgaLimit - ulgaUsedEli) : 0;
+                const { s_brutto, pit, dochod } = findSBrutto(eliTargetNetto, narastEli, ulgaAvailable);
                 const netto = z_brutto + s_brutto - z_zus - z_zdrow - pit;
                 const wasBelow = narastEli < p1Limit;
-                // Ulga młodych: limit roczny narastająco tak samo jak w Standard
-                let dochoEliTaxable = dochod;
-                if (hasUlga && ulgaUsedEli < ulgaLimit) {
-                    const canEx = Math.min(dochoEliTaxable, ulgaLimit - ulgaUsedEli);
-                    ulgaUsedEli += canEx;
-                    dochoEliTaxable = Math.max(0, dochoEliTaxable - canEx);
-                }
-                narastEli += dochoEliTaxable;
+                const ulgaUsedThisMonth = Math.min(dochod, ulgaAvailable);
+                ulgaUsedEli += ulgaUsedThisMonth;
+                narastEli += dochod - ulgaUsedThisMonth; // narastające = tylko dochód opodatkowany
                 if (wasBelow && narastEli >= p1Limit && !eliIIProg) eliIIProg = m + 1;
                 eliMonths.push({ brutto: z_brutto + s_brutto, s_brutto, pit, netto, dochod, narastajace: narastEli, isIIProg: narastEli >= p1Limit });
             }
