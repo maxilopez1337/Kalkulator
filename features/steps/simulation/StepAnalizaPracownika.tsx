@@ -3,12 +3,12 @@ import { useCalculation, useCompany } from '../../../store/AppContext';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { Users, TrendingDown, ChevronDown, ChevronUp, Check } from '../../../common/Icons';
 
-// ��� Month names ������������������������������������������������������������
+// ─── Month names
 const MO = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Pa\u017a','Lis','Gru'];
 
-// ��� PIT narastaj�co helper �������������������������������������������������
-// Oblicza zaliczk� PIT dla danego miesi�ca z uwzgl�dnieniem przekroczenia progu.
-// stawki s� u�amkowe (0.12, 0.32), kzp = kwota zmniejszaj�ca zaliczk� (z�/mies).
+// PIT narastająco helper
+// Oblicza zaliczkę PIT dla danego miesiąca z uwzględnieniem przekroczenia progu.
+// stawki są ułamkowe (0.12, 0.32), kzp = kwota zmniejszająca zaliczkę (zł/mies).
 function calcPitMiesiac(
     dochod: number,
     narastajaceBefore: number,
@@ -30,7 +30,7 @@ function calcPitMiesiac(
     return Math.max(0, Math.round(tax - kzp));
 }
 
-// ��� Types ������������������������������������������������������������������
+// ─── Types
 interface RaiseEntry { ebs: string; employer: string }
 
 interface MonthRow {
@@ -45,7 +45,7 @@ interface EliMonthRow extends MonthRow {
     s_brutto: number; // Świadczenie brutto (ekwiwalent)
 }
 
-// ��� Component ��������������������������������������������������������������
+// ─── Component
 export const StepAnalizaPracownika = () => {
     const { wyniki } = useCalculation();
     const { config } = useCompany();
@@ -62,7 +62,7 @@ export const StepAnalizaPracownika = () => {
 
     const pracownicy: any[] = wyniki?.szczegoly || [];
 
-    // ��� State helpers ����������������������������������������������������
+    // ─── State helpers
     const setRaise = (id: string | number, field: 'ebs' | 'employer', val: string) =>
         setRaises(prev => ({ ...prev, [id]: { ...(prev[id] ?? { ebs: '', employer: '' }), [field]: val } }));
 
@@ -75,7 +75,7 @@ export const StepAnalizaPracownika = () => {
     const toggleRow = (id: string | number) =>
         setExpanded(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
 
-    // ��� Main computation �������������������������������������������������
+    // ─── Main computation
     const tableData = useMemo(() => pracownicy.map((w: any) => {
         const emp    = w.pracownik;
         const r      = raises[emp.id] ?? { ebs: '', employer: '' };
@@ -86,14 +86,14 @@ export const StepAnalizaPracownika = () => {
         const hasUlga      = emp.ulgaMlodych === true;
         const ulgaLimit    = config?.pit?.ulgaMlodziLimitRoczny ?? 85528;
 
-        // �� Standard model constants �����������������������������������
+        // Standard model constants
         const std_brutto = w.standard?.brutto  ?? 0;
         const std_zus    = w.standard?.zusPracownik?.suma ?? 0;
         const std_zdrow  = w.standard?.zdrowotna ?? 0;
         const std_kup    = w.standard?.kup ?? 0;
         const std_netto1 = w.standard?.netto  ?? 0;
 
-        // �� Eliton model constants �������������������������������������
+        // Eliton model constants
         const z_brutto = w.podzial?.zasadnicza?.brutto ?? 0;
         const z_zus    = w.podzial?.zasadnicza?.zusPracownik?.suma ?? 0;
         const z_zdrow  = w.podzial?.zasadnicza?.zdrowotna ?? 0;
@@ -104,7 +104,7 @@ export const StepAnalizaPracownika = () => {
         const totalSwNetto = baseSwiadczenieNetto + podEBS + podEmp;
         const eliTargetNetto = z_netto + totalSwNetto;
 
-        // �� Binary search: znajd� s_brutto dla danego narastaj�cego ���
+        // Binary search: znajdź s_brutto dla danego narastającego
         const findSBrutto = (targetNetto: number, narastBefore: number): { s_brutto: number; pit: number; dochod: number } => {
             if (targetNetto <= 0) return { s_brutto: 0, pit: 0, dochod: 0 };
             let lo = totalSwNetto * 0.8;
@@ -122,7 +122,7 @@ export const StepAnalizaPracownika = () => {
             return { s_brutto, pit, dochod };
         };
 
-        // �� Build 12-month arrays �������������������������������������
+        // Build 12-month arrays
         const stdMonths: MonthRow[] = [];
         const eliMonths: EliMonthRow[] = [];
         let narastStd = 0, narastEli = 0;
@@ -130,7 +130,7 @@ export const StepAnalizaPracownika = () => {
         let ulgaUsedStd = 0, ulgaUsedEli = 0; // obie zmienne używane w pętli
 
         for (let m = 0; m < 12; m++) {
-            // �� Standard month ����������������������������������������
+            // Standard month
             {
                 let dochoBase = Math.max(0, std_brutto - std_zus - std_kup);
                 let taxable   = dochoBase;
@@ -147,7 +147,7 @@ export const StepAnalizaPracownika = () => {
                 stdMonths.push({ brutto: std_brutto, pit, netto, dochod: taxable, narastajace: narastStd, isIIProg: narastStd >= p1Limit });
             }
 
-            // �� Eliton month ������������������������������������������
+            // Eliton month
             if (isStudent) {
                 eliMonths.push({ brutto: z_brutto + totalSwNetto, s_brutto: totalSwNetto, pit: 0, netto: eliTargetNetto, dochod: 0, narastajace: narastEli, isIIProg: false });
             } else {
@@ -212,11 +212,11 @@ export const StepAnalizaPracownika = () => {
     }), { n: 0, stdRocznyPit: 0, eliRocznyPit: 0, pitOszczednosc: 0, stdIIProg: 0, eliIIProg: 0 }),
     [tableData]);
 
-    // ��� Render �����������������������������������������������������������
+    // ─── Render
     return (
         <div className="h-full flex flex-col bg-[#f3f2f1] overflow-hidden">
 
-            {/* �� D365 COMMAND BAR ������������������������������������������� */}
+            {/* D365 COMMAND BAR */}
             <div className="bg-white border-b border-[#edebe9] shadow-sm shrink-0">
                 <div className="px-4 md:px-6 py-3 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
                     <div>
@@ -248,7 +248,7 @@ export const StepAnalizaPracownika = () => {
                 </div>
             </div>
 
-            {/* �� KPI BAR ���������������������������������������������������� */}
+            {/* KPI BAR */}
             <div className="shrink-0 px-4 md:px-6 py-3">
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
                     {[
@@ -267,7 +267,7 @@ export const StepAnalizaPracownika = () => {
                 </div>
             </div>
 
-            {/* �� MAIN TABLE ������������������������������������������������� */}
+            {/* MAIN TABLE */}
             <div className="flex-1 min-h-0 px-4 md:px-6 pb-4 md:pb-6 overflow-hidden">
                 <div className="h-full bg-white rounded-md border border-[#edebe9] shadow-sm overflow-hidden flex flex-col">
                     <div className="overflow-auto flex-1 custom-scrollbar">
@@ -330,7 +330,7 @@ export const StepAnalizaPracownika = () => {
                                 )}
                                 {tableData.map((row, i) => (
                                     <React.Fragment key={row.id}>
-                                        {/* �� Main row �������������������������������������������� */}
+                                        {/* Main row */}
                                         <tr className={`transition-colors ${expanded.has(row.id) ? 'bg-blue-50/40' : 'hover:bg-[#f8f9fa]'}`}>
                                             {/* Expand */}
                                             <td className="py-2.5 px-2 border-r border-[#edebe9] text-center">
@@ -414,7 +414,7 @@ export const StepAnalizaPracownika = () => {
                                             </td>
                                         </tr>
 
-                                        {/* �� Expanded: 12-month detail ��������������������������� */}
+                                        {/* 12-month detail */}
                                         {expanded.has(row.id) && (
                                             <tr className="bg-[#f8fbff]">
                                                 <td colSpan={16} className="p-0 border-b-2 border-blue-200">
@@ -517,7 +517,7 @@ export const StepAnalizaPracownika = () => {
                                     </React.Fragment>
                                 ))}
 
-                                {/* �� Grand totals ��������������������������������������������� */}
+                                {/* Grand totals */}
                                 {tableData.length > 0 && (
                                     <tr className="bg-[#001433] text-white">
                                         <td></td>
