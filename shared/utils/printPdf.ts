@@ -1,45 +1,53 @@
 /**
- * Opens HTML as a printable PDF.
- * Desktop: opens in new tab (auto-print via embedded onload script).
- * Mobile: loads in hidden iframe, strips embedded auto-print, calls
- *         iframe.contentWindow.print() → browser shows "Save as PDF" sheet.
+ * Generates a PDF from HTML content and triggers a download.
+ *
+ * Primary path  — POST the HTML to the local Puppeteer server (:3002).
+ *   Headless Chrome renders the HTML at exact A4 dimensions, returns a
+ *   real PDF binary.  Client creates a <a download> link and clicks it.
+ *   On iOS this shows the native "Download" sheet → saves to Files directly.
+ *   On desktop this saves the file immediately.  No print dialog anywhere.
+ *
+ * Fallback path — when the server is unreachable, falls back to opening the
+ *   HTML in a new browser tab (auto-print via window.onload is embedded in
+ *   the HTML). Works on both desktop and mobile.
  */
-export function printHtmlAsPdf(html: string, desktopUrl: string): void {
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+export async function printHtmlAsPdf(
+    html: string,
+    desktopUrl: string,
+    filename = 'oferta-eliton-prime.pdf'
+): Promise<void> {
+    const serverUrl = `${window.location.protocol}//${window.location.hostname}:3002/generate-pdf`;
 
-    if (!isMobile) {
-        const win = window.open(desktopUrl, '_blank');
-        if (win) win.focus();
-        return;
+    try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 60_000);
+
+        const res = await fetch(serverUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ html }),
+            signal: controller.signal,
+        });
+
+        clearTimeout(timer);
+
+        if (res.ok) {
+            const blob = await res.blob();
+            const pdfUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(pdfUrl), 10_000);
+            URL.revokeObjectURL(desktopUrl);
+            return;
+        }
+    } catch {
+        // Server unreachable or timed-out — fall through to browser fallback
     }
 
-    // Strip any embedded auto-print scripts so we control timing
-    const cleanHtml = html.replace(
-        /<script\b[^>]*>[\s\S]*?window\.print\s*\(\s*\)[\s\S]*?<\/script>/gi,
-        ''
-    );
-
-    const cleanBlob = new Blob([cleanHtml], { type: 'text/html' });
-    const cleanUrl = URL.createObjectURL(cleanBlob);
-    URL.revokeObjectURL(desktopUrl); // no longer needed
-
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText =
-        'position:fixed;left:-9999px;top:-9999px;width:0;height:0;border:none;opacity:0;pointer-events:none;';
-    document.body.appendChild(iframe);
-
-    iframe.onload = () => {
-        // Give fonts/images time to load before printing
-        setTimeout(() => {
-            iframe.contentWindow?.focus();
-            iframe.contentWindow?.print();
-            // Clean up after the print dialog is dismissed
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-                URL.revokeObjectURL(cleanUrl);
-            }, 3000);
-        }, 1500);
-    };
-
-    iframe.src = cleanUrl;
+    // Fallback: open in new tab (embedded window.onload calls window.print())
+    window.open(desktopUrl, '_blank')?.focus();
 }

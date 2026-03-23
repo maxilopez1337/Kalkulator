@@ -8,53 +8,84 @@ const app = express();
 const PORT = 3002;
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '20mb' }));
+
+// Reuse a single browser instance for performance
+let browserInstance = null;
+async function getBrowser() {
+    if (!browserInstance) {
+        browserInstance = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--font-render-hinting=none',
+                '--force-color-profile=srgb',
+                '--disable-web-security',            // allow cross-origin font loading
+                '--allow-running-insecure-content',
+            ],
+        });
+        // Clear cached instance if browser disconnects unexpectedly
+        browserInstance.on('disconnected', () => { browserInstance = null; });
+    }
+    return browserInstance;
+}
 
 app.post('/generate-pdf', async (req, res) => {
-    const { html } = req.body;
+    const { html, filename } = req.body;
 
     if (!html) {
-        return res.status(400).send('Missing HTML content');
+        return res.status(400).json({ error: 'Missing HTML content' });
     }
 
+    let page;
     try {
-        const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        const browser = await getBrowser();
+        page = await browser.newPage();
+
+        // Viewport matching A4 at 96 dpi so all mm-based layouts render correctly
+        await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
+
+        // Load the HTML; wait until network is fully idle so Google Fonts load
+        await page.setContent(html, {
+            waitUntil: 'networkidle0',
+            timeout: 45_000,
         });
-        const page = await browser.newPage();
 
-        // Ustawienie treści HTML
-        await page.setContent(html, { waitUntil: 'networkidle0' });
+        // Extra pause for font swap / final layout
+        await new Promise(r => setTimeout(r, 800));
 
-        // Generowanie PDF
         const pdfBuffer = await page.pdf({
             format: 'A4',
-            landscape: false, // Zmiana na pionowo
+            landscape: false,
             printBackground: true,
-            margin: {
-                top: '0px',
-                right: '0px',
-                bottom: '0px',
-                left: '0px'
-            }
+            preferCSSPageSize: false,
+            margin: { top: '0', right: '0', bottom: '0', left: '0' },
         });
 
-        await browser.close();
+        await page.close();
+
+        const safeFilename = (filename || 'oferta-eliton-prime.pdf')
+            .replace(/[^a-z0-9\-_.() ]/gi, '_');
 
         res.set({
             'Content-Type': 'application/pdf',
             'Content-Length': pdfBuffer.length,
+            'Content-Disposition': `attachment; filename="${safeFilename}"`,
+            'Cache-Control': 'no-store',
         });
-        
+
         res.send(pdfBuffer);
 
     } catch (error) {
+        if (page) await page.close().catch(() => {});
         console.error('PDF Generation Error:', error);
-        res.status(500).send('Error generating PDF');
+        res.status(500).json({ error: 'Error generating PDF', detail: error.message });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`PDF Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`PDF Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Accessible on LAN at http://<this-machine-ip>:${PORT}`);
 });

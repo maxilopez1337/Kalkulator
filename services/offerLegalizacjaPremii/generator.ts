@@ -967,6 +967,9 @@ export const offerLegalizacjaPremiiGenerator = {
 
         const blob = new Blob([html], { type: 'text/html' });
         const url  = URL.createObjectURL(blob);
-        printHtmlAsPdf(html, url);
+        const safeNazwa = (tempFirma?.nazwa || 'Eliton-Prime')
+            .replace(/[^a-z0-9\-_ ]/gi, '_')
+            .trim();
+        printHtmlAsPdf(html, url, `Oferta-LegalizacjaPremii-${safeNazwa}.pdf`);
     },
 };
