@@ -342,7 +342,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
         />
 
         {/* GRID LAYOUT */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 md:gap-6 items-start">
             
             {/* --- LEFT COLUMN: 8/12 --- */}
             <div className="xl:col-span-8 flex flex-col gap-6">

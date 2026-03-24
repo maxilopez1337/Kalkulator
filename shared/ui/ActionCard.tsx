@@ -29,12 +29,12 @@ export const ActionCard = ({
 }: ActionCardProps) => (
   <button
     onClick={onClick}
-    className={`bg-white p-5 rounded-md border border-[#edebe9] ${shadow.elevation4} ${hoverBorderClass} hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.13),0_0.6px_1.8px_0_rgba(0,0,0,0.11)] transition-all group text-left ${className}`}
+    className={`bg-white p-2.5 md:p-5 rounded-md border border-[#edebe9] ${shadow.elevation4} ${hoverBorderClass} hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.13),0_0.6px_1.8px_0_rgba(0,0,0,0.11)] transition-all group text-left ${className}`}
   >
-    <div className={`w-12 h-12 ${iconClass} rounded-md flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+    <div className={`w-8 h-8 md:w-12 md:h-12 ${iconClass} rounded-md flex items-center justify-center mb-2 md:mb-4 group-hover:scale-110 transition-transform`}>
       {icon}
     </div>
-    <div className="font-bold text-[#201f1e]">{title}</div>
-    {subtitle && <div className="text-xs text-[#605e5c] mt-1">{subtitle}</div>}
+    <div className="font-bold text-[#201f1e] text-[11px] md:text-sm leading-tight">{title}</div>
+    {subtitle && <div className="hidden md:block text-xs text-[#605e5c] mt-1">{subtitle}</div>}
   </button>
 );

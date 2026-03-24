@@ -85,7 +85,7 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
     const recentHistory = historia.slice(0, 3);
 
     return (
-        <div className={`animate-in fade-in zoom-in-95 ${animations.slow} h-full flex flex-col gap-4 w-full overflow-hidden`}>
+        <div className={`animate-in fade-in zoom-in-95 ${animations.slow} h-full flex flex-col gap-3 md:gap-4 w-full overflow-hidden`}>
             
             {/* HIDDEN INPUT FOR JSON LOAD */}
             <input 
@@ -101,31 +101,31 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-shrink-0">
                 
                 {/* A. WELCOME / START CARD (2/3 width) */}
-                <div className="col-span-1 md:col-span-2 bg-slate-900 rounded-md px-7 py-5 flex flex-col justify-between relative overflow-hidden shadow-[0_6.4px_14.4px_0_rgba(0,0,0,0.13),0_1.2px_3.6px_0_rgba(0,0,0,0.10)] group">
+                <div className="col-span-1 md:col-span-2 bg-slate-900 rounded-md px-4 py-3 md:px-7 md:py-5 flex flex-col justify-between relative overflow-hidden shadow-[0_6.4px_14.4px_0_rgba(0,0,0,0.13),0_1.2px_3.6px_0_rgba(0,0,0,0.10)] group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none"></div>
                     
-                    <div className="relative z-10 flex items-center gap-4">
-                        <div className="p-2 bg-white/10 rounded-md backdrop-blur-sm border border-white/10 flex-shrink-0">
+                    <div className="relative z-10 flex items-center gap-2 md:gap-4">
+                        <div className="hidden md:flex p-2 bg-white/10 rounded-md backdrop-blur-sm border border-white/10 flex-shrink-0 items-center justify-center">
                             <ShieldCheck className="h-7 w-7 text-white" />
                         </div>
                         <div>
                             <div className="flex items-baseline gap-2">
                                 <span className="text-white font-bold tracking-widest uppercase text-xs">STRATTON PRIME</span>
-                                <span className="text-[10px] text-slate-500 uppercase tracking-wide">Business Solutions</span>
+                                <span className="hidden md:inline text-[10px] text-slate-500 uppercase tracking-wide">Business Solutions</span>
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight mt-0.5">
+                            <h1 className="text-[15px] leading-tight md:text-3xl font-bold text-white tracking-tight mt-0.5">
                                 System Optymalizacji Wynagrodzeń
                             </h1>
-                            <p className="text-slate-400 mt-1 text-xs md:text-sm max-w-xl">
+                            <p className="hidden md:block text-slate-400 mt-1 text-xs md:text-sm max-w-xl">
                                 Profesjonalne narzędzie do analizy kosztów pracy i struktury wynagrodzeń w oparciu o Model Eliton Prime™.
                             </p>
                         </div>
                     </div>
 
-                    <div className="relative z-10 mt-4">
+                    <div className="relative z-10 mt-2 md:mt-4">
                         <button 
                             onClick={handleNewCalculation}
-                            className="bg-white text-slate-900 hover:bg-blue-50 px-5 py-2.5 rounded-md font-bold flex items-center gap-2.5 transition-all shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.13)] hover:-translate-y-0.5 group/btn text-sm"
+                            className="bg-white text-slate-900 hover:bg-blue-50 px-3 py-2 md:px-5 md:py-2.5 rounded-md font-bold flex items-center gap-1.5 md:gap-2.5 transition-all shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.13)] hover:-translate-y-0.5 group/btn text-xs md:text-sm"
                         >
                             <div className="p-1 bg-slate-900 rounded-full text-white group-hover/btn:scale-110 transition-transform">
                                 <Plus className="w-3 h-3" />
@@ -136,11 +136,11 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
                 </div>
 
                 {/* B. ACTIVE SESSION STATUS (1/3 width) */}
-                <div className={`col-span-1 bg-white rounded-md px-5 py-4 border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] flex flex-col justify-between transition-all 
+                <div className={`col-span-1 bg-white rounded-md px-3 py-2.5 md:px-5 md:py-4 border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] flex flex-col justify-between transition-all 
                     ${isSessionSaved ? 'ring-2 ring-blue-500/20' : hasActiveSession ? 'ring-2 ring-emerald-500/20' : ''}`}
                 >
                     <div>
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center justify-between mb-2 md:mb-3">
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status Sesji</span>
                             
                             {hasActiveSession ? (
@@ -164,7 +164,7 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
                             <div className="space-y-2.5">
                                 <div>
                                     <div className="text-xl font-bold text-slate-900">{pracownicy.length}</div>
-                                    <div className="text-xs text-slate-500">Wczytanych pracowników</div>
+                                    <div className="text-[11px] text-slate-500">Wczytanych pracowników</div>
                                 </div>
                                 {firma.nazwa && (
                                     <div className={`px-3 py-2 rounded border transition-colors flex items-center justify-between ${isSessionSaved ? 'bg-blue-50 border-blue-100' : 'bg-slate-50 border-slate-100'}`}>
@@ -185,7 +185,7 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
                     </div>
 
                     {hasActiveSession && (
-                        <div className="mt-3">
+                        <div className="mt-2 md:mt-3">
                             {isSessionSaved ? (
                                 <ButtonSecondary
                                     className="w-full justify-center"
@@ -209,7 +209,7 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
             </div>
 
             {/* 2. SECOND ROW ACTIONS */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
+            <div className="grid grid-cols-4 gap-2 flex-shrink-0">
                 
                 <ActionCard
                     onClick={onImport}
@@ -238,10 +238,10 @@ export const StepDashboard = ({ onNavigate, onImport, onHistory, onConfig }: Pro
                     hoverBorderClass="hover:border-purple-400"
                 />
 
-                <div className="bg-gradient-to-br from-indigo-500 to-blue-600 p-4 rounded-md text-white shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13)] flex flex-col justify-between">
-                    <div className="text-[10px] font-bold uppercase opacity-70">Rok Podatkowy</div>
-                    <div className="text-2xl font-bold">2026</div>
-                    <div className="text-[10px] opacity-80">Parametry zwaloryzowane</div>
+                <div className="bg-gradient-to-br from-indigo-500 to-blue-600 p-2 md:p-4 rounded-md text-white shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13)] flex flex-col justify-between">
+                    <div className="text-[9px] md:text-[10px] font-bold uppercase opacity-70">Rok Podatkowy</div>
+                    <div className="text-xl md:text-2xl font-bold">2026</div>
+                    <div className="hidden md:block text-[10px] opacity-80">Parametry zwaloryzowane</div>
                 </div>
             </div>
 

@@ -76,7 +76,9 @@ export const StepFirma = () => {
               {isFetching ? 'Pobieranie...' : 'Pobierz z GUS'}
             </ButtonSecondary>
             {firma.nip && (
-              <ButtonSecondary onClick={openGoogleSearch}>Google <ArrowRight /></ButtonSecondary>
+              <div className="hidden sm:block">
+                <ButtonSecondary onClick={openGoogleSearch}>Google <ArrowRight /></ButtonSecondary>
+              </div>
             )}
           </div>
 

@@ -311,7 +311,7 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
             <div className="flex flex-col h-full overflow-hidden animate-in fade-in duration-150">
 
               {/* Detail header */}
-              <div className="shrink-0 bg-white border-b border-[#edebe9] px-4 md:px-6 py-3 flex items-center justify-between gap-4">
+              <div className="shrink-0 bg-white border-b border-[#edebe9] px-3 md:px-6 py-3 flex items-center justify-between gap-2 sm:gap-4">
                 {/* Mobile back button */}
                 <div className="flex items-center gap-2 md:gap-3 min-w-0">
                   <button
@@ -336,16 +336,16 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 flex-shrink-0">
-                  <ButtonSecondary size="sm" onClick={() => duplicateEmployee(activeEmployee.id)} icon={<Copy />}>
-                    Duplikuj
+                  <ButtonSecondary size="sm" onClick={() => duplicateEmployee(activeEmployee.id)} icon={<Copy />} title="Duplikuj">
+                    <span className="hidden sm:inline">Duplikuj</span>
                   </ButtonSecondary>
-                  <ButtonDanger size="sm" icon={<Trash />} onClick={async () => {
+                  <ButtonDanger size="sm" icon={<Trash />} title="Usuń" onClick={async () => {
                     if (await confirmDialog(pl.confirms.deleteSelectedEmployees(1), { variant: 'danger' })) {
                       removeEmployee(activeEmployee.id);
                       setActiveId(null);
                     }
                   }}>
-                    Usuń
+                    <span className="hidden sm:inline">Usuń</span>
                   </ButtonDanger>
                   <button
                     onClick={() => setActiveId(null)}

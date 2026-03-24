@@ -223,9 +223,9 @@ export const StepAnalizaPracownika = () => {
                     <div>
                         <div className="flex items-center gap-2 mb-0.5">
                             <div className="w-1.5 h-6 bg-[#0078d4] rounded-sm shrink-0"></div>
-                            <h1 className="text-base font-bold text-slate-900 leading-tight">Analiza PIT-37 – Symulacja Podatku Pracownika</h1>
+                            <h1 className="text-sm md:text-base font-bold text-slate-900 leading-tight">Analiza PIT-37 – Symulacja Podatku Pracownika</h1>
                         </div>
-                        <p className="text-[11px] text-slate-500 pl-3.5">Model Tradycyjny vs. Eliton Prime™ &nbsp;·&nbsp; Skala 12% / 32% (narastająco) &nbsp;·&nbsp; Miesiąc po miesiącu &nbsp;·&nbsp; Próg II: 120 000 zł/rok</p>
+                        <p className="hidden sm:block text-[11px] text-slate-500 pl-3.5">Model Tradycyjny vs. Eliton Prime™ &nbsp;·&nbsp; Skala 12% / 32% (narastająco) &nbsp;·&nbsp; Miesiąc po miesiącu &nbsp;·&nbsp; Próg II: 120 000 zł/rok</p>
                     </div>
                     {/* Global raise controls */}
                     <div className="flex items-center gap-2 flex-wrap shrink-0">

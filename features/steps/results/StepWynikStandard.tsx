@@ -203,7 +203,7 @@ export const StepWynikStandard = () => {
                     {/* Title */}
                     <div className="flex items-center gap-2 px-4 border-r border-[#edebe9] shrink-0">
                         <div className="text-[#0078d4]"><TrendingUp /></div>
-                        <span className="text-[13px] font-semibold text-[#323130] whitespace-nowrap">Aktualny Koszt Zatrudnienia</span>
+                        <span className="hidden sm:inline text-[13px] font-semibold text-[#323130] whitespace-nowrap">Aktualny Koszt Zatrudnienia</span>
                     </div>
                     {/* KPI Stats */}
                     <div className="flex items-stretch flex-1 overflow-x-auto scrollbar-hide">

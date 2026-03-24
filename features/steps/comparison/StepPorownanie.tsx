@@ -176,14 +176,14 @@ const CostBridgeChart: React.FC<{
                             key={row.key}
                             onMouseEnter={() => setHovered(row.key)}
                             onMouseLeave={() => setHovered(null)}
-                            className={`flex items-center gap-4 rounded-lg px-3 py-2 transition-colors cursor-default ${isHovered ? 'bg-slate-50' : ''}`}
+                            className={`flex items-center gap-2 sm:gap-4 rounded-lg px-3 py-2 transition-colors cursor-default ${isHovered ? 'bg-slate-50' : ''}`}
                         >
                             <div className={`w-7 h-7 flex items-center justify-center rounded border text-xs font-black shrink-0 ${signStyles[row.sign]}`}>
                                 {row.sign}
                             </div>
-                            <div className="w-52 shrink-0">
+                            <div className="w-28 sm:w-52 shrink-0 min-w-0">
                                 <div className={`text-xs ${row.bold ? 'font-bold text-slate-900' : 'font-medium text-slate-600'}`}>{row.label}</div>
-                                {row.subLabel && <div className="text-[10px] text-slate-400 mt-0.5">{row.subLabel}</div>}
+                                {row.subLabel && <div className="hidden sm:block text-[10px] text-slate-400 mt-0.5">{row.subLabel}</div>}
                             </div>
                             <div className="flex-1 h-6 bg-slate-100 rounded-sm overflow-hidden">
                                 {row.value > 0 ? (
@@ -201,7 +201,7 @@ const CostBridgeChart: React.FC<{
                                     </div>
                                 )}
                             </div>
-                            <div className={`w-32 text-right tabular-nums shrink-0 ${row.bold ? 'text-emerald-600 font-extrabold text-base' : 'text-sm font-semibold text-slate-700'}`}>
+                            <div className={`w-20 sm:w-32 text-right tabular-nums shrink-0 ${row.bold ? 'text-emerald-600 font-extrabold text-sm sm:text-base' : 'text-xs sm:text-sm font-semibold text-slate-700'}`}>
                                 {row.sign === '-' ? '−' : row.sign === '+' ? '+' : ''}{formatPLN(row.value)}
                             </div>
                         </div>
@@ -334,7 +334,7 @@ export const StepPorownanie = () => {
   const isCustomPrime = customPrimeRate !== 26;
 
   return (
-    <div className="animate-in fade-in zoom-in-95 duration-300 space-y-8">
+    <div className="animate-in fade-in zoom-in-95 duration-300 space-y-4 md:space-y-8">
       
       {/* 1. HEADER & CONTEXT */}
       <PageHeader
