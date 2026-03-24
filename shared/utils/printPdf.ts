@@ -16,38 +16,53 @@ export async function printHtmlAsPdf(
     desktopUrl: string,
     filename = 'oferta-eliton-prime.pdf'
 ): Promise<void> {
-    const serverUrl = `${window.location.protocol}//${window.location.hostname}:3002/generate-pdf`;
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
-    try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 60_000);
+    // Open the fallback window synchronously BEFORE any async work,
+    // so the browser recognises it as triggered by the user gesture.
+    // On local dev we keep it as a placeholder; on Vercel we skip the fetch entirely.
+    const fallbackWindow = window.open('', '_blank');
 
-        const res = await fetch(serverUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ html }),
-            signal: controller.signal,
-        });
+    if (isLocal) {
+        const serverUrl = `${window.location.protocol}//${window.location.hostname}:3002/generate-pdf`;
+        try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 8_000);
 
-        clearTimeout(timer);
+            const res = await fetch(serverUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ html }),
+                signal: controller.signal,
+            });
 
-        if (res.ok) {
-            const blob = await res.blob();
-            const pdfUrl = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(pdfUrl), 10_000);
-            URL.revokeObjectURL(desktopUrl);
-            return;
+            clearTimeout(timer);
+
+            if (res.ok) {
+                const blob = await res.blob();
+                const pdfUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = pdfUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(pdfUrl), 10_000);
+                URL.revokeObjectURL(desktopUrl);
+                fallbackWindow?.close();
+                return;
+            }
+        } catch {
+            // Server unreachable or timed-out — fall through to browser fallback
         }
-    } catch {
-        // Server unreachable or timed-out — fall through to browser fallback
     }
 
-    // Fallback: open in new tab (embedded window.onload calls window.print())
-    window.open(desktopUrl, '_blank')?.focus();
+    // Fallback: navigate the pre-opened tab to the blob URL
+    // (embedded window.onload calls window.print())
+    if (fallbackWindow) {
+        fallbackWindow.location.href = desktopUrl;
+        fallbackWindow.focus();
+    } else {
+        window.open(desktopUrl, '_blank')?.focus();
+    }
 }
