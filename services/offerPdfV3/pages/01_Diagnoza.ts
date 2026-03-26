@@ -15,7 +15,7 @@ export const generatePage02V3 = (firma: Firma, totals: any, date: string, sector
 
     <!-- ══ SEKCJA 1: PROBLEM ══ -->
     <div style="border-left:4px solid #DC2626;padding:20px 24px;background:var(--white);border-bottom:1px solid var(--border);flex:1">
-      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#DC2626;margin-bottom:12px">Twoja sytuacja dziś &mdash; wyniki analizy listy płac</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#DC2626;margin-bottom:12px">Twoja sytuacja dziś &mdash; wyniki analizy listy płac</div>
 
       <!-- Lead — problem w języku właściciela -->
       <p style="font-size:13.5px;color:var(--sp-navy);font-weight:600;line-height:1.6;margin-bottom:14px">Z analizy Twojej listy płac wynika, że <strong>${totals.count === 1 ? '1 pracownik kwalifikuje się' : `${totals.count} pracowników kwalifikuje się`} do restrukturyzacji kosztu pracy</strong>. Odprowadzasz co miesiąc <strong>${fmt(totals.sumaZusPracodawcy || 0)}</strong> składek ZUS — przy łącznym wynagrodzeniu brutto <strong>${fmt(totals.sumaBrutto || 0)}</strong>. Wdrożenie pozwoli Ci zaoszczędzić część tych środków w sposób transparentny i trwały.</p>
@@ -51,8 +51,8 @@ export const generatePage02V3 = (firma: Firma, totals: any, date: string, sector
 
     <!-- ══ SEKCJA 2: ROZWIĄZANIE ══ -->
     <div style="border-left:4px solid var(--sp-gold);padding:20px 24px;background:var(--white);border-bottom:1px solid var(--border);flex:1">
-      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:12px">Co zmienia restrukturyzacja kosztu pracy</div>
-      <p style="font-size:13px;color:var(--sp-text-muted);line-height:1.7;margin-bottom:8px">Część wynagrodzenia zostaje zastąpiona <strong>Voucherem EBS</strong> &mdash; świadczeniem rzeczowym wyłączonym z podstawy ZUS na mocy przepisu obowiązującego od&nbsp;1998&nbsp;r. (§2&nbsp;ust.&nbsp;1&nbsp;pkt&nbsp;26 Rozp.&nbsp;MPiPS).</p>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:12px">Co zmienia restrukturyzacja kosztu pracy</div>
+      <p style="font-size:13px;color:var(--sp-text-muted);line-height:1.7;margin-bottom:8px">Część wynagrodzenia zostaje zastąpiona wartościowym benefitem &mdash; <strong>Voucherem EBS</strong> &mdash; świadczeniem rzeczowym wyłączonym z podstawy ZUS na mocy przepisu obowiązującego od&nbsp;1998&nbsp;r. (§2&nbsp;ust.&nbsp;1&nbsp;pkt&nbsp;26 Rozp.&nbsp;MPiPS).</p>
       <p style="font-size:13px;color:var(--sp-text-muted);line-height:1.7;margin-bottom:8px">Po zmianie modelu wynagrodzenia, pracownik nadal otrzymuje to samo NETTO - w dwóch składowych <strong>${fmt(totals.sumaNettoZasadnicze || 0)} netto zasadnicze</strong> oraz <strong>${fmt(totals.totalBenefit || 0)} voucher EBS</strong>.</p>
       <p style="font-size:11px;color:var(--sp-text-muted);line-height:1.6;margin-top:0;margin-bottom:8px">W dalszej części oferty przedstawiamy <strong>Twój wariant wdrożenia</strong> &mdash; model skrojony pod Twoją strukturę zatrudnienia i Twoje preferencje.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
@@ -70,29 +70,29 @@ export const generatePage02V3 = (firma: Firma, totals: any, date: string, sector
     </div>
 
     <!-- ══ SEKCJA 3: WNIOSEK ══ -->
-    <div style="border-left:4px solid var(--success);padding:20px 24px;background:var(--white);flex:1">
-      <div style="font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--success);margin-bottom:14px">Wniosek &mdash; co Ty na tym zyskujesz</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
-        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
-          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:8px">Oszczędność miesięczna</div>
-          <div style="font-family:var(--font-serif);font-size:28px;color:var(--success);line-height:1">+${fmt(totals.savingsPlus || 0)}</div>
-          <div style="font-size:10px;color:var(--sp-text-muted);margin-top:4px">zostaje w Twoim budżecie</div>
+    <div style="border-left:4px solid var(--success);padding:20px 24px;background:var(--white);flex:1;display:flex;flex-direction:column">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--success);margin-bottom:14px">Wniosek &mdash; co Ty na tym zyskujesz</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);flex:1">
+        <div style="background:#f0faf4;padding:22px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:10px">Oszczędność miesięczna</div>
+          <div style="font-family:var(--font-serif);font-size:34px;color:var(--success);line-height:1">+${fmt(totals.savingsPlus || 0)}</div>
+          <div style="font-size:11.5px;color:var(--sp-text-muted);margin-top:6px">zostaje w Twoim budżecie</div>
         </div>
-        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
-          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:8px">Oszczędność roczna</div>
-          <div style="font-family:var(--font-serif);font-size:28px;color:var(--success);line-height:1">+${fmt((totals.savingsPlus || 0) * 12)}</div>
-          <div style="font-size:10px;color:var(--sp-text-muted);margin-top:4px">przy stałych parametrach ZUS</div>
+        <div style="background:#f0faf4;padding:22px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:10px">Oszczędność roczna</div>
+          <div style="font-family:var(--font-serif);font-size:34px;color:var(--success);line-height:1">+${fmt((totals.savingsPlus || 0) * 12)}</div>
+          <div style="font-size:11.5px;color:var(--sp-text-muted);margin-top:6px">przy stałych parametrach ZUS</div>
         </div>
-        <div style="background:#f0faf4;padding:16px 18px;text-align:center">
-          <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:8px">Oszczędność na pracownika / m-c</div>
-          <div style="font-family:var(--font-serif);font-size:28px;color:var(--success);line-height:1">+${fmt((totals.savingsPlus || 0) / (totals.count || 1))}</div>
-          <div style="font-size:10px;color:var(--sp-text-muted);margin-top:4px">średnio na 1 pracownika</div>
+        <div style="background:#f0faf4;padding:22px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--success);margin-bottom:10px">Oszczędność na pracownika / m-c</div>
+          <div style="font-family:var(--font-serif);font-size:34px;color:var(--success);line-height:1">+${fmt((totals.savingsPlus || 0) / (totals.count || 1))}</div>
+          <div style="font-size:11.5px;color:var(--sp-text-muted);margin-top:6px">średnio na 1 pracownika</div>
         </div>
       </div>
       <!-- CTA — forward-looking -->
-      <div style="margin-top:14px;padding:13px 18px;background:var(--sp-navy);display:flex;align-items:center;justify-content:space-between;gap:16px">
-        <div style="font-size:11px;color:rgba(255,255,255,.85);line-height:1.55;flex:1">
-          Jak działa mechanizm i dlaczego jest bezpieczny prawnie? <strong style="color:#fff"><br>Kolejne strony wyjaśniają to krok po kroku.</strong>
+      <div style="margin-top:14px;padding:14px 18px;background:var(--sp-navy);display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.55;flex:1">
+          Jak działa mechanizm i dlaczego jest zgodny z obowiązującymi regulacjami? <strong style="color:#fff"><br>Kolejne strony wyjaśniają to krok po kroku.</strong>
         </div>
         <div style="flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sp-gold);white-space:nowrap">
           → Szczegóły

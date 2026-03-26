@@ -1,10 +1,7 @@
 
 import { Config } from '../../../entities/company/model';
 import { ZusSkladkiPracownik, ZusSkladkiPracodawca } from '../../../entities/calculation/model';
-
-// Helper: Zaokrąglenie do groszy (Zasada matematyczna: 0.005 -> 0.01)
-// Zgodne z algorytmem ZUS Płatnik dla poszczególnych składek.
-const roundCurrency = (val: number) => Math.round(val * 100) / 100;
+import { roundCurrency } from '../../../shared/utils/formatters';
 
 export const obliczZusPracownik = (brutto: number, typUmowy: string, trybSkladek: string, choroboweAktywne: boolean, config: Config): ZusSkladkiPracownik => {
   // Student (<26 lat) na UZ lub Zbieg tytułów -> Brak składek społecznych pracownika

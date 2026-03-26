@@ -2,15 +2,13 @@
 
 import { Firma } from '../../../entities/company/model';
 import { GlobalneWyniki } from '../../../entities/calculation/model';
+import { roundCurrency as round } from '../../../shared/utils/formatters';
 
 interface GeneratorOptions {
     firma: Firma;
     wyniki: GlobalneWyniki;
     prowizjaProc: number;
 }
-
-// Helper do zaokrąglania
-const round = (val: number) => Math.round(val * 100) / 100;
 
 export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: GeneratorOptions) => {
     if (!window.ExcelJS) {
@@ -181,29 +179,29 @@ export const generatePremiumExcel = async ({ firma, wyniki, prowizjaProc }: Gene
     // 4. Elementy Modelu PLUS (Jeśli dotyczy)
     if (isPlus) {
         // Podwyżka Systemowa (B13) - ZMIANA ETYKIETY
-        addDashboardRow("+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime", 0, { formula: "'Kalkulator Podwyżek'!$V$6" }, currentRow++, false, {
+        addDashboardRow("+4% świadczeń rzeczowych EBS finansowane przez Stratton Prime", 0, { formula: "'Kalkulator Podwyżek'!$P$6" }, currentRow++, false, {
             font: { color: { argb: 'FF059669' }, italic: true }, // Green Text
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFECFDF5' } } // Green BG
         });
 
         // Bonus Administracyjny (B14) - ZMIANA ETYKIETY
-        addDashboardRow("Bonus dla administracji w (Stratton 2%)", 0, { formula: "'Kalkulator Podwyżek'!$V$11" }, currentRow++, false, {
+        addDashboardRow("Bonus dla administracji w (Stratton 2%)", 0, { formula: "'Kalkulator Podwyżek'!$P$11" }, currentRow++, false, {
             font: { color: { argb: 'FF1E40AF' }, italic: true }, // Blue Text
             fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEFF6FF' } } // Blue BG
         });
 
         // Wstaw do D14 wartość z O14 arkusza Kalkulator Podwyżek
-        wsDash.getCell('D14').value = { formula: "'Kalkulator Podwyżek'!V11" };
+        wsDash.getCell('D14').value = { formula: "'Kalkulator Podwyżek'!P11" };
     }
 
     // 5. Budżet na dodatkowe podwyżki (B15) - ZMIANA ETYKIETY
     // Suma z kolumny I (która jest teraz edytowalną podwyżką)
-    addDashboardRow("Budżet na dodatkowe podwyżki od pracodawcy", 0, { formula: "'Kalkulator Podwyżek'!$V$7" }, currentRow++, false, {
+    addDashboardRow("Budżet na dodatkowe podwyżki od pracodawcy", 0, { formula: "'Kalkulator Podwyżek'!$P$7" }, currentRow++, false, {
         font: { color: { argb: 'FFD97706' }, italic: true }, // Amber Text
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFBEB' } } // Amber BG
     });
     // Wstaw do D15 wartość z O7 arkusza Kalkulator Podwyżek
-    wsDash.getCell('D15').value = { formula: "'Kalkulator Podwyżek'!V7" };
+    wsDash.getCell('D15').value = { formula: "'Kalkulator Podwyżek'!P7" };
 
     // SUMA CAŁKOWITA
     const totalRowIdx = currentRow;

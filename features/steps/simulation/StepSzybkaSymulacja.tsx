@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Zap, Users, ArrowRight, Wallet, PieChart, TrendingUp, Filter, Building, Check, ShieldCheck } from '../../../common/Icons';
+import { Zap, Users, ArrowRight, Wallet, PieChart, TrendingUp, Filter, Building, Check, ShieldCheck } from '../../../shared/icons/Icons';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { useAppStore } from '../../../store/AppContext';
 import { obliczWariantStandard, obliczWariantPodzial } from '../../tax-engine';

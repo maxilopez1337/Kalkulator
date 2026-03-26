@@ -1,5 +1,5 @@
 import React from 'react';
-import { shadow } from '../../common/theme';
+import { shadow } from '../config/theme';
 
 interface KpiCardProps {
   label: string;

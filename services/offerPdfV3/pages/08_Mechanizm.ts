@@ -24,7 +24,7 @@ export const generate4przesankiwyczeniaZUS2ust1pkt26RozpMPiPSV3 = (firma: Firma,
       <div class="gc">
         <div class="gc-lbl">Krok 2</div>
         <div style="font-size:14px;font-weight:600;color:var(--sp-navy);margin-bottom:4px">Zamknięty katalog usług EBS</div>
-        <p style="font-size:11.5px;color:var(--sp-text-muted);line-height:1.6">Pracownik korzysta z usług: pakiety medyczne, VPN, narzędzia AI, wellbeing, ubezpieczenia, telekomunikacja. Voucher nie jest środkiem pieniężnym — nie podlega wymianie na gotówkę.</p>
+        <p style="font-size:11.5px;color:var(--sp-text-muted);line-height:1.6">Pracownik korzysta z usług wyłącznie z zamkniętego katalogu EBS. Voucher nie jest środkiem pieniężnym — pracodawca nie wypłaca go w gotówce ani nie wymienia na ekwiwalent finansowy.</p>
       </div>
       <div class="gc">
         <div class="gc-lbl">Krok 3</div>
@@ -36,7 +36,7 @@ export const generate4przesankiwyczeniaZUS2ust1pkt26RozpMPiPSV3 = (firma: Firma,
     <!-- 4 przesłanki -->
     <div style="position:relative">
       <img src="data:image/png;base64,${tarczaOchronnaB64}" style="position:absolute;right:-27px;bottom:47px;height:1000px;width:auto;z-index:10;pointer-events:none" />
-    <h3 class="sh">4 przesłanki wyłączenia ZUS — §2 ust. 1 pkt 26 Rozp. MPiPS</h3>
+    <h3 class="sh" style="font-size:14px;letter-spacing:.12em">4 przesłanki wyłączenia ZUS — §2 ust. 1 pkt 26 Rozp. MPiPS</h3>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
 

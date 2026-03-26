@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Building, Users, Check, X, Search, ArrowRight, Info, LayoutGrid } from '../../../common/Icons';
+import { Building, Users, Check, X, Search, ArrowRight, Info, LayoutGrid } from '../../../shared/icons/Icons';
 import { Input } from '../../../shared/ui/Input';
 import { ButtonSecondary } from '../../../shared/ui/Button';
 import { formatPLN } from '../../../shared/utils/formatters';

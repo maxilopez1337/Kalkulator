@@ -112,22 +112,8 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
     kupCalkowiteWstepne = (lacznyPrzychodWstepny - wynikZasadnicza.zusPracownik.suma) * (procKup / 100);
   }
   
-  // FIX: Wyłączenie automatycznej projekcji rocznej (x12) dla świadczenia.
-  // Wcześniej kod sprawdzał (podstawaPitWstepna * 12 > limit), co powodowało narzucenie stawki 32%
-  // nawet przy średnich zarobkach. Teraz kalkulator liczy "Tu i Teraz" (Miesiąc 1),
-  // chyba że użytkownik ręcznie wybierze FLAT_32.
-  
-  /* 
-  let podstawaPitWstepna = Math.max(0, lacznyPrzychodWstepny - wynikZasadnicza.zusPracownik.suma - kupCalkowiteWstepne);
-  
-  if (pracownik.pitMode === 'AUTO' || !pracownik.pitMode) {
-      if (podstawaPitWstepna * 12 > config.pit.prog1Limit && wynikZasadnicza.stawkaPit === config.pit.prog1Stawka) {
-        stawkaPitDlaSwiadczenia = config.pit.prog2Stawka / 100;
-        efektywnaStawkaSwiadczenia = stawkaPitDlaSwiadczenia * (1 - wspolczynnikKupSwiadczenia);
-        swiadczenieBruttoWstepne = swiadczenieNetto / (1 - efektywnaStawkaSwiadczenia);
-      }
-  } 
-  */
+  // Kalkulator liczy "Tu i Teraz" (Miesiąc 1) bez projekcji rocznej.
+  // Stawka 32% dostępna tylko przez ręczny wybór FLAT_32.
   
   let kupOdSwiadczeniaWstepne = 0;
   if (pracownik.typUmowy === 'UZ') {

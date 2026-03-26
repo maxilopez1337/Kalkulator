@@ -5,14 +5,14 @@ export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any
 <div class="page">
 
   ${generatePageHeaderV3('Twoja Droga do Pierwszych Oszczędności', '10. Twoja droga', 10, 11, date)}
-<div class="page-body" style="padding-top:20px">
+<div class="page-body" style="padding-top:24px;padding-bottom:62px;display:flex;flex-direction:column">
 
-    <p class="lead" style="border-left:3px solid var(--sp-gold);padding-left:14px;color:var(--sp-navy);margin-bottom:16px">Poniżej widać pełny proces od pierwszego kontaktu do wygenerowania pierwszych oszczędności.<br><strong>Jesteś teraz na etapie Decyzji</strong> — wszystkie poprzednie kroki zostały wykonane. Dalsze działanie zależy wyłącznie od Ciebie.</p>
+    <p class="lead" style="border-left:3px solid var(--sp-gold);padding-left:14px;color:var(--sp-navy);margin-bottom:22px;font-size:13.5px;line-height:1.75">Poniżej widać pełny proces od pierwszego kontaktu do wygenerowania pierwszych oszczędności.<br><strong>Jesteś teraz na etapie Decyzji</strong> — wszystkie poprzednie kroki zostały wykonane. Dalsze działanie zależy wyłącznie od Ciebie.</p>
 
     <!-- PROCESS AXIS -->
-    <div style="margin-bottom:14px;overflow:hidden;border:1px solid rgba(0,0,0,.09)">
+    <div style="margin-bottom:22px;overflow:hidden;border:1px solid rgba(0,0,0,.09)">
       <div style="background:var(--sp-navy);padding:10px 18px;display:flex;align-items:center;justify-content:space-between">
-        <div style="font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sp-gold)">Etapy wdrożenia</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sp-gold)">Etapy wdrożenia</div>
         <div style="display:flex;align-items:center;gap:5px">
           <span style="width:9px;height:9px;border-radius:50%;background:var(--success);display:inline-block"></span>
           <span style="width:9px;height:9px;border-radius:50%;background:var(--success);display:inline-block"></span>
@@ -24,8 +24,8 @@ export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any
           <span style="font-size:8px;color:rgba(255,255,255,.45);margin-left:6px">krok 3 z 7</span>
         </div>
       </div>
-      <div style="background:var(--sp-gray);padding:0 16px 14px">
-      <div style="padding-top:38px">
+      <div style="background:var(--sp-gray);padding:0 16px 26px">
+      <div style="padding-top:50px">
         <div class="proc-axis">
 
         <div class="proc-step">
@@ -76,50 +76,50 @@ export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any
       </div>
     </div>
 
-    <div style="background:var(--sp-navy);border-left:4px solid var(--success);padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px">
-      <div style="background:var(--success);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span style="font-size:15px;color:var(--white);font-weight:700">✓</span>
+    <div style="background:var(--sp-navy);border-left:4px solid var(--success);padding:18px 24px;margin-bottom:22px;display:flex;align-items:center;gap:18px">
+      <div style="background:var(--success);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-size:20px;color:var(--white);font-weight:700">✓</span>
       </div>
       <div>
-        <div style="font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--success);margin-bottom:3px">Kroki 1–2 z 7 zakończone</div>
-        <div style="font-size:11.5px;color:rgba(255,255,255,.78);line-height:1.5">Analiza potrzeb i kalkulacja indywidualna są gotowe. Następny krok to Twoja decyzja — potem wszystko realizujemy my.</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--success);margin-bottom:6px">Kroki 1–2 z 7 zakończone</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.78);line-height:1.6">Analiza potrzeb i kalkulacja indywidualna są gotowe. Następny krok to Twoja decyzja — potem wszystko realizujemy my.</div>
       </div>
     </div>
 
-    <h3 class="sh">Ile kosztuje Cię każdy miesiąc zwłoki?</h3>
-    <p style="font-size:13px;color:var(--sp-text-muted);margin-bottom:16px">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która pozostaje niezrealizowana — środki trafiają do systemu danin publicznych w wyższej niż możliwa wysokości.</p>
+    <h3 class="sh" style="font-size:14px;letter-spacing:.12em">Ile kosztuje Cię każdy miesiąc zwłoki?</h3>
+    <p style="font-size:14px;color:var(--sp-text-muted);margin-bottom:20px">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która pozostaje niezrealizowana — środki trafiają do systemu danin publicznych w wyższej niż możliwa wysokości.</p>
 
-    <div class="cod">
-      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.35)">
-        <div class="cod-period">1 miesiąc zwłoki</div>
-        <div class="cod-amount">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus)} zł</div>
-        <div class="cod-label">strata netto</div>
+    <div class="cod" style="flex:1;align-items:stretch">
+      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.35);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div class="cod-period" style="font-size:10px;margin-bottom:12px">1 miesiąc zwłoki</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus)} zł</div>
+        <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
-      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.55)">
-        <div class="cod-period">3 miesiące zwłoki</div>
-        <div class="cod-amount">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 3)} zł</div>
-        <div class="cod-label">strata netto</div>
+      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.55);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div class="cod-period" style="font-size:10px;margin-bottom:12px">3 miesiące zwłoki</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 3)} zł</div>
+        <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
-      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.75)">
-        <div class="cod-period">6 miesięcy zwłoki</div>
-        <div class="cod-amount">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 6)} zł</div>
-        <div class="cod-label">strata netto</div>
+      <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.75);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div class="cod-period" style="font-size:10px;margin-bottom:12px">6 miesięcy zwłoki</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 6)} zł</div>
+        <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
-      <div class="cod-cell" style="border-top:3px solid #DC2626">
-        <div class="cod-period">12 miesięcy zwłoki</div>
-        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 12)} zł</div>
-        <div class="cod-label" style="color:#f87171;font-weight:600">maksymalna strata</div>
+      <div class="cod-cell" style="border-top:3px solid #DC2626;padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <div class="cod-period" style="font-size:10px;margin-bottom:12px">12 miesięcy zwłoki</div>
+        <div class="cod-amount" style="font-size:30px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 12)} zł</div>
+        <div class="cod-label" style="color:#f87171;font-weight:600;font-size:12.5px">maksymalna strata</div>
       </div>
     </div>
 
     <div style="border:1px solid #DC2626;display:grid;grid-template-columns:auto 1fr;overflow:hidden;margin-bottom:10px">
-      <div style="background:#DC2626;padding:14px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:80px;text-align:center">
-        <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75)">Ważność</div>
-        <div style="font-size:16px;font-weight:700;color:var(--white);line-height:1.2;white-space:nowrap">${totals.offerDeadline}</div>
+      <div style="background:#DC2626;padding:18px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:90px;text-align:center">
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75)">Ważność</div>
+        <div style="font-size:20px;font-weight:700;color:var(--white);line-height:1.2;white-space:nowrap">${totals.offerDeadline}</div>
       </div>
-      <div style="padding:12px 16px;background:#fff0f0">
-        <div style="font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#DC2626;margin-bottom:5px">Ważne — termin oferty Wariantu PLUS</div>
-        <p style="font-size:12px;color:var(--sp-text);line-height:1.6;margin:0">Wariant <strong>PLUS</strong> (niższy koszt obsługi, D&amp;O Leadenhall w pakiecie, wdrożenie w 14 dni) jest dostępny przez <strong>14 dni od daty tej kalkulacji</strong>. Po tym terminie obowiązuje wyłącznie wariant STANDARD.</p>
+      <div style="padding:16px 20px;background:#fff0f0">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#DC2626;margin-bottom:7px">Ważne — termin oferty Wariantu PLUS</div>
+        <p style="font-size:13px;color:var(--sp-text);line-height:1.65;margin:0">Wariant <strong>PLUS</strong> (niższy koszt obsługi, D&amp;O Leadenhall w pakiecie, wdrożenie w 14 dni) jest dostępny przez <strong>14 dni od daty tej kalkulacji</strong>. Po tym terminie obowiązuje wyłącznie wariant STANDARD.</p>
       </div>
     </div>
 

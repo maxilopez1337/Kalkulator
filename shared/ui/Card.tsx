@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { theme } from '../../common/theme';
+import { theme } from '../config/theme';
 
 interface CardProps {
     title?: string;

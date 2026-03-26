@@ -1,6 +1,6 @@
 
 import React, { useMemo, useEffect, useState } from 'react';
-import { TrendingUp, Info, PieChart, Users, Check, Wallet, Star, ShieldCheck, Settings, Check as CheckIcon } from '../../../common/Icons';
+import { TrendingUp, Info, PieChart, Users, Check, Wallet, Star, ShieldCheck, Settings, Check as CheckIcon } from '../../../shared/icons/Icons';
 import { Card } from '../../../shared/ui/Card';
 import { Alert } from '../../../shared/ui/Alert';
 import { PageHeader } from '../../../shared/ui/PageHeader';
@@ -22,9 +22,9 @@ interface BridgeRow {
 }
 
 const signStyles: Record<BridgeSign, string> = {
-    '-': 'bg-emerald-100 text-emerald-700 border-emerald-200',
-    '+': 'bg-amber-100 text-amber-700 border-amber-200',
-    '=': 'bg-slate-100 text-slate-600 border-slate-200',
+    '-': 'bg-emerald-500 text-white border-emerald-700',
+    '+': 'bg-amber-500 text-white border-amber-700',
+    '=': 'bg-slate-700 text-white border-slate-900',
 };
 
 const CostBridgeChart: React.FC<{
@@ -52,7 +52,7 @@ const CostBridgeChart: React.FC<{
             subLabel: 'Punkt wyjścia — model standardowy',
             value: sumaKosztStandard,
             pct: 100,
-            barClass: 'bg-slate-400',
+            barClass: 'bg-slate-300',          // jasny na ciemnym tle slate-800
             sign: '=',
         },
         {
@@ -61,7 +61,7 @@ const CostBridgeChart: React.FC<{
             subLabel: 'Redukcja kosztu pracodawcy po optymalizacji',
             value: baseSavings,
             pct: (baseSavings / ref) * 100,
-            barClass: 'bg-emerald-500',
+            barClass: 'bg-emerald-400',         // żywa zieleń na jasnym tle
             sign: '-',
         },
         {
@@ -72,7 +72,7 @@ const CostBridgeChart: React.FC<{
                 : `Opłata serwisowa — ${((netFee / ref) * 100).toFixed(1)}% kosztu bazowego`,
             value: netFee,
             pct: (netFee / ref) * 100,
-            barClass: 'bg-amber-400',
+            barClass: 'bg-amber-500',           // złoto — kolor marki Stratton
             sign: '+',
         },
         ...(isPrime && raiseAmount > 0 ? [{
@@ -81,7 +81,7 @@ const CostBridgeChart: React.FC<{
             subLabel: 'Finansowane przez Stratton Prime',
             value: raiseAmount,
             pct: (raiseAmount / ref) * 100,
-            barClass: 'bg-orange-400',
+            barClass: 'bg-orange-400',          // ciepły pomarańcz — podwyżki
             sign: '+' as BridgeSign,
         }] : []),
         ...(isPrime && adminAmount > 0 ? [{
@@ -90,7 +90,7 @@ const CostBridgeChart: React.FC<{
             subLabel: 'Dla działu Księgowo-Kadrowego',
             value: adminAmount,
             pct: (adminAmount / ref) * 100,
-            barClass: 'bg-violet-400',
+            barClass: 'bg-violet-500',          // wyróżniający fiolet — bonus kadr
             sign: '+' as BridgeSign,
         }] : []),
         {
@@ -99,7 +99,7 @@ const CostBridgeChart: React.FC<{
             subLabel: 'Miesięczna korzyść finansowa netto',
             value: oszczednoscNetto,
             pct: (oszczednoscNetto / ref) * 100,
-            barClass: 'bg-emerald-600',
+            barClass: 'bg-emerald-200',         // jasna zieleń — kontrastuje z emerald-600 tłem
             sign: '=',
             bold: true,
         },
@@ -107,112 +107,137 @@ const CostBridgeChart: React.FC<{
 
     return (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className={`h-1 w-full ${isPrime ? 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400' : 'bg-[#0078d4]'}`} />
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <TrendingUp className="text-slate-400 w-4 h-4" />
+            {/* ── HEADER ───────────────────────────────────────────────────── */}
+            <div className="px-5 py-3 flex items-center justify-between border-b border-slate-700 bg-slate-900 rounded-t-2xl">
+                <h3 className="text-[11px] font-black text-white uppercase tracking-[.18em] flex items-center gap-2">
+                    <TrendingUp className="text-emerald-400 w-3.5 h-3.5 shrink-0" />
                     Most Kosztowy — Dekompozycja Oszczędności
                 </h3>
-                <span className={`text-[10px] font-bold px-2 py-1 rounded border ${isPrime ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-blue-50 text-[#0078d4] border-blue-200'}`}>
+                <span className={`text-[9px] font-black px-2 py-0.5 uppercase tracking-widest border ${isPrime ? 'bg-transparent text-amber-400 border-amber-500' : 'bg-transparent text-blue-300 border-blue-500'}`}>
                     {isPrime ? 'Eliton Prime™ PLUS' : 'Eliton Prime™'}
                 </span>
             </div>
 
             {/* ── BEFORE / AFTER HERO ──────────────────────────────────────── */}
-            <div className="px-4 sm:px-6 pt-5 pb-2">
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 items-center">
-                    {/* PRZED */}
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 sm:p-4 text-center">
-                        <div className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 leading-tight">
-                            Koszt Przed Wdrożeniem
-                        </div>
-                        <div className="text-xl sm:text-2xl font-extrabold text-slate-600 tabular-nums leading-tight">
-                            {formatPLN(sumaKosztStandard)}
-                        </div>
-                        <div className="text-[9px] text-slate-400 mt-1">miesięcznie</div>
+            <div className="grid grid-cols-3 gap-0 border-b border-slate-200">
+                {/* PRZED */}
+                <div className="p-4 sm:p-5 text-center border-r border-slate-700 bg-slate-800">
+                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-[.18em] mb-2">
+                        Koszt Przed Wdrożeniem
                     </div>
-
-                    {/* ARROW + SAVINGS BADGE */}
-                    <div className="flex flex-col items-center justify-center gap-1.5">
-                        <svg className="w-5 h-5 text-emerald-400 hidden sm:block" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                        <div className="bg-emerald-500 text-white rounded-xl px-2.5 sm:px-4 py-2 text-center shadow-md">
-                            <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider opacity-80">Oszczędność</div>
-                            <div className="text-base sm:text-xl font-extrabold tabular-nums leading-tight">
-                                {formatPLN(oszczednoscNetto)}
-                            </div>
-                            <div className="text-[9px] sm:text-[10px] font-bold opacity-80">
-                                −{((oszczednoscNetto / sumaKosztStandard) * 100).toFixed(1)}%
-                            </div>
-                        </div>
+                    <div className="text-xl sm:text-2xl font-black text-white tabular-nums leading-tight">
+                        {formatPLN(sumaKosztStandard)}
                     </div>
+                    <div className="text-[9px] font-bold text-slate-500 mt-1.5 uppercase tracking-wider">miesięcznie</div>
+                </div>
 
-                    {/* PO */}
-                    <div className={`border rounded-xl p-3 sm:p-4 text-center ${isPrime ? 'bg-amber-50 border-amber-200' : 'bg-blue-50 border-[#c7e0f4]'}`}>
-                        <div className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 leading-tight">
-                            Koszt Po Wdrożeniu
-                        </div>
-                        <div className={`text-xl sm:text-2xl font-extrabold tabular-nums leading-tight ${isPrime ? 'text-amber-700' : 'text-[#0078d4]'}`}>
-                            {formatPLN(sumaKosztStandard - oszczednoscNetto)}
-                        </div>
-                        <div className="text-[9px] text-slate-400 mt-1">miesięcznie</div>
+                {/* SAVINGS — centralny akcent */}
+                <div className="p-4 sm:p-5 text-center border-r border-slate-700 bg-emerald-600">
+                    <div className="text-[9px] font-black text-white uppercase tracking-[.18em] mb-2">
+                        ↓ Oszczędność Netto
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black text-white tabular-nums leading-tight">
+                        {formatPLN(oszczednoscNetto)}
+                    </div>
+                    <div className="text-[10px] font-black text-white mt-1.5 bg-emerald-800 px-2 py-0.5 inline-block">
+                        −{((oszczednoscNetto / sumaKosztStandard) * 100).toFixed(1)}%
                     </div>
                 </div>
 
-                {/* Divider */}
-                <div className="flex items-center gap-3 mt-5 mb-1">
-                    <div className="flex-1 h-px bg-slate-100" />
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest whitespace-nowrap">Dekompozycja szczegółowa</span>
-                    <div className="flex-1 h-px bg-slate-100" />
+                {/* PO */}
+                <div className={`p-4 sm:p-5 text-center ${isPrime ? 'bg-amber-600' : 'bg-[#0078d4]'}`}>
+                    <div className="text-[9px] font-black text-white uppercase tracking-[.18em] mb-2">
+                        Koszt Po Wdrożeniu
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black tabular-nums leading-tight text-white">
+                        {formatPLN(sumaKosztStandard - oszczednoscNetto)}
+                    </div>
+                    <div className="text-[9px] font-bold text-white/70 mt-1.5 uppercase tracking-wider">miesięcznie</div>
                 </div>
             </div>
-            <div className="px-4 sm:px-6 pb-4 space-y-2">
+
+            {/* ── COLUMN HEADERS ───────────────────────────────────────────── */}
+            <div className="flex items-center gap-2 sm:gap-4 px-5 py-2 border-b border-slate-700 bg-slate-900">
+                <div className="w-7 shrink-0" />
+                <div className="w-28 sm:w-52 shrink-0 text-[9px] font-black text-slate-300 uppercase tracking-widest">Pozycja</div>
+                <div className="flex-1 text-[9px] font-black text-slate-300 uppercase tracking-widest">Udział procentowy</div>
+                <div className="w-20 sm:w-32 text-right text-[9px] font-black text-slate-300 uppercase tracking-widest">Wartość / mies.</div>
+            </div>
+
+            {/* ── ROWS ─────────────────────────────────────────────────────── */}
+            <div className="divide-y divide-slate-200">
                 {rows.map((row) => {
-                    const clampedPct = Math.min(100, Math.max(0.5, row.pct));
-                    const isHovered = hovered === row.key;
+                    const isAnchor  = row.key === 'today';
+                    const isResult  = row.key === 'netto';
+                    // Minimalny pasek 4px żeby małe wartości były zawsze widoczne
+                    const barWidth = row.value > 0
+                        ? `max(4px, ${Math.min(100, Math.max(0.5, row.pct))}%)`
+                        : '0';
+                    const pctVisible = row.pct >= 5;
                     return (
                         <div
                             key={row.key}
                             onMouseEnter={() => setHovered(row.key)}
                             onMouseLeave={() => setHovered(null)}
-                            className={`flex items-center gap-2 sm:gap-4 rounded-lg px-3 py-2 transition-colors cursor-default ${isHovered ? 'bg-slate-50' : ''}`}
+                            className={`flex items-center gap-2 sm:gap-4 px-5 py-2.5 transition-colors cursor-default border-l-4 ${
+                                isAnchor ? 'bg-slate-800 border-l-white/30' :
+                                isResult ? 'bg-emerald-700 border-l-emerald-300' :
+                                row.sign === '-' ? 'bg-white border-l-emerald-500 hover:bg-emerald-50' :
+                                row.sign === '+' ? 'bg-white border-l-amber-500 hover:bg-amber-50' :
+                                'bg-white border-l-slate-400 hover:bg-slate-50'
+                            }`}
                         >
-                            <div className={`w-7 h-7 flex items-center justify-center rounded border text-xs font-black shrink-0 ${signStyles[row.sign]}`}>
+                            <div className={`w-7 h-6 flex items-center justify-center border text-[10px] font-black shrink-0 ${signStyles[row.sign]}`}>
                                 {row.sign}
                             </div>
                             <div className="w-28 sm:w-52 shrink-0 min-w-0">
-                                <div className={`text-xs ${row.bold ? 'font-bold text-slate-900' : 'font-medium text-slate-600'}`}>{row.label}</div>
-                                {row.subLabel && <div className="hidden sm:block text-[10px] text-slate-400 mt-0.5">{row.subLabel}</div>}
+                                <div className={`text-[11px] font-bold leading-tight ${
+                                    isAnchor || isResult ? 'text-white' : 'text-slate-800'
+                                }`}>{row.label}</div>
+                                {row.subLabel && <div className={`hidden sm:block text-[9px] mt-0.5 ${isAnchor || isResult ? 'text-white/50' : 'text-slate-400'}`}>{row.subLabel}</div>}
                             </div>
-                            <div className="flex-1 h-6 bg-slate-100 rounded-sm overflow-hidden">
+                            <div className={`flex-1 h-5 overflow-visible relative ${isAnchor ? 'bg-slate-600' : isResult ? 'bg-emerald-900' : 'bg-slate-100'}`}>
                                 {row.value > 0 ? (
                                     <div
-                                        className={`h-full ${row.barClass} rounded-sm transition-all duration-700 ease-out flex items-center justify-end pr-2`}
-                                        style={{ width: `${clampedPct}%` }}
+                                        className={`h-full ${row.barClass} transition-all duration-700 ease-out flex items-center`}
+                                        style={{ width: barWidth, minWidth: '4px' }}
                                     >
-                                        {clampedPct > 8 && (
-                                            <span className="text-[9px] font-bold text-white/80">{row.pct.toFixed(1)}%</span>
+                                        {pctVisible && (
+                                            <span className="text-[9px] font-black text-white/90 tabular-nums px-1.5">{row.pct.toFixed(1)}%</span>
                                         )}
                                     </div>
                                 ) : (
                                     <div className="h-full flex items-center px-2">
-                                        <span className="text-[9px] text-slate-400 italic">brak</span>
+                                        <span className="text-[9px] text-slate-400">—</span>
                                     </div>
                                 )}
+                                {/* Etykieta % poza paskiem dla małych wartości */}
+                                {row.value > 0 && !pctVisible && (
+                                    <span className="absolute left-2 top-0 h-full flex items-center text-[9px] font-bold tabular-nums text-slate-500">
+                                        {row.pct.toFixed(1)}%
+                                    </span>
+                                )}
                             </div>
-                            <div className={`w-20 sm:w-32 text-right tabular-nums shrink-0 ${row.bold ? 'text-emerald-600 font-extrabold text-sm sm:text-base' : 'text-xs sm:text-sm font-semibold text-slate-700'}`}>
+                            <div className={`w-20 sm:w-32 text-right tabular-nums shrink-0 font-black ${
+                                isAnchor ? 'text-white text-sm sm:text-base' :
+                                isResult ? 'text-white text-sm sm:text-base' :
+                                row.sign === '-' ? 'text-emerald-700 text-xs sm:text-sm' :
+                                row.sign === '+' ? 'text-amber-700 text-xs sm:text-sm' :
+                                'text-slate-700 text-xs sm:text-sm'
+                            }`}>
                                 {row.sign === '-' ? '−' : row.sign === '+' ? '+' : ''}{formatPLN(row.value)}
                             </div>
                         </div>
                     );
                 })}
             </div>
-            <div className="mx-6 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-            <div className="px-6 py-3 bg-slate-50/50 flex items-center justify-between">
-                <span className="text-xs text-slate-500 font-medium">Skumulowana oszczędność roczna</span>
-                <span className="text-base font-extrabold text-emerald-600 tabular-nums">
-                    {formatPLN(oszczednoscNetto * 12)} / rok
+
+            {/* ── FOOTER ───────────────────────────────────────────────────── */}
+            <div className={`px-5 py-3.5 flex items-center justify-between border-t ${isPrime ? 'border-amber-200 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
+                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Skumulowana oszczędność roczna</span>
+                <span className="text-xl font-black text-emerald-700 tabular-nums">
+                    {formatPLN(oszczednoscNetto * 12)}
+                    <span className="text-[11px] font-black text-emerald-600 ml-1">/ rok</span>
                 </span>
             </div>
         </div>
@@ -355,7 +380,7 @@ export const StepPorownanie = () => {
           {/* OPTION A: STANDARD (BENCHMARK) */}
           <div 
             onClick={handleSelectStandard}
-            className={`lg:col-span-5 relative p-6 rounded-md flex flex-col border-2 cursor-pointer transition-all duration-300
+            className={`lg:col-span-5 relative p-6 rounded-2xl flex flex-col border cursor-pointer transition-all duration-300
                 ${activeCard === 'STANDARD' 
                     ? 'bg-white border-blue-500 ring-4 ring-blue-500/10 shadow-xl scale-[1.01] z-10' 
                     : 'bg-white border-slate-200 hover:border-blue-200 shadow-sm opacity-80 hover:opacity-100 hover:scale-[1.005]'
@@ -429,7 +454,7 @@ export const StepPorownanie = () => {
           {/* OPTION B: PRIME PLUS (OFFER) */}
           <div 
             onClick={handleSelectPrime}
-            className={`lg:col-span-7 relative rounded-md flex flex-col border-2 cursor-pointer transition-all duration-300 overflow-visible
+            className={`lg:col-span-7 relative rounded-2xl flex flex-col border cursor-pointer transition-all duration-300 overflow-visible
                 ${activeCard === 'PRIME' 
                     ? 'bg-gradient-to-b from-white to-[#FFF9E5] border-amber-400 ring-4 ring-amber-400/20 shadow-2xl scale-[1.01] z-10' 
                     : 'bg-white border-slate-200 hover:border-amber-200 shadow-sm opacity-80 hover:opacity-100 hover:scale-[1.005]'
@@ -541,13 +566,17 @@ export const StepPorownanie = () => {
       </div>
 
       {/* 3. KPI DASHBOARD */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden relative">
-          <div className={`absolute top-0 left-0 w-full h-1 ${activeCard === 'PRIME' ? 'bg-gradient-to-r from-amber-300 via-yellow-500 to-amber-300' : 'bg-blue-500'}`}></div>
-          
-          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
-              <PieChart className="text-slate-400" /> Symulacja Wyniku Finansowego ({activeCard === 'PRIME' ? 'Eliton Prime™ PLUS' : 'Eliton Prime™'})
-          </h3>
-          
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-5 py-3 flex items-center justify-between border-b border-slate-700 bg-slate-900 rounded-t-2xl">
+              <div className="flex items-center gap-2.5">
+                  <PieChart className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="text-[11px] font-black uppercase tracking-widest text-white">Symulacja Wyniku Finansowego</span>
+              </div>
+              <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${activeCard === 'PRIME' ? 'text-amber-400 bg-amber-900/60' : 'text-blue-300 bg-blue-900/60'}`}>
+                  {activeCard === 'PRIME' ? 'Eliton Prime™ PLUS' : 'Eliton Prime™'}
+              </span>
+          </div>
+          <div className="p-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-center">
               
               {/* LEFT: COSTS BREAKDOWN */}
@@ -635,6 +664,7 @@ export const StepPorownanie = () => {
                   )}
               </div>
           </div>
+          </div>{/* /p-6 */}
       </div>
 
       {/* 3.5. COST BRIDGE CHART */}
@@ -649,54 +679,97 @@ export const StepPorownanie = () => {
       />
 
       {/* 4. TOP GAINERS TABLE (Excludes Students) */}
-      <Card title={`Top 5 - Największy potencjał oszczędności`} icon={<Users />}>
-          <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                  <thead>
-                      <tr className="border-b border-slate-100 text-xs text-slate-400 uppercase">
-                          <th className="py-3 px-4 font-semibold">Pracownik</th>
-                          <th className="py-3 px-4 font-semibold text-right">Koszt Obecny</th>
-                          <th className="py-3 px-4 font-semibold text-right text-emerald-600">Potencjał Oszcz.</th>
-                          <th className="py-3 px-4 font-semibold">% Redukcji</th>
-                      </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-50">
-                      {topSavers.length === 0 ? (
-                          <tr><td colSpan={4} className="py-4 text-center text-slate-400 text-xs italic">Brak pracowników spełniających kryteria.</td></tr>
-                      ) : (
-                          topSavers.map((w, i) => {
-                              const percent = ((w.oszczednosc / w.standard.kosztPracodawcy) * 100).toFixed(1);
-                              return (
-                                  <tr key={i} className="hover:bg-slate-50 transition-colors">
-                                      <td className="py-3 px-4">
-                                          <div className="font-bold text-slate-700">{w.pracownik.imie} {w.pracownik.nazwisko}</div>
-                                          <div className="text-[10px] text-slate-400">{w.pracownik.typUmowy}</div>
-                                      </td>
-                                      <td className="py-3 px-4 text-right text-slate-500 tabular-nums">
-                                          {formatPLN(w.standard.kosztPracodawcy)}
-                                      </td>
-                                      <td className="py-3 px-4 text-right font-bold text-emerald-600 tabular-nums bg-emerald-50/30 rounded-lg">
-                                          +{formatPLN(w.oszczednosc)}
-                                      </td>
-                                      <td className="py-3 px-4">
-                                          <div className="flex items-center gap-2">
-                                              <div className="flex-1 h-3.5 bg-slate-100 rounded-sm overflow-hidden min-w-[60px]">
-                                                  <div
-                                                      className="h-full bg-emerald-400 rounded-sm transition-all duration-700"
-                                                      style={{ width: `${percent}%` }}
-                                                  />
-                                              </div>
-                                              <span className="text-xs font-bold text-slate-600 w-10 text-right tabular-nums">{percent}%</span>
-                                          </div>
-                                      </td>
-                                  </tr>
-                              );
-                          })
-                      )}
-                  </tbody>
-              </table>
+      {/* TOP 5 — McKinsey-style ranking card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        {/* Header */}
+        <div className="px-5 py-3 flex items-center justify-between border-b border-slate-700 bg-slate-900 rounded-t-2xl">
+          <div className="flex items-center gap-2.5">
+            <Users className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="text-[11px] font-black uppercase tracking-widest text-white">
+              Ranking Potencjału Oszczędności
+            </span>
           </div>
-      </Card>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-900/60 px-2 py-0.5 rounded">
+            Top 5 Pracowników
+          </span>
+        </div>
+
+        {/* Column headers */}
+        <div className="grid grid-cols-[2fr_1fr_1fr_1.4fr] border-b border-slate-700 bg-slate-900">
+          <div className="py-2 px-4 text-[9px] font-black uppercase tracking-widest text-slate-300">Pracownik</div>
+          <div className="py-2 px-4 text-[9px] font-black uppercase tracking-widest text-slate-300 text-right">Koszt Obecny</div>
+          <div className="py-2 px-4 text-[9px] font-black uppercase tracking-widest text-emerald-400 text-right">Oszczędność</div>
+          <div className="py-2 px-4 text-[9px] font-black uppercase tracking-widest text-slate-300">% Redukcji</div>
+        </div>
+
+        {/* Rows */}
+        <div className="divide-y divide-slate-100">
+          {topSavers.length === 0 ? (
+            <div className="py-6 text-center text-slate-400 text-xs italic">
+              Brak pracowników spełniających kryteria.
+            </div>
+          ) : (
+            topSavers.map((w, i) => {
+              const percent = ((w.oszczednosc / w.standard.kosztPracodawcy) * 100);
+              const percentStr = percent.toFixed(1);
+              const rankColors = ['border-l-amber-400', 'border-l-slate-400', 'border-l-orange-700', 'border-l-emerald-500', 'border-l-emerald-500'];
+              const rankBg = ['bg-amber-400 text-slate-900', 'bg-slate-400 text-white', 'bg-orange-700 text-white', 'bg-emerald-600 text-white', 'bg-emerald-600 text-white'];
+              return (
+                <div
+                  key={i}
+                  className={`grid grid-cols-[2fr_1fr_1fr_1.4fr] items-center border-l-4 ${rankColors[i] ?? 'border-l-slate-200'} hover:bg-slate-50 transition-colors`}
+                >
+                  {/* Name + rank */}
+                  <div className="py-3 px-4 flex items-center gap-2.5">
+                    <span className={`w-5 h-5 rounded-sm flex items-center justify-center text-[10px] font-black shrink-0 ${rankBg[i] ?? 'bg-slate-200 text-slate-700'}`}>
+                      {i + 1}
+                    </span>
+                    <div>
+                      <div className="font-bold text-slate-800 text-sm leading-tight">{w.pracownik.imie} {w.pracownik.nazwisko}</div>
+                      <div className="text-[10px] text-slate-400 uppercase tracking-wide mt-0.5">{w.pracownik.typUmowy}</div>
+                    </div>
+                  </div>
+                  {/* Current cost */}
+                  <div className="py-3 px-4 text-right text-sm text-slate-500 tabular-nums font-medium">
+                    {formatPLN(w.standard.kosztPracodawcy)}
+                  </div>
+                  {/* Savings */}
+                  <div className="py-3 px-4 text-right font-black text-emerald-600 tabular-nums text-sm">
+                    +{formatPLN(w.oszczednosc)}
+                  </div>
+                  {/* Bar */}
+                  <div className="py-3 px-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-4 bg-slate-100 overflow-hidden min-w-[50px]">
+                        <div
+                          className="h-full bg-emerald-400 transition-all duration-700"
+                          style={{ width: `${Math.max(4, percent)}%`, minWidth: '4px' }}
+                        />
+                      </div>
+                      <span className="text-xs font-black text-slate-700 w-10 text-right tabular-nums">{percentStr}%</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Footer — total savings */}
+        {topSavers.length > 0 && (() => {
+          const totalSavings = topSavers.reduce((s, w) => s + w.oszczednosc, 0);
+          return (
+            <div className="px-5 py-3 flex items-center justify-between border-t border-emerald-200 bg-emerald-50">
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">
+                Łączny Potencjał Top 5
+              </span>
+              <span className="text-xl font-black text-emerald-700 tabular-nums">
+                +{formatPLN(totalSavings)}<span className="text-sm font-semibold text-emerald-600 ml-1">/ rok</span>
+              </span>
+            </div>
+          );
+        })()}
+      </div>
 
       {/* 5. DISCLAIMER */}
       <Alert icon={<Info />}>

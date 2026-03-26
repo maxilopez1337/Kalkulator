@@ -75,7 +75,7 @@ export const CompanyProvider = ({ children }: { children?: ReactNode }) => {
           }
         };
       } catch (e) {
-        console.warn('Failed to parse saved config, falling back to default', e);
+        if (import.meta.env.DEV) console.warn('Failed to parse saved config, falling back to default', e);
         return DEFAULT_CONFIG;
       }
     }

@@ -1,8 +1,10 @@
 
 import React, { useMemo, useState } from 'react';
 import { formatPLN } from '../../../../shared/utils/formatters';
-import { TableContainer, Thead, Tbody, Tfoot, Tr, ThGroup, ThRight, ThCenter, Td, TdRight, TdCenter } from '../../../../common/TableUI';
+import { TableContainer, Thead, Tbody, Tfoot, Tr, ThGroup, ThRight, ThCenter, Td, TdRight, TdCenter } from '../../../../shared/ui/TableUI';
 import { WynikPracownika } from '../../../../entities/calculation/model';
+import { TableToolbar } from './TableToolbar';
+import { CollapsedGroupBar } from './CollapsedGroupBar';
 
 // Helper: Zaokrąglenie do 2 miejsc po przecinku (grosze)
 const round = (val: number) => Math.round(val * 100) / 100;
@@ -62,53 +64,8 @@ export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
 
     return (
         <div className="w-full h-full flex flex-col min-h-0">
-
-            {/* ── D365 PIVOT TOOLBAR ──────────────────────────────────── */}
-            <div className="flex items-stretch bg-[#f8f9fa] border-b border-[#edebe9] flex-shrink-0 h-[34px]">
-                <span className="flex items-center text-[11px] font-semibold text-[#a19f9d] uppercase tracking-widest px-3 select-none border-r border-[#edebe9]">Widok</span>
-                <button
-                    onClick={() => setCompact(false)}
-                    className={`flex items-center gap-1 px-4 h-full text-[12px] font-medium border-b-2 transition-all ${
-                        !compact ? 'border-[#0078d4] text-[#0078d4]' : 'border-transparent text-[#605e5c] hover:text-[#323130] hover:border-[#c8c6c4]'
-                    }`}
-                >
-                    <span className="text-[10px]">⊞</span> Komfort
-                </button>
-                <button
-                    onClick={() => setCompact(true)}
-                    className={`flex items-center gap-1 px-4 h-full text-[12px] font-medium border-b-2 transition-all ${
-                        compact ? 'border-[#0078d4] text-[#0078d4]' : 'border-transparent text-[#605e5c] hover:text-[#323130] hover:border-[#c8c6c4]'
-                    }`}
-                >
-                    <span className="text-[10px]">≡</span> Kompakt
-                </button>
-                <div className="flex-1" />
-                <button
-                    onClick={() => setExp(allOpen ? ALL_CLOSED : ALL_OPEN)}
-                    className="flex items-center px-4 h-full text-[12px] text-[#0078d4] hover:text-[#106ebe] hover:underline transition-colors whitespace-nowrap border-l border-[#edebe9]"
-                >
-                    {allOpen ? '← Zwiń wszystkie' : '→ Rozwiń wszystkie'}
-                </button>
-            </div>
-
-            {/* ── D365 FILTER BAR: collapsed group tags ───────────────── */}
-            {collapsedGroups.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1.5 px-3 py-1.5 bg-white border-b border-[#edebe9] flex-shrink-0">
-                    <span className="text-[11px] text-[#a19f9d] font-medium select-none mr-1">Zwinięte:</span>
-                    {collapsedGroups.map(g => (
-                        <button
-                            key={g.key}
-                            onClick={() => tog(g.key)}
-                            className="inline-flex items-center gap-1.5 h-[22px] px-2.5 bg-[#deecf9] text-[#0078d4] border border-[#c7e0f4] text-[11px] font-medium hover:bg-[#c7e0f4] active:bg-[#b3d6f0] transition-colors whitespace-nowrap"
-                            title="Kliknij aby rozwinąć"
-                        >
-                            {g.label}
-                            <span className="opacity-60 tabular-nums">{formatPLN(g.value)}</span>
-                            <span className="opacity-40 text-[9px] ml-0.5">▸</span>
-                        </button>
-                    ))}
-                </div>
-            )}
+            <TableToolbar compact={compact} onCompact={setCompact} allOpen={allOpen} onToggleAll={() => setExp(allOpen ? ALL_CLOSED : ALL_OPEN)} />
+            <CollapsedGroupBar groups={collapsedGroups} onExpand={key => tog(key as GroupKey)} />
 
             <TableContainer className="flex-1 min-h-0 bg-white">
             <Thead>
@@ -181,15 +138,15 @@ export const StandardTable = ({ data }: { data: WynikPracownika[] }) => {
                     return (
                         <Tr key={w.pracownik.id} className={`transition-colors group ${idx % 2 === 1 ? 'bg-slate-50/40' : 'bg-white'} hover:bg-[#f0f7ff]`}>
                             {/* Sticky Columns */}
-                            <Td className="text-center bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 text-slate-400 font-mono text-[10px]">{idx + 1}</Td>
-                            <Td className="bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 pl-4">
+                            <Td className={`text-center bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 text-slate-400 font-mono text-[10px] ${rowPy}`}>{idx + 1}</Td>
+                            <Td className={`bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 pl-4 ${rowPy}`}>
                                 <div className="font-semibold text-slate-900 text-sm truncate max-w-[120px] md:max-w-[200px]" title={`${w.pracownik.imie} ${w.pracownik.nazwisko}`}>
                                     {w.pracownik.imie} {w.pracownik.nazwisko}
                                 </div>
                             </Td>
 
                             {/* DANE FINANSOWE */}
-                            <Td className="text-center">
+                            <Td className={`text-center ${rowPy}`}>
                                 <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-wide border ${w.pracownik.typUmowy==='UOP' ? 'bg-white border-blue-200 text-blue-700' : 'bg-white border-amber-200 text-amber-700'}`}>
                                     {w.pracownik.typUmowy}
                                 </span>

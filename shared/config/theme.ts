@@ -1,5 +1,5 @@
 
-import { COLORS } from '../shared/config/colors';
+import { COLORS } from './colors';
 
 export const theme = {
   colors: {

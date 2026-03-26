@@ -1,10 +1,10 @@
 
 import React, { useMemo, useRef } from 'react';
-import { ArrowRight, FileText, Database, Settings, Clock, Users, Building, Calculator, Plus, ShieldCheck, Check, Save, Layers, Download } from '../../../common/Icons';
+import { ArrowRight, FileText, Database, Settings, Clock, Users, Building, Calculator, Plus, ShieldCheck, Check, Save, Layers, Download } from '../../../shared/icons/Icons';
 import { ButtonPrimary, ButtonSecondary } from '../../../shared/ui/Button';
 import { ActionCard } from '../../../shared/ui/ActionCard';
 import { useAppStore, useConfirm } from '../../../store/AppContext';
-import { animations } from '../../../common/theme';
+import { animations } from '../../../shared/config/theme';
 import { DEFAULT_FIRMA_STATE } from '../../../store/CompanyContext';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { pl } from '../../../shared/i18n/pl';

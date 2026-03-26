@@ -23,7 +23,7 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
 
         <!-- Słupki poziome — pełna szerokość -->
         <div>
-          <!-- Model obecny -->
+          <!-- Twój obecny model-->
           <div style="margin-bottom:10px">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
               <span style="font-size:10.5px;font-weight:600;color:var(--sp-text-muted)">Model obecny</span>

@@ -1,34 +1,11 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { useCalculation, useCompany } from '../../../store/AppContext';
 import { formatPLN } from '../../../shared/utils/formatters';
-import { Users, TrendingDown, ChevronDown, ChevronUp, Check } from '../../../common/Icons';
+import { Users, TrendingDown, ChevronDown, ChevronUp, Check } from '../../../shared/icons/Icons';
+import { calcPitMiesiac } from '../../tax-engine/logic/pit';
 
 // ─── Month names
 const MO = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Pa\u017a','Lis','Gru'];
-
-// PIT narastająco helper
-// Oblicza zaliczkę PIT dla danego miesiąca z uwzględnieniem przekroczenia progu.
-// stawki są ułamkowe (0.12, 0.32), kzp = kwota zmniejszająca zaliczkę (zł/mies).
-function calcPitMiesiac(
-    dochod: number,
-    narastajaceBefore: number,
-    p1Limit: number,
-    p1Rate: number,
-    p2Rate: number,
-    kzp: number,
-): number {
-    const b = Math.round(Math.max(0, dochod));
-    let tax: number;
-    if (narastajaceBefore < p1Limit) {
-        const space = p1Limit - narastajaceBefore;
-        tax = b <= space
-            ? b * p1Rate
-            : space * p1Rate + (b - space) * p2Rate;
-    } else {
-        tax = b * p2Rate;
-    }
-    return Math.max(0, Math.round(tax - kzp));
-}
 
 // ─── Types
 interface RaiseEntry { ebs: string; employer: string }

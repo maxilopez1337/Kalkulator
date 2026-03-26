@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check } from '../../common/Icons';
+import { Check } from '../icons/Icons';
 
 export const StepIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: string[]; onStepClick: (idx: number) => void }) => (
   <div className="w-full bg-white overflow-x-auto scrollbar-hide">

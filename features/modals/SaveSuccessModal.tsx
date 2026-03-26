@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Home, ArrowRight, Save, Download } from '../../common/Icons';
+import { Check, Home, ArrowRight, Save, Download } from '../../shared/icons/Icons';
 import { Modal } from '../../shared/ui/Modal';
 
 interface Props {

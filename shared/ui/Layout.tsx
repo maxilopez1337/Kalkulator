@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { theme } from '../../common/theme';
+import { theme } from '../config/theme';
 
 export const FormField = ({ label, children, hint }: { label: string; children?: React.ReactNode; hint?: string }) => (
   <div className="flex flex-col gap-1 w-full">

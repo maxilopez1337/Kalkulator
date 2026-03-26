@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Database, Folder, Trash, Search, X, Calculator, Users, Wallet, Download } from '../../common/Icons';
+import { Database, Folder, Trash, Search, X, Calculator, Users, Wallet, Download } from '../../shared/icons/Icons';
 import { ZapisanaKalkulacja } from '../../entities/history/model';
 import { formatPLN } from '../../shared/utils/formatters';
 import { Modal } from '../../shared/ui/Modal';

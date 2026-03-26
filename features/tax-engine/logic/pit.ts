@@ -5,6 +5,38 @@ import { Config } from '../../../entities/company/model';
 // "Końcówki kwot wynoszące mniej niż 50 groszy pomija się, a końcówki wynoszące 50 i więcej groszy podwyższa się do pełnych złotych."
 const roundTotal = (val: number) => Math.round(val);
 
+/**
+ * Miesięczna zaliczka PIT z uwzględnieniem narastającego przekroczenia progu.
+ * Używana w analizie rocznej (StepAnalizaPracownika).
+ *
+ * @param dochod           - dochód (podstawa PIT) w bieżącym miesiącu
+ * @param narastajaceBefore - suma dochodów narastająco PRZED bieżącym miesiącem
+ * @param p1Limit          - roczny limit I progu (np. 120 000)
+ * @param p1Rate           - stawka I progu jako ułamek (np. 0.12)
+ * @param p2Rate           - stawka II progu jako ułamek (np. 0.32)
+ * @param kzp              - kwota zmniejszająca zaliczkę w zł/mies (np. 300)
+ */
+export const calcPitMiesiac = (
+    dochod: number,
+    narastajaceBefore: number,
+    p1Limit: number,
+    p1Rate: number,
+    p2Rate: number,
+    kzp: number,
+): number => {
+    const b = Math.round(Math.max(0, dochod));
+    let tax: number;
+    if (narastajaceBefore < p1Limit) {
+        const space = p1Limit - narastajaceBefore;
+        tax = b <= space
+            ? b * p1Rate
+            : space * p1Rate + (b - space) * p2Rate;
+    } else {
+        tax = b * p2Rate;
+    }
+    return Math.max(0, Math.round(tax - kzp));
+};
+
 export const obliczPit = (podstawa: number, pit2Kwota: string, ulgaMlodych: boolean, stawkaProcentowa: number, config: Config): number => {
   if (ulgaMlodych) return 0;
   

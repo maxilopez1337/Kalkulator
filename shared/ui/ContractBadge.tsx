@@ -1,5 +1,5 @@
 import React from 'react';
-import { theme } from '../../common/theme';
+import { theme } from '../config/theme';
 
 type TypUmowy = 'UOP' | 'B2B' | 'UZ' | 'MIX' | string;
 

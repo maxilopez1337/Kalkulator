@@ -1,13 +1,14 @@
 
 import { describe, it, expect } from 'vitest';
-import { 
-    obliczWariantStandard, 
-    obliczWariantPodzial, 
+import {
+    obliczWariantStandard,
+    obliczWariantPodzial,
     znajdzBruttoDlaNetto,
     DEFAULT_CONFIG
 } from '../index';
 import { obliczPit } from '../logic/pit';
 import { obliczZusPracownik, obliczZusPracodawca } from '../logic/zus';
+import type { CalcParams } from '../logic/grossUp';
 import { Pracownik } from '../../../entities/employee/model';
 
 // Konfiguracja do testów (zamrożona kopia)
@@ -73,7 +74,7 @@ describe('Silnik Podatkowy 2025 (Features Module)', () => {
             // Docelowe Netto dla 4806 Brutto (2026) ~ 3605.85
             const targetNetto = 3605.85; 
             
-            const params = {
+            const params: CalcParams = {
                 typUmowy: 'UOP',
                 trybSkladek: 'PELNE',
                 choroboweAktywne: true,

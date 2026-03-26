@@ -1,4 +1,7 @@
 
+/** Zaokrąglenie do groszy — zgodne z algorytmem ZUS Płatnik */
+export const roundCurrency = (val: number) => Math.round(val * 100) / 100;
+
 export const formatPLN = (value: number | undefined) => {
   if (value === undefined || value === null || isNaN(value)) return '0,00 zł';
   return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);

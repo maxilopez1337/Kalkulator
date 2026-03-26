@@ -22,18 +22,19 @@ export const EmployeeProvider = ({ children }: { children?: ReactNode }) => {
       if (!saved) return [];
       const storedVersion = localStorage.getItem(`${EMPLOYEES_KEY}_v`);
       if (storedVersion && Number(storedVersion) !== SCHEMA_VERSION) {
-        console.warn('Employees schema version mismatch, clearing stored employees');
+        if (import.meta.env.DEV) console.warn('Employees schema version mismatch, clearing stored employees');
         return [];
       }
-      const parsed: Pracownik[] = JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) return [];
       // Migration v1: pracownicy UZ z starym defaultem 840 → 1680
-      return parsed.map(p =>
-        (p.typUmowy === 'UZ' || p.typUmowy === 'MIX') && p.nettoZasadnicza === STARY_DEFAULT_UZ
+      return (parsed as Pracownik[]).map(p =>
+        p.typUmowy === 'UZ' && p.nettoZasadnicza === STARY_DEFAULT_UZ
           ? { ...p, nettoZasadnicza: NOWY_DEFAULT_UZ }
           : p
       );
     } catch {
-      console.warn('Failed to load employees from localStorage');
+      if (import.meta.env.DEV) console.warn('Failed to load employees from localStorage');
       return [];
     }
   });

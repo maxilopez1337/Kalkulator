@@ -5,7 +5,7 @@ export const generatePage08V3 = (firma: Firma, date: string, sector: string) => 
 <div class="page">
 
   ${generatePageHeaderV3('Proces i Warunki', '09. Proces i warunki', 9, 11, date)}
-<div class="page-body" style="padding:0 24px 40px;display:flex;flex-direction:column">
+<div class="page-body" style="padding:0 24px 62px;display:flex;flex-direction:column">
 
     <!-- GÓRNA CZĘŚĆ: 2 kolumny — Harmonogram | Warunki -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);flex-shrink:0">
@@ -54,36 +54,36 @@ export const generatePage08V3 = (firma: Firma, date: string, sector: string) => 
       </div>
 
       <!-- PRAWA: Warunki współpracy -->
-      <div style="background:var(--sp-gray);padding:12px 20px;display:flex;flex-direction:column;gap:8px">
-        <div style="font-size:13px;font-weight:700;color:var(--sp-navy);margin-bottom:4px">Warunki współpracy</div>
+      <div style="background:var(--sp-gray);padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:13px;font-weight:700;color:var(--sp-navy);margin-bottom:2px">Warunki współpracy</div>
 
         <!-- Umowa + Wypowiedzenie -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
-          <div style="background:var(--white);padding:14px 16px">
-            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-text-muted);margin-bottom:6px">Umowa</div>
-            <div style="font-family:var(--font-serif);font-size:18px;color:var(--sp-navy);line-height:1.2">Czas<br>nieokreślony</div>
+          <div style="background:var(--white);padding:12px 14px">
+            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-text-muted);margin-bottom:5px">Umowa</div>
+            <div style="font-family:var(--font-serif);font-size:20px;color:var(--sp-navy);line-height:1.2">Czas<br>nieokreślony</div>
           </div>
-          <div style="background:var(--white);padding:14px 16px">
-            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-text-muted);margin-bottom:6px">Wypowiedzenie</div>
-            <div style="font-family:var(--font-serif);font-size:18px;color:var(--sp-navy);line-height:1.2">1<br>miesiąc</div>
+          <div style="background:var(--white);padding:12px 14px">
+            <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-text-muted);margin-bottom:5px">Wypowiedzenie</div>
+            <div style="font-family:var(--font-serif);font-size:20px;color:var(--sp-navy);line-height:1.2">1<br>miesiąc</div>
           </div>
         </div>
 
         <!-- Opłata -->
-        <div style="background:rgba(176,144,32,.08);border-left:3px solid var(--sp-gold);padding:14px 16px">
+        <div style="background:rgba(176,144,32,.08);border-left:3px solid var(--sp-gold);padding:12px 14px">
           <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:5px">Wartość dla firmy</div>
-          <div style="font-size:13px;font-weight:600;color:var(--sp-navy);margin-bottom:3px">Opłata od wartości uruchomionych świadczeń</div>
+          <div style="font-size:13px;font-weight:600;color:var(--sp-navy);margin-bottom:4px">Opłata od wartości uruchomionych świadczeń</div>
           <div style="font-size:11px;color:var(--sp-text-muted);line-height:1.55">Naliczana od faktycznej wartości wdrożonych świadczeń — nie od deklarowanych oszczędności.</div>
         </div>
 
         <!-- Polisa -->
-        <div style="background:var(--white);border-left:3px solid var(--sp-navy);padding:14px 16px">
+        <div style="background:var(--white);border-left:3px solid var(--sp-navy);padding:12px 14px;flex:1;display:flex;flex-direction:column">
           <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-text-muted);margin-bottom:5px">Bezpieczeństwo</div>
           <div style="font-size:13px;font-weight:600;color:var(--sp-navy)">Polisa D&amp;O Leadenhall — do 30 mln zł</div>
-          <div style="font-size:11px;color:var(--sp-text-muted);margin-top:3px;line-height:1.5">Ochrona Zarządu, prokurentów i głównych księgowych w zakresie odpowiedzialności cywilnej.</div>
-          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-navy);margin-bottom:4px">Warunki umowne · Eliton Prime™ PLUS</div>
-            <div style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.6">W przypadku wyboru Polisy D&amp;O jako elementu pakietu <strong style="color:var(--sp-navy)">Eliton Prime™ PLUS</strong>, umowa ramowa współpracy zawierana jest na okres <strong style="color:var(--sp-navy)">12 miesięcy</strong>, z możliwością przedłużenia na kolejne okresy roczne. Wcześniejsze rozwiązanie umowy przez Zamawiającego skutkuje obowiązkiem <strong style="color:var(--sp-navy)">zwrotu pełnej składki rocznej za polisę</strong> — Stratton reguluje zobowiązanie ubezpieczeniowe z góry za cały rok polisowy.</div>
+          <div style="font-size:11px;color:var(--sp-text-muted);margin-top:4px;line-height:1.5">Ochrona Zarządu, prokurentów i głównych księgowych w zakresie odpowiedzialności cywilnej.</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-navy);margin-bottom:6px">Warunki umowne · Eliton Prime™ PLUS</div>
+            <div style="font-size:10.5px;color:var(--sp-text-muted);line-height:1.65">W przypadku wyboru Polisy D&amp;O jako elementu pakietu <strong style="color:var(--sp-navy)">Eliton Prime™ PLUS</strong>, umowa ramowa współpracy zawierana jest na okres <strong style="color:var(--sp-navy)">12 miesięcy</strong>, z możliwością przedłużenia na kolejne okresy roczne. Wcześniejsze rozwiązanie umowy przez Zamawiającego skutkuje obowiązkiem <strong style="color:var(--sp-navy)">zwrotu pełnej składki rocznej za polisę</strong> — Stratton reguluje zobowiązanie ubezpieczeniowe z góry za cały rok polisowy.</div>
           </div>
         </div>
 
@@ -103,10 +103,16 @@ export const generatePage08V3 = (firma: Firma, date: string, sector: string) => 
           <div style="font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sp-gold);margin:3px 0 10px">Dyrektor ds. Wdrożeń · HR i Payroll</div>
           <p style="font-size:12px;color:var(--sp-text-muted);line-height:1.65;margin-bottom:10px;max-width:560px">Wieloletnia praktyka w zarządzaniu procesami płacowymi. Dba o Precyzję Operacyjną — od konfiguracji systemów po bezbłędne rozliczenia. Zapewnia spokój działom HR i księgowości klienta.</p>
           <div style="display:flex;gap:24px">
-            <span style="font-size:10px;color:var(--sp-text-muted)">Tydzień 1–2: <strong style="color:var(--sp-navy)">Audyt, uchwała Zarządu, aneksy, dokumentacja EBS</strong></span>
+            <span style="font-size:10px;color:var(--sp-text-muted)">Tydzień 1–2: <strong style="color:var(--sp-navy)">Audyt, Akutalizacja Regulaminu wynagradzania, aneksy, dokumentacja EBS</strong></span>
             <span style="font-size:10px;color:var(--sp-text-muted)">Od tygodnia 3+: <strong style="color:var(--sp-navy)">Raporty oszczędności, monitoring legislacyjny</strong></span>
           </div>
         </div>
+      </div>
+
+      <!-- BLOK — Cytat Agnieszki -->
+      <div style="padding:18px 28px 20px;border-left:4px solid var(--sp-gold);border-top:1px solid var(--border);background:var(--sp-gray);flex:1">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:10px">Słowo od opiekunki Twojego wdrożenia</div>
+        <p style="font-family:var(--font-serif);font-size:14.5px;color:var(--sp-navy);line-height:1.8;font-style:italic;margin:0">"Zadbam o to, żebyś Ty i Twój dział HR mieli pełen spokój — każdy aneks, każde rozliczenie i każdy raport oszczędności trafi do Ciebie gotowy, bezbłędny i na czas."</p>
       </div>
 
     </div>

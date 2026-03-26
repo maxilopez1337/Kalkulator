@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Settings, X, Refresh, Wallet, ShieldCheck, FileText, Layers, Save, Calculator } from '../../common/Icons';
+import { Settings, X, Refresh, Wallet, ShieldCheck, FileText, Layers, Save, Calculator } from '../../shared/icons/Icons';
 import { ButtonPrimary, ButtonSecondary } from '../../shared/ui/Button';
 import { Badge } from '../../shared/ui/Badge';
 import { Modal } from '../../shared/ui/Modal';

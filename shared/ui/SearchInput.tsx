@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X } from '../../common/Icons';
+import { Search, X } from '../icons/Icons';
 
 interface SearchInputProps {
   value: string;

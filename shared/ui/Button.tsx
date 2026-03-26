@@ -1,5 +1,5 @@
 import React from 'react';
-import { theme } from '../../common/theme';
+import { theme } from '../config/theme';
 
 export type ButtonProps = React.ComponentProps<'button'> & {
     icon?: React.ReactNode;

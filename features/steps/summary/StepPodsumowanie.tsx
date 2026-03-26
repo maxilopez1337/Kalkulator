@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { TrendingUp, LayoutGrid, List, Save, ArrowRight, FileText, Mail, Printer, Check, ShieldCheck, Download, PieChart, Wallet, Building, Calculator, Info, TrendingDown } from '../../../common/Icons';
+import { TrendingUp, LayoutGrid, List, Save, ArrowRight, FileText, Mail, Printer, Check, ShieldCheck, Download, PieChart, Wallet, Building, Calculator, Info, TrendingDown } from '../../../shared/icons/Icons';
 import { FormField } from '../../../shared/ui/Layout';
 import { Input, Select } from '../../../shared/ui/Input';
 import { ButtonPrimary, ButtonSecondary } from '../../../shared/ui/Button';
@@ -48,7 +48,7 @@ const DonutChart = ({
     const scaledArcs = bumpedArcs.map(a => (a / bumpedTotal) * circumference);
 
     return (
-        <div className="flex flex-col lg:flex-row items-center gap-8 bg-white p-6 rounded-md border border-[#edebe9] shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)]">
+        <div className="flex flex-col lg:flex-row items-center gap-8 bg-white p-6">
             
             {/* CHART AREA */}
             <div className="relative w-64 h-64 flex-shrink-0">
@@ -351,7 +351,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     
                     {/* A. PAST (STANDARD) - Neutral/Grey Theme */}
-                    <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group">
+                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group">
                         <div className="flex justify-between items-start mb-2">
                             <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Koszt Obecny</div>
                             <div className="p-1.5 bg-white rounded-lg text-slate-400 border border-slate-200"><Building className="w-4 h-4" /></div>
@@ -364,9 +364,9 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                     </div>
                     
                     {/* B. FUTURE (ELITON) - Professional/Blue Theme */}
-                    <div className="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-blue-500 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group hover:shadow-md transition-shadow">
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 border-l-4 border-l-blue-500 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group hover:shadow-md transition-shadow">
                         <div className="flex justify-between items-start mb-2">
-                            <div className="text-xs font-bold text-blue-700 uppercase tracking-wider">Nowy Koszt</div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Nowy Koszt</div>
                             <div className="flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded text-[10px] font-bold text-blue-600">
                                 <TrendingDown className="w-3 h-3" />
                                 <span>{costReductionPercent.toFixed(1)}%</span>
@@ -379,9 +379,9 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                     </div>
 
                     {/* C. RESULT (SAVINGS) */}
-                    <div className="bg-white border border-[#edebe9] border-l-4 border-l-emerald-500 p-5 rounded-md flex flex-col justify-between h-full">
+                    <div className="bg-white border border-slate-200 border-l-4 border-l-emerald-500 p-5 rounded-2xl flex flex-col justify-between h-full">
                         <div className="flex justify-between items-start mb-2">
-                            <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Oszczędność Roczna</div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Oszczędność Roczna</div>
                             <div className="p-1.5 bg-emerald-50 rounded-md text-emerald-600"><TrendingUp className="w-4 h-4" /></div>
                         </div>
                         <div>
@@ -396,20 +396,16 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                 </div>
 
                 {/* 2. STRUKTURA KOSZTU (DONUT CHART) */}
-                <div>
-                    <div className="flex items-center justify-between mb-4 px-1">
-                        <div>
-                            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                                <PieChart className="text-blue-600" /> Struktura Nowego Kosztu
-                            </h3>
-                            <p className="text-sm text-slate-500">Analiza efektywności alokacji środków w Modelu Eliton Prime™</p>
-                        </div>
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div className="px-5 py-3 flex items-center gap-2.5 border-b border-slate-700 bg-slate-900 rounded-t-2xl">
+                        <PieChart className="w-4 h-4 text-slate-400 shrink-0" />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-white">Struktura Nowego Kosztu</span>
+                        <span className="ml-auto text-[10px] text-slate-400 hidden sm:block">Eliton Prime™ — alokacja kosztów</span>
                     </div>
-                    
                     <DonutChart 
                         data={chartData} 
-                        totalReference={kpiStandardKoszt} // Ważne: 100% to koszt stary
-                        savingsValue={kpiOszczednoscMies} // Wartość oszczędności do wyświetlenia jako dopełnienie
+                        totalReference={kpiStandardKoszt}
+                        savingsValue={kpiOszczednoscMies}
                     />
                 </div>
 
@@ -417,10 +413,13 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col mt-2">
                     
                     {/* Header Filters */}
-                    <div className="px-6 py-5 border-b border-slate-100 bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                            <h3 className="text-base font-bold text-slate-900">Symulacja Szczegółowa</h3>
-                            <div className="text-xs text-slate-500 mt-0.5">Porównanie kosztów i wyników finansowych</div>
+                    <div className="px-5 py-3 border-b border-slate-700 bg-slate-900 rounded-t-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div className="flex items-center gap-2.5">
+                            <Calculator className="w-4 h-4 text-slate-400 shrink-0" />
+                            <div>
+                                <div className="text-[11px] font-black uppercase tracking-widest text-white">Symulacja Szczegółowa</div>
+                                <div className="text-[10px] text-slate-400 mt-0.5">Porównanie kosztów i wyników finansowych</div>
+                            </div>
                         </div>
                         
                         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
@@ -509,7 +508,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
             <div className="xl:col-span-4 flex flex-col gap-6 sticky top-6">
                 
                 {/* PRIMARY ACTIONS CARD */}
-                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-md">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
                         <FileText className="text-slate-400" />
                         <span>Dokumentacja</span>
@@ -587,7 +586,7 @@ export const StepPodsumowanie = ({ onGoToDashboard }: StepPodsumowanieProps) => 
                 </div>
 
                 {/* SECONDARY ACTIONS */}
-                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
                         <Save className="text-slate-400" />
                         <span>Archiwizacja</span>

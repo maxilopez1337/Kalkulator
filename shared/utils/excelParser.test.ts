@@ -1,7 +1,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { parseExcelData } from './excelParser';
-import { DEFAULT_CONFIG } from '../features/tax-engine/constants';
+import { DEFAULT_CONFIG } from '../../features/tax-engine/constants';
 
 describe('Excel Parser v2.6.1 Logic', () => {
     

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useAppStore } from '../../../../store/AppContext';
 import { obliczWariantStandard, obliczWariantPodzial } from '../../../tax-engine';
 import { Card } from '../../../../shared/ui/Card';
-import { TrendingUp, Users, UserCheck } from '../../../../common/Icons';
+import { TrendingUp, Users, UserCheck } from '../../../../shared/icons/Icons';
 import { formatPLN } from '../../../../shared/utils/formatters';
 
 export const RaiseSimulationMatrix = () => {

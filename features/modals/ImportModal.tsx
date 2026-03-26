@@ -1,9 +1,9 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Pracownik } from '../../entities/employee/model';
-import { Plus, ArrowDown, X, Trash, FileText, Check, ArrowRight, Filter } from '../../common/Icons';
+import { Plus, ArrowDown, X, Trash, FileText, Check, ArrowRight, Filter } from '../../shared/icons/Icons';
 import { useEmployees, useCompany, useConfirm } from '../../store/AppContext';
-import { parseExcelData, ImportRow } from '../../utils/excelParser';
+import { parseExcelData, ImportRow } from '../../shared/utils/excelParser';
 import { obliczWiek } from '../../shared/utils/dates';
 import { Modal } from '../../shared/ui/Modal';
 import { excelGenerator } from '../../services/excelGenerator';
@@ -68,7 +68,7 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
             
             let newRaw = { ...currentRow.raw };
             if (field === 'dataUrodzenia') {
-                const age = obliczWiek(value);
+                const age = obliczWiek(value as string);
                 newRaw.wiek = age;
             }
 

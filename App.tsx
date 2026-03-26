@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { StepIndicator } from './shared/ui/StepIndicator';
-import { Menu, X, Home, Zap, Building, ShieldCheck, Check, Info, Calculator, Settings, Database, FileText } from './common/Icons';
+import { Menu, X, Home, Zap, Building, ShieldCheck, Calculator, Settings, Database, FileText } from './shared/icons/Icons';
 import { ImportModal } from './features/modals/ImportModal';
 import { ConfigModal } from './features/modals/ConfigModal';
 import { DatabaseModal } from './features/modals/DatabaseModal';
@@ -15,37 +15,10 @@ import { StepPorownanie } from './features/steps/comparison/StepPorownanie';
 import { StepPodsumowanie } from './features/steps/summary/StepPodsumowanie';
 import { StepAnalizaPracownika } from './features/steps/simulation/StepAnalizaPracownika';
 import { useAppStore } from './store/AppContext';
-import { theme } from './common/theme';
+import { theme } from './shared/config/theme';
 import { DEFAULT_FIRMA_STATE } from './store/CompanyContext';
-
-// Toast Component Local
-interface ToastNotificationProps {
-    notification: { type: 'success' | 'error' | 'info'; message: string } | null;
-    onClose: () => void;
-}
-const ToastNotification = ({ notification, onClose }: ToastNotificationProps) => {
-    if (!notification) return null;
-
-    const isSuccess = notification.type === 'success';
-    const isError = notification.type === 'error';
-    
-    return (
-        <div className={`fixed bottom-6 right-6 z-[100] max-w-sm w-full bg-white rounded-lg shadow-2xl border-l-4 overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300 flex items-center p-4 gap-3 ${isSuccess ? 'border-emerald-500' : isError ? 'border-rose-500' : 'border-blue-500'}`}>
-            <div className={`p-2 rounded-full flex-shrink-0 ${isSuccess ? 'bg-emerald-100 text-emerald-600' : isError ? 'bg-rose-100 text-rose-600' : 'bg-blue-100 text-blue-600'}`}>
-                {isSuccess ? <Check className="w-5 h-5" /> : isError ? <X className="w-5 h-5" /> : <Info className="w-5 h-5" />}
-            </div>
-            <div className="flex-1">
-                <h4 className={`text-sm font-bold ${isSuccess ? 'text-emerald-900' : isError ? 'text-rose-900' : 'text-blue-900'}`}>
-                    {isSuccess ? 'Sukces' : isError ? 'Błąd' : 'Informacja'}
-                </h4>
-                <p className="text-xs text-slate-600 mt-0.5">{notification.message}</p>
-            </div>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1">
-                <X className="w-4 h-4" />
-            </button>
-        </div>
-    );
-};
+import { Toast } from './shared/ui/Toast';
+import { ErrorBoundary } from './shared/ui/ErrorBoundary';
 
 const App = () => {
   // Start on Dashboard (-1), Simulation is -2
@@ -68,7 +41,10 @@ const App = () => {
         'Model Docelowy',
         'Business Case',
         'Podsumowanie',
-        'Sym. Pracownika'    ];  // Detect mobile & auto-configure sidebar
+        'Sym. Pracownika'
+  ];
+
+  // Detect mobile & auto-configure sidebar
   useEffect(() => {
     const handleResize = () => {
         const mobile = window.innerWidth < 1024; // lg breakpoint
@@ -115,7 +91,9 @@ const App = () => {
           case 2: return <StepWynikStandard />;
           case 3: return <StepWynikPodzial />;
           case 4: return <StepPorownanie />;
-          case 5: return <StepPodsumowanie onGoToDashboard={handleCloseSession} />;            case 6: return <StepAnalizaPracownika />;          default: return null;
+          case 5: return <StepPodsumowanie onGoToDashboard={handleCloseSession} />;
+          case 6: return <StepAnalizaPracownika />;
+          default: return null;
       }
   };
 
@@ -296,6 +274,7 @@ const App = () => {
               flex-1 min-h-0 flex flex-col bg-[#f3f2f1] relative w-full overflow-hidden
               transition-all duration-300
           `}>
+          <ErrorBoundary>
               
               {/* Step Indicator - Visible ONLY if step >= 0 */}
               {isProcessVisible && (
@@ -329,11 +308,12 @@ const App = () => {
                   </div>
               </div>
 
+          </ErrorBoundary>
           </main>
       </div>
 
       {/* Global Toast Notification */}
-      <ToastNotification notification={notification} onClose={clearNotification} />
+      <Toast notification={notification} onClose={clearNotification} />
 
       {/* Modals */}
       <ImportModal isOpen={importModalOpen} onClose={() => setImportModalOpen(false)} />

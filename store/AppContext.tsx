@@ -119,7 +119,7 @@ export const useAppStore = () => {
           notification.notify('Nieprawidłowy format pliku JSON. Wymagana struktura kopii zapasowej.', 'error');
           return false;
       } catch (error) {
-          console.error(error);
+          if (import.meta.env.DEV) console.error(error);
           notification.notify('Błąd krytyczny podczas przetwarzania pliku.', 'error');
           return false;
       }

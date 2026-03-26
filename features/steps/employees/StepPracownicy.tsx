@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Users, Plus, Copy, Trash, FileText, Check, X, ChevronRight } from '../../../common/Icons';
+import { Users, Plus, Copy, Trash, FileText, Check, X, ChevronRight } from '../../../shared/icons/Icons';
 import { Avatar } from '../../../shared/ui/Avatar';
 import { FormField } from '../../../shared/ui/Layout';
 import { SearchInput } from '../../../shared/ui/SearchInput';

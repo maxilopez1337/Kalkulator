@@ -1,7 +1,8 @@
 
 import React, { useMemo, useState } from 'react';
-import { Calculator, Layers, ShieldCheck, Wallet, PieChart, ChevronDown, ChevronUp, Info, Users, UserMinus } from '../../../common/Icons';
+import { Layers, ShieldCheck, PieChart, ChevronDown, Info, Users, UserMinus } from '../../../shared/icons/Icons';
 import { formatPLN } from '../../../shared/utils/formatters';
+import { shadow } from '../../../shared/config/theme';
 import { SectionLabel } from '../../../shared/ui/SectionLabel';
 import { Alert } from '../../../shared/ui/Alert';
 import { SearchInput } from '../../../shared/ui/SearchInput';
@@ -10,14 +11,13 @@ import { useExcelExport } from '../../../hooks/useExcelExport';
 import { useAppStore } from '../../../store/AppContext';
 import { PodzialTable } from './components/PodzialTable';
 import { useResultsFilter } from '../../../hooks/useResultsFilter';
-import { Input } from '../../../shared/ui/Input';
 import { ButtonSecondary } from '../../../shared/ui/Button';
 import { NettoZasadniczaCell } from './components/NettoZasadniczaCell';
 import { SPLIT_TABLE_CONFIG } from './excelTableConfigs';
 import { WynikPracownika } from '../../../entities/calculation/model';
 import { Avatar } from '../../../shared/ui/Avatar';
-import { PageHeader } from '../../../shared/ui/PageHeader';
 import { DataTableToolbar } from '../../../shared/ui/DataTableToolbar';
+import { ExcelExportButton } from '../../../shared/ui/ExcelExportButton';
 
 // --- MOBILE CARD COMPONENT ---
 const PodzialResultCard: React.FC<{ item: WynikPracownika }> = ({ item }) => {
@@ -295,7 +295,7 @@ export const StepWynikPodzial = () => {
         <div className="animate-in fade-in zoom-in-95 duration-300 h-full min-h-0 flex flex-col gap-2">
 
             {/* DATA GRID CONTAINER */}
-            <div className="bg-white rounded-md shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.13),0_0.6px_1.8px_0_rgba(0,0,0,0.11)] border border-[#edebe9] overflow-hidden flex flex-col flex-1 min-h-0">
+            <div className={`bg-white rounded-md ${shadow.elevation8} border border-[#edebe9] overflow-hidden flex flex-col flex-1 min-h-0`}>
 
                 {/* D365 COMMAND BAR */}
                 <div className="flex items-stretch border-b border-[#edebe9] bg-white flex-shrink-0 h-[44px] overflow-hidden">
@@ -336,16 +336,7 @@ export const StepWynikPodzial = () => {
                         </div>
                     </div>
                     {/* Export — D365 command button */}
-                    <div className="flex items-center border-l border-[#edebe9] px-3 shrink-0">
-                        <button
-                            onClick={handleExport}
-                            className="flex items-center gap-1.5 px-3 h-[30px] text-[12px] font-medium text-[#323130] bg-white border border-[#8a8886] hover:bg-[#f3f2f1] active:bg-[#edebe9] transition-colors whitespace-nowrap"
-                        >
-                            <Wallet className="w-3.5 h-3.5" />
-                            <span className="hidden md:inline">Eksportuj do Excel</span>
-                            <span className="md:hidden">Excel</span>
-                        </button>
-                    </div>
+                    <ExcelExportButton onClick={handleExport} />
                 </div>
                 
                 {/* Search Bar */}
@@ -424,7 +415,7 @@ export const StepWynikPodzial = () => {
                     </div>
 
                     {/* MOBILE CARD LIST */}
-                    <div className="md:hidden overflow-y-auto max-h-[62dvh] p-4 space-y-3 bg-slate-100/50 pb-6 custom-scrollbar">
+                    <div className="md:hidden h-full overflow-y-auto p-4 space-y-3 bg-slate-100/50 pb-6 custom-scrollbar">
                         {filteredWyniki.map((item) => (
                             <PodzialResultCard key={item.pracownik.id} item={item} />
                         ))}

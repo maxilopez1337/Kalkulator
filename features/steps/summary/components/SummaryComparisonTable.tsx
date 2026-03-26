@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { formatPLN } from '../../../../shared/utils/formatters';
-import { TrendingUp, ArrowDown, Star, ShieldCheck } from '../../../../common/Icons';
+import { TrendingUp, ArrowDown, Star, ShieldCheck } from '../../../../shared/icons/Icons';
 
 interface Props {
     stats: {

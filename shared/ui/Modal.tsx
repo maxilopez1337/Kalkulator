@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { radius, shadow } from '../../common/theme';
+import { radius, shadow } from '../config/theme';
 
 interface ModalProps {
   isOpen: boolean;

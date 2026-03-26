@@ -20,12 +20,13 @@ export const HistoryProvider = ({ children }: { children?: ReactNode }) => {
       if (!saved) return [];
       const storedVersion = localStorage.getItem(`${HISTORY_KEY}_v`);
       if (storedVersion && Number(storedVersion) !== SCHEMA_VERSION) {
-        console.warn('History schema version mismatch, clearing stored history');
+        if (import.meta.env.DEV) console.warn('History schema version mismatch, clearing stored history');
         return [];
       }
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      console.warn('Failed to load history from localStorage');
+      if (import.meta.env.DEV) console.warn('Failed to load history from localStorage');
       return [];
     }
   });

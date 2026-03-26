@@ -1,7 +1,7 @@
 
-import { Pracownik } from '../entities/employee/model';
-import { Config } from '../entities/company/model';
-import { obliczWiek, czyZwolnionyZFpFgsp } from '../shared/utils/dates';
+import { Pracownik } from '../../entities/employee/model';
+import { Config } from '../../entities/company/model';
+import { obliczWiek, czyZwolnionyZFpFgsp } from './dates';
 
 export interface ImportRow {
     id: number;

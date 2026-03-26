@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Pracownik } from '../../../../entities/employee/model';
 import { Config } from '../../../../entities/company/model';
 import { obliczWariantStandard } from '../../../tax-engine';
-import { Info, Calculator, TrendingUp } from '../../../../common/Icons';
+import { Info, Calculator, TrendingUp } from '../../../../shared/icons/Icons';
 
 interface TaxSimulationProps {
   pracownik: Pracownik;

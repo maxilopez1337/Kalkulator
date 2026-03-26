@@ -13,26 +13,26 @@ export const generatePage05V3 = (firma: Firma, totals: any, date: string, sector
 <div class="page">
 
   ${generatePageHeaderV3('Twarde Dane Finansowe', '06. Twarde dane finansowe', 6, 11, date)}
-<div class="page-body" style="padding-top:6px;padding-bottom:40px;overflow:hidden">
+<div class="page-body" style="padding-top:6px;padding-bottom:62px;overflow:hidden;display:flex;flex-direction:column">
     <!-- CEO summary — trzy liczby ponad tabelą -->
-    <div style="background:var(--sp-navy);border-radius:4px;padding:7px 14px;margin-bottom:7px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;align-items:center">
+    <div style="background:var(--sp-navy);border-radius:4px;padding:10px 16px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;align-items:center">
       <div style="text-align:center;padding:0 10px">
-        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:2px">Twoja firma płaci teraz</div>
-        <div style="font-family:var(--font-serif);font-size:22px;color:rgba(255,255,255,.85)">${fmtK(totals.currentCost)}&nbsp;<span style="font-size:11px">zł/m-c</span></div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:3px">Twoja firma płaci teraz</div>
+        <div style="font-family:var(--font-serif);font-size:25px;color:rgba(255,255,255,.85)">${fmtK(totals.currentCost)}&nbsp;<span style="font-size:11px">zł/m-c</span></div>
       </div>
       <div style="width:1px;height:32px;background:rgba(255,255,255,.1)"></div>
       <div style="text-align:center;padding:0 10px">
-        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:2px">Po wdrożeniu PLUS</div>
-        <div style="font-family:var(--font-serif);font-size:22px;color:var(--sp-gold)">${fmtK(totals.plusCost)}&nbsp;<span style="font-size:11px">zł/m-c</span></div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:3px">Po wdrożeniu PLUS</div>
+        <div style="font-family:var(--font-serif);font-size:25px;color:var(--sp-gold)">${fmtK(totals.plusCost)}&nbsp;<span style="font-size:11px">zł/m-c</span></div>
       </div>
       <div style="width:1px;height:32px;background:rgba(255,255,255,.1)"></div>
       <div style="text-align:center;padding:0 10px">
-        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:2px">Oszczędność rocznie</div>
-        <div style="font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--success)">${fmtK(totals.savingsPlus * 12)}&nbsp;<span style="font-size:11px">zł/rok</span></div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:3px">Oszczędność rocznie</div>
+        <div style="font-family:var(--font-serif);font-size:27px;font-weight:700;color:var(--success)">${fmtK(totals.savingsPlus * 12)}&nbsp;<span style="font-size:11px">zł/rok</span></div>
       </div>
     </div>
 
-    <table class="dt" style="font-size:10px">
+    <table class="dt" style="font-size:12px">
       <thead>
         <tr>
           <th>Kategoria kosztowa</th>
@@ -64,7 +64,7 @@ export const generatePage05V3 = (firma: Firma, totals: any, date: string, sector
           <td>Opłata serwisowa EBS<span class="sub">${totals.prowizjaProc}% wartości nominalnej świadczeń</span></td>
           <td style="text-align:right;color:var(--sp-text-muted)">—</td>
           <td class="new">${fmt(totals.commission - totals.sumaRaise - totals.sumaAdminBonus)} zł</td>
-          <td class="delta cost">+${fmt(totals.commission - totals.sumaRaise - totals.sumaAdminBonus)} zł</td>
+          <td class="delta" style="color:var(--sp-navy)">${fmt(totals.commission - totals.sumaRaise - totals.sumaAdminBonus)} zł</td>
         </tr>
         <tr>
           <td>Bonus administracyjny dla kadr i księg.<span class="sub">2% wartości świadczeń — finansowany przez Stratton Prime</span></td>
@@ -89,40 +89,40 @@ export const generatePage05V3 = (firma: Firma, totals: any, date: string, sector
     </table>
 
     <!-- BOX: Bonus administracyjny — wyjaśnienie -->
-    <div style="background:var(--sp-gray);border:1px solid var(--border);border-left:3px solid var(--sp-gold);padding:5px 12px;margin-bottom:6px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:start">
+    <div style="background:var(--sp-gray);border:1px solid var(--border);border-left:3px solid var(--sp-gold);padding:10px 14px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start">
       <div>
-        <div style="font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:2px">Bonus administracyjny — co to jest?</div>
-        <p style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.4;margin:0">Miesięczny dodatek dla kadr i księgowości obsługujących EBS. Wynosi <strong>2%</strong> wartości świadczeń — przy świadczeniu ${fmt(totals.totalBenefit)} zł daje to <strong>${fmt(totals.sumaAdminBonus)} zł/m-c</strong>.</p>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:4px">Bonus administracyjny — co to jest?</div>
+        <p style="font-size:11px;color:var(--sp-text-muted);line-height:1.5;margin:0">Miesięczny dodatek dla kadr i księgowości obsługujących EBS. Wynosi <strong>2%</strong> wartości świadczeń — przy świadczeniu ${fmt(totals.totalBenefit)} zł daje to <strong>${fmt(totals.sumaAdminBonus)} zł/m-c</strong>.</p>
       </div>
       <div>
-        <div style="font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:2px">Kto otrzymuje i skąd środki?</div>
-        <p style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.4;margin:0">Bonus dla wskazanych pracowników kadr/księgowości. <strong>Finansowany w całości przez Stratton Prime</strong> — zerowy koszt pracodawcy.</p>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:4px">Kto otrzymuje i skąd środki?</div>
+        <p style="font-size:11px;color:var(--sp-text-muted);line-height:1.5;margin:0">Bonus dla wskazanych pracowników kadr/księgowości. <strong>Finansowany w całości przez Stratton Prime</strong> — zerowy koszt pracodawcy.</p>
       </div>
       <div>
-        <div style="font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:2px">Skutki podatkowe i ewidencja</div>
-        <p style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.4;margin:0">Przychód z art. 12 ust. 1 uPIT — pracodawca odprowadza zaliczkę PIT. Stratton Prime dostarcza gotowy schemat ewidencji i wzór listy wypłat.</p>
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:4px">Skutki podatkowe i ewidencja</div>
+        <p style="font-size:11px;color:var(--sp-text-muted);line-height:1.5;margin:0">Przychód z art. 12 ust. 1 uPIT — pracodawca odprowadza zaliczkę PIT. Stratton Prime dostarcza gotowy schemat ewidencji i wzór listy wypłat.</p>
       </div>
     </div>
 
-    <div class="two">
-      <div class="box-navy" style="margin-bottom:0;padding:8px 14px">
-        <div style="font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold-light);margin-bottom:6px">Rekomendacja alokacji oszczędności<br>Eliton Prime™ PLUS</div>
-        <p style="font-size:10.5px;color:#fff;line-height:1.5;margin:0">Wygenerowaną pulę <strong style="color:var(--sp-gold-light)">${fmt(totals.savingsPlus)} zł/m-c</strong> rekomendujemy rozdzielić strategicznie: część przeznaczyć na podwyżkę wynagrodzenia netto pracowników — realizowaną poprzez zwiększenie wartości świadczeń rzeczowych EBS, bez wzrostu brutto z umowy ani nowych narzutów ZUS — bezpośrednio wzmacniając retencję zespołu, a pozostałą część zatrzymać jako zysk operacyjny firmy.</p>
+    <div class="two" style="flex:1">
+      <div class="box-navy" style="margin-bottom:0;padding:16px 20px;display:flex;flex-direction:column">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold-light);margin-bottom:10px">Rekomendacja alokacji oszczędności<br>Eliton Prime™ PLUS</div>
+        <p style="font-size:13px;color:#fff;line-height:1.7;margin:0;flex:1">Wygenerowaną pulę <strong style="color:var(--sp-gold-light)">${fmt(totals.savingsPlus)} zł/m-c</strong> rekomendujemy rozdzielić strategicznie: część przeznaczyć na podwyżkę wynagrodzenia netto pracowników — realizowaną poprzez zwiększenie wartości świadczeń rzeczowych EBS, bez wzrostu brutto z umowy ani nowych narzutów ZUS — bezpośrednio wzmacniając retencję zespołu, a pozostałą część zatrzymać jako zysk operacyjny firmy.</p>
       </div>
-      <div class="box-gold" style="margin-bottom:0;padding:8px 14px">
-        <div style="font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:4px">Wniosek analityczny: koszt zaniechania</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-size:11px;color:var(--sp-text-muted)">Strata miesięczna</span>
-          <span style="font-family:var(--font-serif);font-size:18px;color:#DC2626">−${fmt(totals.savingsPlus)} zł</span>
+      <div class="box-gold" style="margin-bottom:0;padding:16px 20px;display:flex;flex-direction:column">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:10px">Wniosek analityczny: koszt zaniechania</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-size:13px;color:var(--sp-text-muted)">Strata miesięczna</span>
+          <span style="font-family:var(--font-serif);font-size:24px;color:#DC2626">−${fmt(totals.savingsPlus)} zł</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <span style="font-size:11px;color:var(--sp-text-muted)">Strata roczna</span>
-          <span style="font-family:var(--font-serif);font-size:21px;font-weight:700;color:#DC2626">−${fmt(totals.savingsPlus * 12)} zł</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:13px;color:var(--sp-text-muted)">Strata roczna</span>
+          <span style="font-family:var(--font-serif);font-size:28px;font-weight:700;color:#DC2626">−${fmt(totals.savingsPlus * 12)} zł</span>
         </div>
-        <p style="font-size:10px;color:var(--sp-text-muted);line-height:1.4;margin:0">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która nie zostaje zrealizowana.</p>
+        <p style="font-size:12.5px;color:var(--sp-text-muted);line-height:1.6;margin:0;flex:1">Każdy miesiąc bez wdrożenia to potencjalna oszczędność, która nie zostaje zrealizowana.</p>
       </div>
     </div>
-    <p class="disc">Kalkulacja indywidualna na podstawie przesłanej listy płac. Wyniki mogą się różnić w zależności od zmian struktury zatrudnienia, formy umów i stawek ZUS. Dane mają charakter szacunkowy i mogą się różnić od wyników faktycznie osiągniętych. · Szczegółowy rozkład tego, jak liczona jest oszczędność — patrz str. 12.</p>
+    <p class="disc">Kalkulacja indywidualna na podstawie przesłanej listy płac. Wyniki mogą się różnić w zależności od zmian struktury zatrudnienia, formy umów i stawek ZUS. Dane mają charakter szacunkowy i mogą się różnić od wyników faktycznie osiągniętych. · Szczegółowy rozkład tego, jak liczona jest oszczędność.</p>
   </div>
   
 

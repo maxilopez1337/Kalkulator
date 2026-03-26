@@ -1,14 +1,16 @@
 
 import { Config } from '../../../entities/company/model';
+import { Pracownik } from '../../../entities/employee/model';
 import { obliczZusPracownik, obliczZdrowotna } from './zus';
 import { obliczPit } from './pit';
 import { BaseCalculationResult } from '../../../entities/calculation/model';
+import { roundCurrency } from '../../../shared/utils/formatters';
 
-// Helpery
-const roundCurrency = (val: number) => Math.round(val * 100) / 100;
 const roundTotal = (val: number) => Math.round(val);
 
-export const obliczNettoZBrutto = (brutto: number, params: any, config: Config): BaseCalculationResult => {
+export type CalcParams = Pick<Pracownik, 'typUmowy' | 'trybSkladek' | 'choroboweAktywne' | 'pit2' | 'ulgaMlodych' | 'kupTyp' | 'pitMode'>;
+
+export const obliczNettoZBrutto = (brutto: number, params: CalcParams, config: Config): BaseCalculationResult => {
   // 1. Brutto wejściowe zaokrąglone do 2 miejsc po przecinku
   const bruttoInput = roundCurrency(brutto);
   
@@ -83,7 +85,7 @@ export const obliczNettoZBrutto = (brutto: number, params: any, config: Config):
   };
 };
 
-export const znajdzBruttoDlaNetto = (nettoDocelowe: number, params: any, config: Config): BaseCalculationResult => {
+export const znajdzBruttoDlaNetto = (nettoDocelowe: number, params: CalcParams, config: Config): BaseCalculationResult => {
   const target = roundCurrency(nettoDocelowe);
   
   // 1. Zgrubne przybliżenie (Binary Search)
