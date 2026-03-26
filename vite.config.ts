@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => {
           output: {
             manualChunks: {
               'vendor-react': ['react', 'react-dom'],
-              'vendor-pdf': ['@react-pdf/renderer', 'jspdf', 'pdf-lib'],
             }
           }
         }
