@@ -10,8 +10,8 @@ import {
     generatePage05V3, 
     generatePage06V3, 
     generatePage07V3, 
-    generatePage08V3, 
-    generatePage09V3, 
+    generatePage09V3,
+    generatePage11V3,
     generatePage10V3, 
     generateIlekosztujeCikadymiesiczwokiV3, 
     generateJakjestpodzielonawygenerowanawartoV3,
@@ -116,9 +116,9 @@ export const offerPdfV3Generator = {
             generatePage05V3(tempFirma, totals, date, sector),                                      // 6. Twarde dane finansowe
             generatePage10V3(tempFirma, date, sector),                                              // 7. Pytania i odpowiedzi
             generate4przesankiwyczeniaZUS2ust1pkt26RozpMPiPSV3(tempFirma, date, sector),           // 8. Mechanizm i bezpieczeństwo
-            generatePage08V3(tempFirma, date, sector),                                              // 9. Proces i warunki
+            generatePage09V3(tempFirma, date, sector),                                              // 9. Proces i warunki
             generateIlekosztujeCikadymiesiczwokiV3(tempFirma, totals, date, sector),                // 10. Twoja droga do pierwszych oszczędności
-            generatePage09V3(tempFirma, date, sector),                                              // 11. Dlaczego Stratton Prime
+            generatePage11V3(tempFirma, date, sector),                                              // 11. Dlaczego Stratton Prime
             generateHookPageV3(tempFirma, totals, date, sector),                                    // 12. Jak będzie wyglądać Twoja firma za rok?
         ];
 

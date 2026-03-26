@@ -1,7 +1,7 @@
 ﻿import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
-export const generatePage08V3 = (firma: Firma, date: string, sector: string) => `
+export const generatePage09V3 = (firma: Firma, date: string, sector: string) => `
 <div class="page">
 
   ${generatePageHeaderV3('Proces i Warunki', '09. Proces i warunki', 9, 11, date)}

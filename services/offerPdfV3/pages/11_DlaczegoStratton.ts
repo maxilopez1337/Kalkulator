@@ -12,7 +12,7 @@ const NR_DP  = '12602';           // ← numer wpisu na listę doradców podatko
 // Dane statystyczne oparte na wynikach po pierwszych 3 miesiącach współpracy (źródło: stratton-prime.pl)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const generatePage09V3 = (firma: Firma, date: string, sector: string) => `
+export const generatePage11V3 = (firma: Firma, date: string, sector: string) => `
 <div class="page">
 
   ${generatePageHeaderV3('Dlaczego Stratton Prime', '11. Dlaczego Stratton Prime', 11, 11, date)}
