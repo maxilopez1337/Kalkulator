@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ZapisanaKalkulacja } from '../entities/history/model';
+import { secureSetItem, secureGetItem } from '../shared/utils/storageEncryption';
 
 interface HistoryContextType {
   historia: ZapisanaKalkulacja[];
@@ -14,27 +15,41 @@ const SCHEMA_VERSION = 1;
 const HISTORY_KEY = 'kalkulator_historia';
 
 export const HistoryProvider = ({ children }: { children?: ReactNode }) => {
-  const [historia, setHistoria] = useState<ZapisanaKalkulacja[]>(() => {
-    try {
-      const saved = localStorage.getItem(HISTORY_KEY);
-      if (!saved) return [];
-      const storedVersion = localStorage.getItem(`${HISTORY_KEY}_v`);
-      if (storedVersion && Number(storedVersion) !== SCHEMA_VERSION) {
-        if (import.meta.env.DEV) console.warn('History schema version mismatch, clearing stored history');
-        return [];
-      }
-      const parsed = JSON.parse(saved);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      if (import.meta.env.DEV) console.warn('Failed to load history from localStorage');
-      return [];
-    }
-  });
+  const [historia, setHistoria] = useState<ZapisanaKalkulacja[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
+  // Async load from encrypted localStorage on mount
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(historia));
-    localStorage.setItem(`${HISTORY_KEY}_v`, String(SCHEMA_VERSION));
-  }, [historia]);
+    async function load() {
+      try {
+        const saved = await secureGetItem(HISTORY_KEY);
+        if (!saved) { setLoaded(true); return; }
+        const storedVersion = await secureGetItem(`${HISTORY_KEY}_v`);
+        if (storedVersion && Number(storedVersion) !== SCHEMA_VERSION) {
+          if (import.meta.env.DEV) console.warn('History schema version mismatch, clearing stored history');
+          setLoaded(true);
+          return;
+        }
+        const parsed = JSON.parse(saved);
+        setHistoria(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        if (import.meta.env.DEV) console.warn('Failed to load history from localStorage');
+      } finally {
+        setLoaded(true);
+      }
+    }
+    load();
+  }, []);
+
+  // Async persist to encrypted localStorage whenever historia changes (skip before load)
+  useEffect(() => {
+    if (!loaded) return;
+    async function save() {
+      await secureSetItem(HISTORY_KEY, JSON.stringify(historia));
+      await secureSetItem(`${HISTORY_KEY}_v`, String(SCHEMA_VERSION));
+    }
+    save();
+  }, [historia, loaded]);
 
   const deleteFromHistory = (id: string) => {
     setHistoria(prev => prev.filter(h => h.id !== id));

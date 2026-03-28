@@ -2,6 +2,7 @@
 import React, { ReactNode } from 'react';
 import { ZapisanaKalkulacja } from '../entities/history/model';
 import { Pracownik } from '../entities/employee/model';
+import { zapisanaKalkulacjaSchema, pracownicyArraySchema } from './validation/backupSchema';
 import { offerPdfV3Generator } from '../services/offerPdfV3Generator';
 import { offerLegalizacjaPremiiGenerator } from '../services/offerLegalizacjaPremii/generator';
 import { obliczWariantStandard, obliczWariantPodzial } from '../features/tax-engine';
@@ -93,29 +94,35 @@ export const useAppStore = () => {
   // Nowa funkcja do ładowania z pliku JSON (z opcją pominięcia confirm dla uploadu pliku)
   const loadBackup = async (data: ZapisanaKalkulacja | Pracownik[] | unknown, skipConfirm: boolean = false): Promise<boolean> => {
       try {
-          // 1. Walidacja formatu 'ZapisanaKalkulacja'
-          const asKalkulacja = data as ZapisanaKalkulacja;
-          if (asKalkulacja && asKalkulacja.dane && asKalkulacja.dane.firma && Array.isArray(asKalkulacja.dane.pracownicy)) {
+          // 1. Walidacja formatu 'ZapisanaKalkulacja' przez Zod
+          const kalkulacjaResult = zapisanaKalkulacjaSchema.safeParse(data);
+          if (kalkulacjaResult.success) {
+              const asKalkulacja = kalkulacjaResult.data;
               if (!skipConfirm && !await confirmDialog(`Wczytać kopię zapasową dla firmy ${asKalkulacja.nazwaFirmy || 'Bez nazwy'}?`)) return false;
-              
+
               company.setFirma(asKalkulacja.dane.firma);
               employees.setPracownicy(asKalkulacja.dane.pracownicy);
               if (asKalkulacja.dane.config) company.setConfig(asKalkulacja.dane.config);
               if (asKalkulacja.dane.prowizjaProc) calculation.setProwizjaProc(asKalkulacja.dane.prowizjaProc);
-              
+
               notification.notify('Przywrócono kopię zapasową.', 'success');
               return true;
           }
-          
-          // 2. Walidacja formatu 'Surowa tablica pracowników'
-          const asPracownicy = data as Pracownik[];
-          if (Array.isArray(asPracownicy) && asPracownicy.length > 0 && asPracownicy[0].imie) {
-               if (!skipConfirm && !await confirmDialog(`Plik wygląda na listę ${asPracownicy.length} pracowników (bez ustawień firmy). Zaimportować?`)) return false;
-               employees.setPracownicy(asPracownicy);
-               notification.notify(`Zaimportowano ${asPracownicy.length} pracowników z pliku.`, 'success');
-               return true;
+
+          // 2. Walidacja formatu 'Surowa tablica pracowników' przez Zod
+          const pracownicyResult = pracownicyArraySchema.safeParse(data);
+          if (pracownicyResult.success && pracownicyResult.data.length > 0) {
+              const asPracownicy = pracownicyResult.data;
+              if (!skipConfirm && !await confirmDialog(`Plik wygląda na listę ${asPracownicy.length} pracowników (bez ustawień firmy). Zaimportować?`)) return false;
+              employees.setPracownicy(asPracownicy);
+              notification.notify(`Zaimportowano ${asPracownicy.length} pracowników z pliku.`, 'success');
+              return true;
           }
 
+          if (import.meta.env.DEV) {
+              console.error('[loadBackup] Błąd walidacji ZapisanaKalkulacja:', kalkulacjaResult.error?.flatten());
+              console.error('[loadBackup] Błąd walidacji Pracownicy[]:', pracownicyResult.error?.flatten());
+          }
           notification.notify('Nieprawidłowy format pliku JSON. Wymagana struktura kopii zapasowej.', 'error');
           return false;
       } catch (error) {
