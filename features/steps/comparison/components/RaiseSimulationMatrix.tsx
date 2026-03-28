@@ -70,21 +70,21 @@ export const RaiseSimulationMatrix = () => {
 
     return (
         <Card>
-            <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="p-6 border-b border-[#edebe9] flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-[#201f1e] flex items-center gap-2">
                         <TrendingUp className="text-amber-500" />
                         Symulator Kosztów Podwyżek
                     </h3>
-                    <p className="text-xs text-slate-500 mt-1 max-w-xl">
+                    <p className="text-xs text-[#605e5c] mt-1 max-w-xl">
                         Sprawdź, ile realnie kosztuje firmę przyznanie podwyżki "na rękę" w modelu klasycznym (UoP w pełni oskładkowane) w porównaniu do modelu Eliton (gdzie podwyżka trafia bezpiecznie do kwoty wolnej od ZUS).
                     </p>
                 </div>
                 
-                <div className="flex bg-slate-100 p-1 rounded-lg">
-                    <button 
+                <div className="flex bg-[#f3f2f1] p-1 rounded-md">
+                    <button
                         onClick={() => setSelectedEmployeeId('ALL')}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${selectedEmployeeId === 'ALL' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all ${selectedEmployeeId === 'ALL' ? 'bg-white shadow text-[#201f1e]' : 'text-[#605e5c] hover:text-[#323130]'}`}
                     >
                         <Users className="w-3.5 h-3.5" />
                         Cały Zespół
@@ -93,7 +93,7 @@ export const RaiseSimulationMatrix = () => {
                         <button 
                             key={p.id}
                             onClick={() => setSelectedEmployeeId(p.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all truncate max-w-[120px] ${selectedEmployeeId === p.id ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all truncate max-w-[120px] ${selectedEmployeeId === p.id ? 'bg-white shadow text-[#201f1e]' : 'text-[#605e5c] hover:text-[#323130]'}`}
                             title={`${p.imie} ${p.nazwisko}`}
                         >
                             <UserCheck className="w-3.5 h-3.5" />
@@ -106,40 +106,40 @@ export const RaiseSimulationMatrix = () => {
             <div className="p-0 overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[700px]">
                     <thead>
-                        <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
-                            <th className="py-4 px-6 text-indigo-700">Podwyżka Netto<br/><span className="text-[10px] font-normal text-slate-400">Na rękę (na pracownika)</span></th>
-                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-slate-400">Standardowy (UoP)</span></th>
-                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-slate-400">W modelu Eliton Prime™</span></th>
+                        <tr className="bg-[#f3f2f1] border-b border-[#edebe9] text-xs font-bold text-[#605e5c] uppercase">
+                            <th className="py-4 px-6 text-indigo-700">Podwyżka Netto<br/><span className="text-[10px] font-normal text-[#a19f9d]">Na rękę (na pracownika)</span></th>
+                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-[#a19f9d]">Standardowy (UoP)</span></th>
+                            <th className="py-4 px-6 text-right">Koszt Pracodawcy<br/><span className="text-[10px] font-normal text-[#a19f9d]">W modelu Eliton Prime™</span></th>
                             <th className="py-4 px-6 text-right bg-emerald-50/50">Oszczędność Firmy<br/><span className="text-[10px] font-normal text-emerald-600/70">W każdym miesiącu</span></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#edebe9]">
                         {matrixData.map((row) => (
-                            <tr key={row.raiseAmount} className="hover:bg-slate-50 transition-colors group">
+                            <tr key={row.raiseAmount} className="hover:bg-[#f3f2f1] transition-colors group">
                                 <td className="py-3 px-6">
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs ring-1 ring-indigo-100 group-hover:scale-110 transition-transform">
                                             +{row.raiseAmount}
                                         </div>
-                                        <div className="font-bold text-sm text-slate-800">
+                                        <div className="font-bold text-sm text-[#201f1e]">
                                             {formatPLN(row.raiseAmount)} netto
-                                            {selectedEmployeeId === 'ALL' && <div className="text-[10px] text-slate-400 font-normal">Suma: +{formatPLN(row.totalNettoRaise)} msc</div>}
+                                            {selectedEmployeeId === 'ALL' && <div className="text-[10px] text-[#a19f9d] font-normal">Suma: +{formatPLN(row.totalNettoRaise)} msc</div>}
                                         </div>
                                     </div>
                                 </td>
                                 
                                 <td className="py-3 px-6 text-right">
-                                    <span className="text-sm font-semibold text-slate-600">{formatPLN(row.kosztPodwyzkiStandard)}</span>
+                                    <span className="text-sm font-semibold text-[#605e5c]">{formatPLN(row.kosztPodwyzkiStandard)}</span>
                                     <div className="flex items-center justify-end gap-1 mt-0.5">
-                                        <span className="text-[10px] text-slate-400">Dopłata podatk./ZUS:</span>
+                                        <span className="text-[10px] text-[#a19f9d]">Dopłata podatk./ZUS:</span>
                                         <span className="text-[10px] text-rose-500 font-medium">+{formatPLN(row.kosztPodwyzkiStandard - row.totalNettoRaise)}</span>
                                     </div>
                                 </td>
                                 
-                                <td className="py-3 px-6 text-right border-l border-dashed border-slate-200 bg-slate-50/30">
+                                <td className="py-3 px-6 text-right border-l border-dashed border-[#edebe9] bg-[#f3f2f1]/30">
                                     <span className="text-sm font-bold text-amber-700">{formatPLN(row.kosztPodwyzkiEliton)}</span>
                                     <div className="flex items-center justify-end gap-1 mt-0.5">
-                                        <span className="text-[10px] text-slate-400">Marża platformy:</span>
+                                        <span className="text-[10px] text-[#a19f9d]">Marża platformy:</span>
                                         <span className="text-[10px] text-amber-600 font-medium">+{formatPLN(row.kosztPodwyzkiEliton - row.totalNettoRaise)}</span>
                                     </div>
                                 </td>
@@ -156,12 +156,12 @@ export const RaiseSimulationMatrix = () => {
                 </table>
             </div>
             
-            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-start gap-3">
+            <div className="px-6 py-4 bg-[#f3f2f1] border-t border-[#edebe9] flex items-start gap-3">
                 <div className="p-1 rounded-full bg-blue-100 text-blue-600 mt-0.5"><TrendingUp size={14} /></div>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
-                    <strong className="text-slate-700">Dlaczego warto?</strong> Przyznając pracownikowi 500 zł podwyżki w klasycznym modelu, firma pokrywa narzut PIT i obustronnego ZUS-u dochodzący do 70% wartości podwyżki.
+                <p className="text-xs text-[#605e5c] leading-relaxed max-w-3xl">
+                    <strong className="text-[#323130]">Dlaczego warto?</strong> Przyznając pracownikowi 500 zł podwyżki w klasycznym modelu, firma pokrywa narzut PIT i obustronnego ZUS-u dochodzący do 70% wartości podwyżki.
                     W modelu Eliton Prime™ nowa kwota zasila strumień świadczenia rzeczowego, co oznacza zapłatę jedynie prowizji platformy i PIT. 
-                    <strong className="text-slate-700 ml-1">Pracownik zarabia więcej, a budżet firmy pozostaje pod ścisłą kontrolą.</strong>
+                    <strong className="text-[#323130] ml-1">Pracownik zarabia więcej, a budżet firmy pozostaje pod ścisłą kontrolą.</strong>
                 </p>
             </div>
         </Card>

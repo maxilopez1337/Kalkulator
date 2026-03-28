@@ -47,7 +47,7 @@ export const Modal = ({
   if (size === 'small') {
     return (
       <div
-        className={`fixed inset-0 bg-slate-900/60 flex items-center justify-center ${zIndex} p-4 backdrop-blur-sm animate-in fade-in duration-200`}
+        className={`fixed inset-0 bg-[#001433]/60 flex items-center justify-center ${zIndex} p-4 backdrop-blur-sm animate-in fade-in duration-200`}
         onClick={onClose}
       >
         <div
@@ -65,7 +65,7 @@ export const Modal = ({
   // size === 'full' (default) — bottom sheet on mobile, centred on desktop
   return (
     <div
-      className={`fixed inset-0 bg-slate-900/60 flex items-end md:items-center justify-center ${zIndex} p-0 md:p-4 backdrop-blur-sm transition-opacity`}
+      className={`fixed inset-0 bg-[#001433]/60 flex items-end md:items-center justify-center ${zIndex} p-0 md:p-4 backdrop-blur-sm transition-opacity`}
       onClick={onClose}
     >
       <div

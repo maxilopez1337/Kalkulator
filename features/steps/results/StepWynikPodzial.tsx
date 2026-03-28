@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import { Layers, ShieldCheck, PieChart, ChevronDown, Info, Users, UserMinus } from '../../../shared/icons/Icons';
 import { formatPLN } from '../../../shared/utils/formatters';
-import { shadow } from '../../../shared/config/theme';
+import { shadow, animations } from '../../../shared/config/theme';
 import { SectionLabel } from '../../../shared/ui/SectionLabel';
 import { Alert } from '../../../shared/ui/Alert';
 import { SearchInput } from '../../../shared/ui/SearchInput';
@@ -32,47 +32,47 @@ const PodzialResultCard: React.FC<{ item: WynikPracownika }> = ({ item }) => {
     const bazaNetto = item.podzial.zasadnicza.nettoGotowka;
 
     return (
-        <div className={`rounded-md border shadow-sm overflow-hidden transition-all duration-200 active:scale-[0.99]
-            ${isStudent ? 'bg-slate-50 border-[#edebe9] opacity-60 grayscale' : 'bg-white border-[#edebe9]'}
+        <div className={`rounded-md border shadow-sm overflow-hidden transition-all ${animations.quick} active:scale-[0.99]
+            ${isStudent ? 'bg-[#f3f2f1] border-[#edebe9] opacity-60 grayscale' : 'bg-white border-[#edebe9]'}
         `}>
             {/* Header */}
-            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-slate-50/50 transition-colors" role="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
+            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-[#f3f2f1]/50 transition-colors" role="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
                 <div className="flex items-center gap-3">
                     <Avatar
                         name={item.pracownik.imie}
                         surname={item.pracownik.nazwisko}
                         colorClass={isStudent
-                            ? 'bg-slate-200 text-slate-500 border border-slate-300'
+                            ? 'bg-[#e1dfdd] text-[#605e5c] border border-[#c8c6c4]'
                             : 'bg-indigo-50 text-indigo-700 border border-indigo-100'
                         }
                     />
                     <div>
-                        <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <div className="font-bold text-[#201f1e] text-sm flex items-center gap-2">
                             {item.pracownik.imie} {item.pracownik.nazwisko}
-                            {isStudent && <span className="text-[9px] bg-slate-200 text-slate-600 px-1.5 rounded border border-slate-300">STUDENT</span>}
+                            {isStudent && <span className="text-[9px] bg-[#e1dfdd] text-[#605e5c] px-1.5 rounded-sm border border-[#c8c6c4]">STUDENT</span>}
                         </div>
-                        <div className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
+                        <div className="text-xs text-[#605e5c] flex items-center gap-2 mt-0.5">
                             {!isStudent && (
                                 <span className="bg-emerald-50 text-emerald-700 border border-emerald-100 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">
                                     Do ręki
                                 </span>
                             )}
-                            <span className="font-bold text-slate-700">{formatPLN(doWyplaty)}</span>
+                            <span className="font-bold text-[#323130]">{formatPLN(doWyplaty)}</span>
                         </div>
                     </div>
                 </div>
-                <div className={`text-slate-400 p-1 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}>
+                <div className={`text-[#a19f9d] p-1 transition-transform ${animations.quick} ${expanded ? 'rotate-180' : ''}`}>
                     <ChevronDown />
                 </div>
             </div>
 
             {/* Key Metrics Row */}
             <div className="px-4 pb-4 grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                <div className="bg-[#f3f2f1] p-2.5 rounded-md border border-[#edebe9]">
                     <SectionLabel className="mb-1">Nowy Koszt</SectionLabel>
-                    <div className="text-sm font-bold text-slate-700">{formatPLN(koszt)}</div>
+                    <div className="text-sm font-bold text-[#323130]">{formatPLN(koszt)}</div>
                 </div>
-                <div className="bg-amber-50 p-2.5 rounded-lg border border-amber-100">
+                <div className="bg-amber-50 p-2.5 rounded-sm border border-amber-100">
                     <SectionLabel color="text-amber-600" className="mb-1">Benefit (Świadczenie)</SectionLabel>
                     <div className="text-sm font-bold text-amber-800">{formatPLN(benefit)}</div>
                 </div>
@@ -80,16 +80,16 @@ const PodzialResultCard: React.FC<{ item: WynikPracownika }> = ({ item }) => {
 
             {/* Expanded Details */}
             {expanded && (
-                <div className="border-t border-slate-100 bg-slate-50/50 p-4 space-y-4 animate-in slide-in-from-top-2">
+                <div className="border-t border-[#edebe9] bg-[#f3f2f1]/50 p-4 space-y-4 animate-in slide-in-from-top-2">
                     
                     {isStudent ? (
-                        <div className="p-3 bg-slate-100 rounded text-xs text-slate-500 text-center italic">
+                        <div className="p-3 bg-[#f3f2f1] rounded-sm text-xs text-[#605e5c] text-center italic">
                             Osoba ze statusem studenta nie podlega optymalizacji w tym modelu.
                         </div>
                     ) : (
                         <>
                             {/* Config Input for Mobile */}
-                            <div className="bg-blue-50/50 p-3 rounded-lg border border-blue-100 shadow-sm">
+                            <div className="bg-blue-50/50 p-3 rounded-sm border border-blue-100 shadow-sm">
                                 <div className="flex justify-between items-center mb-2">
                                     <div className="text-xs font-bold text-blue-700">Baza ZUS (Edycja)</div>
                                     <div className="text-[10px] text-blue-500 bg-white px-1.5 py-0.5 rounded border border-blue-100">Netto Zasadnicza</div>
@@ -102,41 +102,41 @@ const PodzialResultCard: React.FC<{ item: WynikPracownika }> = ({ item }) => {
                             </div>
 
                             {/* Breakdown Structure */}
-                            <div className="bg-white p-3 rounded-lg border border-slate-200">
-                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 border-b border-slate-100 pb-1">Struktura Wypłaty</div>
+                            <div className="bg-white p-3 rounded-md border border-[#edebe9]">
+                                <div className="text-[10px] font-bold text-[#a19f9d] uppercase tracking-wider mb-2 border-b border-[#edebe9] pb-1">Struktura Wypłaty</div>
                                 <div className="flex justify-between items-center text-xs mb-1">
-                                    <span className="text-slate-600">Gotówka (Zasadnicza)</span>
+                                    <span className="text-[#605e5c]">Gotówka (Zasadnicza)</span>
                                     <span className="font-mono font-medium">{formatPLN(item.podzial.doWyplatyGotowka)}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-xs">
                                     <span className="text-amber-700 font-medium">Świadczenie (Benefit)</span>
                                     <span className="font-mono font-bold text-amber-700">{formatPLN(item.podzial.doWyplatySwiadczenie)}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-slate-100 font-bold">
-                                    <span className="text-slate-900">Razem do ręki</span>
+                                <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-[#edebe9] font-bold">
+                                    <span className="text-[#201f1e]">Razem do ręki</span>
                                     <span className="text-emerald-600">{formatPLN(item.podzial.doWyplaty)}</span>
                                 </div>
                             </div>
 
                             {/* Taxes Breakdown */}
                             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                                <div className="col-span-2 font-bold text-slate-900 border-b border-slate-200 pb-1 mb-1 mt-2 flex items-center gap-2">
+                                <div className="col-span-2 font-bold text-[#201f1e] border-b border-[#edebe9] pb-1 mb-1 mt-2 flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
                                     Koszty Pracodawcy
                                 </div>
-                                <div className="text-slate-500">ZUS od Bazy</div>
-                                <div className="text-right font-mono text-slate-700">{formatPLN(item.podzial.zasadnicza.zusPracodawca.suma)}</div>
-                                <div className="text-slate-500">Brutto Benefitu</div>
-                                <div className="text-right font-mono text-slate-700">{formatPLN(item.podzial.swiadczenie.brutto)}</div>
+                                <div className="text-[#605e5c]">ZUS od Bazy</div>
+                                <div className="text-right font-mono text-[#323130]">{formatPLN(item.podzial.zasadnicza.zusPracodawca.suma)}</div>
+                                <div className="text-[#605e5c]">Brutto Benefitu</div>
+                                <div className="text-right font-mono text-[#323130]">{formatPLN(item.podzial.swiadczenie.brutto)}</div>
 
-                                <div className="col-span-2 font-bold text-slate-900 border-b border-slate-200 pb-1 mb-1 mt-2 flex items-center gap-2">
+                                <div className="col-span-2 font-bold text-[#201f1e] border-b border-[#edebe9] pb-1 mb-1 mt-2 flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
                                     Podatki i ZUS (Pracownik)
                                 </div>
-                                <div className="text-slate-500">ZUS + Zdrowotna</div>
-                                <div className="text-right font-mono text-slate-700">{formatPLN(item.podzial.zasadnicza.zusPracownik.suma + item.podzial.zasadnicza.zdrowotna)}</div>
-                                <div className="text-slate-500">PIT Całkowity</div>
-                                <div className="text-right font-mono text-slate-700">{formatPLN(item.podzial.pit.kwota)}</div>
+                                <div className="text-[#605e5c]">ZUS + Zdrowotna</div>
+                                <div className="text-right font-mono text-[#323130]">{formatPLN(item.podzial.zasadnicza.zusPracownik.suma + item.podzial.zasadnicza.zdrowotna)}</div>
+                                <div className="text-[#605e5c]">PIT Całkowity</div>
+                                <div className="text-right font-mono text-[#323130]">{formatPLN(item.podzial.pit.kwota)}</div>
                             </div>
                         </>
                     )}
@@ -292,7 +292,7 @@ export const StepWynikPodzial = () => {
     };
 
     return (
-        <div className="animate-in fade-in zoom-in-95 duration-300 h-full min-h-0 flex flex-col gap-2">
+        <div className={`${animations.fadeIn} h-full min-h-0 flex flex-col gap-2`}>
 
             {/* DATA GRID CONTAINER */}
             <div className={`bg-white rounded-md ${shadow.elevation8} border border-[#edebe9] overflow-hidden flex flex-col flex-1 min-h-0`}>
@@ -356,12 +356,12 @@ export const StepWynikPodzial = () => {
                 />
 
                 {/* Bulk Netto Baza Panel */}
-                <div className="hidden md:flex items-center gap-3 px-4 py-2.5 border-b border-slate-100 bg-blue-50/40 flex-shrink-0 flex-wrap">
+                <div className="hidden md:flex items-center gap-3 px-4 py-2.5 border-b border-[#edebe9] bg-blue-50/40 flex-shrink-0 flex-wrap">
                     <span className="text-[10px] font-bold text-blue-700 uppercase tracking-widest whitespace-nowrap">Ustaw netto bazę zbiorczo:</span>
                     
                     {/* UZ group */}
                     <div className="flex items-center gap-1.5 bg-white border border-blue-200 rounded-md px-2 py-1 shadow-sm">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">UZ</span>
+                        <span className="text-[10px] font-bold text-[#605e5c] uppercase tracking-wider whitespace-nowrap">UZ</span>
                         <input
                             type="number"
                             min={0}
@@ -370,9 +370,9 @@ export const StepWynikPodzial = () => {
                             onChange={e => setBulkUzValue(e.target.value)}
                             onKeyDown={e => { if (e.key === 'Enter') { handleBulkSet('UZ', bulkUzValue); setBulkUzValue(''); } }}
                             placeholder="np. 2028,80"
-                            className="w-28 text-xs text-right border-none outline-none bg-transparent font-mono text-slate-800 placeholder:text-slate-300"
+                            className="w-28 text-xs text-right border-none outline-none bg-transparent font-mono text-[#201f1e] placeholder:text-[#c8c6c4]"
                         />
-                        <span className="text-[10px] text-slate-400">zł</span>
+                        <span className="text-[10px] text-[#a19f9d]">zł</span>
                         <button
                             onClick={() => { handleBulkSet('UZ', bulkUzValue); setBulkUzValue(''); }}
                             disabled={!bulkUzValue}
@@ -382,11 +382,11 @@ export const StepWynikPodzial = () => {
                         </button>
                     </div>
 
-                    <div className="w-px h-5 bg-slate-200" />
+                    <div className="w-px h-5 bg-[#e1dfdd]" />
 
                     {/* UoP group */}
                     <div className="flex items-center gap-1.5 bg-white border border-indigo-200 rounded-md px-2 py-1 shadow-sm">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">UoP</span>
+                        <span className="text-[10px] font-bold text-[#605e5c] uppercase tracking-wider whitespace-nowrap">UoP</span>
                         <input
                             type="number"
                             min={0}
@@ -395,9 +395,9 @@ export const StepWynikPodzial = () => {
                             onChange={e => setBulkUopValue(e.target.value)}
                             onKeyDown={e => { if (e.key === 'Enter') { handleBulkSet('UOP', bulkUopValue); setBulkUopValue(''); } }}
                             placeholder="np. 3605,85"
-                            className="w-28 text-xs text-right border-none outline-none bg-transparent font-mono text-slate-800 placeholder:text-slate-300"
+                            className="w-28 text-xs text-right border-none outline-none bg-transparent font-mono text-[#201f1e] placeholder:text-[#c8c6c4]"
                         />
-                        <span className="text-[10px] text-slate-400">zł</span>
+                        <span className="text-[10px] text-[#a19f9d]">zł</span>
                         <button
                             onClick={() => { handleBulkSet('UOP', bulkUopValue); setBulkUopValue(''); }}
                             disabled={!bulkUopValue}
@@ -415,12 +415,12 @@ export const StepWynikPodzial = () => {
                     </div>
 
                     {/* MOBILE CARD LIST */}
-                    <div className="md:hidden h-full overflow-y-auto p-4 space-y-3 bg-slate-100/50 pb-6 custom-scrollbar">
+                    <div className="md:hidden h-full overflow-y-auto p-4 space-y-3 bg-[#f3f2f1]/50 pb-6 custom-scrollbar">
                         {filteredWyniki.map((item) => (
                             <PodzialResultCard key={item.pracownik.id} item={item} />
                         ))}
                         {filteredWyniki.length === 0 && (
-                            <div className="text-center py-10 text-slate-400 text-sm">Brak wyników spełniających kryteria.</div>
+                            <div className="text-center py-10 text-[#a19f9d] text-sm">Brak wyników spełniających kryteria.</div>
                         )}
                     </div>
                 </div>

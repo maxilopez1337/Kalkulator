@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { StepIndicator } from './shared/ui/StepIndicator';
-import { Menu, X, Home, Zap, Building, ShieldCheck, Calculator, Settings, Database, FileText } from './shared/icons/Icons';
+import { Menu, X, Home, Zap, Building, ShieldCheck, Calculator, Settings, Database, FileText, Users, TrendingUp, ChevronRight, ChevronLeft } from './shared/icons/Icons';
 import { ImportModal } from './features/modals/ImportModal';
 import { ConfigModal } from './features/modals/ConfigModal';
 import { DatabaseModal } from './features/modals/DatabaseModal';
@@ -15,7 +15,7 @@ import { StepPorownanie } from './features/steps/comparison/StepPorownanie';
 import { StepPodsumowanie } from './features/steps/summary/StepPodsumowanie';
 import { StepAnalizaPracownika } from './features/steps/simulation/StepAnalizaPracownika';
 import { useAppStore } from './store/AppContext';
-import { theme } from './shared/config/theme';
+import { theme, animations } from './shared/config/theme';
 import { DEFAULT_FIRMA_STATE } from './store/CompanyContext';
 import { Toast } from './shared/ui/Toast';
 import { ErrorBoundary } from './shared/ui/ErrorBoundary';
@@ -41,7 +41,7 @@ const App = () => {
         'Model Docelowy',
         'Business Case',
         'Podsumowanie',
-        'Sym. Pracownika'
+        'Analiza Pracownika'
   ];
 
   // Detect mobile & auto-configure sidebar
@@ -97,18 +97,18 @@ const App = () => {
       }
   };
 
-  const NavItem = ({ icon, label, onClick, active = false }: { icon: React.ReactNode, label: string, onClick: () => void, active?: boolean }) => (
+  const NavItem = ({ icon, label, onClick, active = false }: { icon: React.ReactNode, label: string, onClick: () => void, active?: boolean, key?: React.Key }) => (
       <button 
         onClick={() => { onClick(); if(isMobile) setIsSidebarOpen(false); }}
         className={`flex items-center gap-3 py-3 md:py-2.5 transition-all rounded-md group relative mb-1
             ${isSidebarCollapsed ? 'justify-center px-2 w-full' : 'w-full px-4'}
-            ${active 
-                ? 'bg-white text-brand shadow-sm ring-1 ring-slate-200' 
-                : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'}
+            ${active
+                ? 'bg-white text-brand shadow-sm ring-1 ring-[#edebe9]'
+                : 'text-[#605e5c] hover:bg-[#f3f2f1] hover:text-[#201f1e]'}
         `}
         title={isSidebarCollapsed ? label : ''}
       >
-          <div className={`${active ? 'text-brand' : 'text-slate-400 group-hover:text-slate-600'} flex-shrink-0 transition-transform ${isSidebarCollapsed ? 'scale-110' : ''}`}>
+          <div className={`${active ? 'text-brand' : 'text-[#a19f9d] group-hover:text-[#605e5c]'} flex-shrink-0 transition-transform ${isSidebarCollapsed ? 'scale-110' : ''}`}>
               {icon}
           </div>
           
@@ -118,7 +118,7 @@ const App = () => {
           
           {/* Tooltip for collapsed mode */}
           {isSidebarCollapsed && (
-              <div className="absolute left-full ml-3 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg">
+              <div className="absolute left-full ml-3 px-2 py-1 bg-[#323130] text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg transition-opacity duration-150">
                   {label}
               </div>
           )}
@@ -141,18 +141,16 @@ const App = () => {
             </button>
             
             {/* LOGO AREA */}
-            <div 
-                className="flex items-center gap-3 cursor-pointer group select-none" 
-                onClick={() => !isMobile && setIsSidebarCollapsed(!isSidebarCollapsed)}
-                title="Przełącz widok menu"
+            <div
+                className="flex items-center gap-3 select-none"
             >
                 <div className="flex items-center justify-center w-8 h-8 transition-transform group-hover:scale-105">
                     <ShieldCheck className="h-8 w-auto text-white" />
                 </div>
 
-                <div className={`h-5 w-px bg-white/10 hidden sm:block transition-all duration-300 ${isSidebarCollapsed ? 'opacity-0 w-0 mx-0' : 'opacity-100 mx-1'}`}></div>
+                <div className={`h-5 w-px bg-white/10 hidden sm:block transition-all ${animations.standard} ${isSidebarCollapsed ? 'opacity-0 w-0 mx-0' : 'opacity-100 mx-1'}`}></div>
                 
-                <div className={`flex flex-col justify-center overflow-hidden transition-all duration-300 origin-left ${isSidebarCollapsed ? 'w-0 opacity-0' : 'w-48 opacity-100'}`}>
+                <div className={`flex flex-col justify-center overflow-hidden transition-all ${animations.standard} origin-left ${isSidebarCollapsed ? 'w-0 opacity-0' : 'w-48 opacity-100'}`}>
                     <span className="text-white font-bold tracking-tight text-sm whitespace-nowrap leading-tight">
                         Stratton Prime
                     </span>
@@ -184,7 +182,7 @@ const App = () => {
         <div className="flex items-center gap-4 relative z-10">
             
             {/* Tax Year Badge */}
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-950/50 border border-blue-900/50">
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-sm bg-blue-950/50 border border-blue-900/50">
                 <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
                 <span className="text-[10px] font-medium text-blue-200 tracking-wide uppercase">
                     Rok Podatkowy <span className="text-white font-bold">2026</span>
@@ -197,7 +195,7 @@ const App = () => {
             <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="text-right hidden sm:block">
                     <div className="text-xs font-bold text-white leading-none">DZIAŁ ANALIZ FINANSOWYCH</div>
-                    <div className="text-[10px] text-blue-300 leading-none mt-1">Wyloguj</div>
+                    <button onClick={handleCloseSession} className="text-[10px] text-blue-300 hover:text-white leading-none mt-1 transition-colors cursor-pointer">Wyloguj</button>
                 </div>
                 <div className="h-9 w-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md border-2 border-brand group-hover:border-blue-400 transition-colors">
                     SP
@@ -213,7 +211,7 @@ const App = () => {
           {/* MOBILE OVERLAY BACKDROP */}
           {isMobile && isSidebarOpen && (
               <div 
-                  className="absolute inset-0 bg-slate-900/60 z-[35] backdrop-blur-sm transition-opacity animate-in fade-in"
+                  className="absolute inset-0 bg-[#001433]/60 z-[35] backdrop-blur-sm transition-opacity animate-in fade-in"
                   onClick={() => setIsSidebarOpen(false)}
               ></div>
           )}
@@ -222,23 +220,34 @@ const App = () => {
           <aside className={`
               absolute lg:static inset-y-0 left-0 z-40
               bg-[#f8fafc] border-r border-[#edebe9] shadow-2xl lg:shadow-none
-              flex flex-col transition-all duration-300 ease-in-out
+              flex flex-col transition-all ${animations.standard} ease-in-out
               ${isSidebarCollapsed && !isMobile ? 'w-[72px]' : 'w-[280px] lg:w-72'}
               ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
           `}>
               {/* Mobile Header in Sidebar */}
-              <div className="lg:hidden flex justify-between items-center p-4 border-b border-slate-200 bg-white">
-                  <span className="font-bold text-slate-800 text-sm uppercase tracking-wide">Menu</span>
-                  <button onClick={() => setIsSidebarOpen(false)} className="text-slate-400 p-1"><X /></button>
+              <div className="lg:hidden flex justify-between items-center p-4 border-b border-[#edebe9] bg-white">
+                  <span className="font-bold text-[#201f1e] text-sm uppercase tracking-wide">Menu</span>
+                  <button onClick={() => setIsSidebarOpen(false)} className="text-[#a19f9d] p-1"><X /></button>
+              </div>
+
+              {/* Collapse Toggle — desktop only */}
+              <div className="hidden lg:flex items-center justify-end px-3 py-1.5 border-b border-[#edebe9]">
+                  <button
+                      onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                      className="p-1.5 rounded-md text-[#a19f9d] hover:text-[#323130] hover:bg-[#f3f2f1] transition-colors"
+                      title={isSidebarCollapsed ? 'Rozwiń menu' : 'Zwiń menu'}
+                  >
+                      <ChevronLeft className={`w-4 h-4 transition-transform ${animations.standard} ${isSidebarCollapsed ? 'rotate-180' : ''}`} />
+                  </button>
               </div>
 
               {/* Navigation Items */}
-              <nav className={`flex-1 overflow-y-auto py-6 px-3 space-y-6 ${isSidebarCollapsed ? 'scrollbar-hide' : 'custom-scrollbar'}`}>
-                  
+              <nav className={`flex-1 overflow-y-auto py-4 px-3 space-y-6 ${isSidebarCollapsed ? 'scrollbar-hide' : 'custom-scrollbar'}`}>
+
                   {/* GLOBAL NAV */}
                   <div>
                       {!isSidebarCollapsed && (
-                          <div className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          <div className="px-4 text-[10px] font-bold text-[#a19f9d] uppercase tracking-wider mb-2">
                               Start
                           </div>
                       )}
@@ -246,36 +255,49 @@ const App = () => {
                       <NavItem active={currentStep === -2} onClick={() => setCurrentStep(-2)} icon={<Zap />} label="Szybka Symulacja" />
                   </div>
 
+                  {/* AKTYWNA ANALIZA — widoczna tylko gdy jesteśmy w procesie */}
+                  {currentStep >= 0 && currentStep <= 5 && (
+                      <div>
+                          {!isSidebarCollapsed && (
+                              <div className="px-4 text-[10px] font-bold text-[#a19f9d] uppercase tracking-wider mb-2">
+                                  Aktywna Analiza
+                              </div>
+                          )}
+                          {[
+                              { icon: <Building />, label: 'Dane Organizacji' },
+                              { icon: <Users />, label: 'Ewidencja Osobowa' },
+                              { icon: <Calculator />, label: 'Analiza Kosztów' },
+                              { icon: <ShieldCheck />, label: 'Model Docelowy' },
+                              { icon: <TrendingUp />, label: 'Business Case' },
+                              { icon: <FileText />, label: 'Podsumowanie' },
+                          ].map((item, idx) => (
+                              <NavItem
+                                  key={idx}
+                                  active={currentStep === idx}
+                                  onClick={() => setCurrentStep(idx)}
+                                  icon={item.icon}
+                                  label={item.label}
+                              />
+                          ))}
+                      </div>
+                  )}
+
               </nav>
 
               {/* Bottom Actions */}
-              <div className={`p-4 border-t border-[#edebe9] space-y-2 bg-white transition-all ${isSidebarCollapsed ? 'items-center flex flex-col px-2' : ''}`}>
-                  <button 
-                    onClick={() => { setDatabaseModalOpen(true); if(isMobile) setIsSidebarOpen(false); }} 
-                    className={`flex items-center gap-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'px-4'}`}
-                    title="Baza Ofert"
-                  >
-                      <Database className="w-4 h-4" /> 
-                      {!isSidebarCollapsed && <span>Baza Ofert</span>}
-                  </button>
-                  <button 
-                    onClick={() => { setConfigModalOpen(true); if(isMobile) setIsSidebarOpen(false); }} 
-                    className={`flex items-center gap-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'px-4'}`}
-                    title="Konfiguracja"
-                  >
-                      <Settings className="w-4 h-4" /> 
-                      {!isSidebarCollapsed && <span>Konfiguracja</span>}
-                  </button>
+              <div className={`p-3 border-t border-[#edebe9] bg-white`}>
+                  <NavItem icon={<Database className="w-4 h-4" />} label="Baza Ofert"    onClick={() => setDatabaseModalOpen(true)} />
+                  <NavItem icon={<Settings className="w-4 h-4" />} label="Konfiguracja"  onClick={() => setConfigModalOpen(true)} />
               </div>
           </aside>
 
           {/* MAIN CONTENT AREA */}
           <main className={`
               flex-1 min-h-0 flex flex-col bg-[#f3f2f1] relative w-full overflow-hidden
-              transition-all duration-300
+              transition-all ${animations.standard}
           `}>
           <ErrorBoundary>
-              
+
               {/* Step Indicator - Visible ONLY if step >= 0 */}
               {isProcessVisible && (
                   <div className="bg-white border-b border-[#edebe9] shadow-sm shrink-0 z-10 animate-in fade-in slide-in-from-top-2 w-full">
@@ -307,6 +329,35 @@ const App = () => {
                       {renderStep()}
                   </div>
               </div>
+
+              {/* Step Navigation Footer — Wróć / Dalej */}
+              {currentStep >= 0 && currentStep <= 5 && (
+                  <div className="bg-white border-t border-[#edebe9] px-4 md:px-6 py-2.5 flex items-center justify-between shrink-0 z-10 animate-in fade-in">
+                      <button
+                          onClick={() => setCurrentStep(currentStep === 0 ? -1 : currentStep - 1)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#605e5c] hover:text-[#201f1e] hover:bg-[#f3f2f1] rounded-md transition-colors"
+                      >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span>{currentStep === 0 ? 'Pulpit' : steps[currentStep - 1]}</span>
+                      </button>
+
+                      <span className="text-[11px] text-[#a19f9d] font-medium tracking-wide hidden sm:block">
+                          Krok {currentStep + 1} / 6
+                      </span>
+
+                      {currentStep < 5 ? (
+                          <button
+                              onClick={() => setCurrentStep(currentStep + 1)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-brand hover:bg-[#002855] rounded-md transition-colors"
+                          >
+                              <span>{steps[currentStep + 1]}</span>
+                              <ChevronRight className="w-4 h-4" />
+                          </button>
+                      ) : (
+                          <div className="w-[120px]" />
+                      )}
+                  </div>
+              )}
 
           </ErrorBoundary>
           </main>

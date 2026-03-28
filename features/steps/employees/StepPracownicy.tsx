@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Users, Plus, Copy, Trash, FileText, Check, X, ChevronRight } from '../../../shared/icons/Icons';
+import { Users, Plus, Copy, Trash, FileText, Check, X, ChevronRight, ChevronLeft } from '../../../shared/icons/Icons';
 import { Avatar } from '../../../shared/ui/Avatar';
 import { FormField } from '../../../shared/ui/Layout';
 import { SearchInput } from '../../../shared/ui/SearchInput';
@@ -10,6 +10,7 @@ import { Input, Select } from '../../../shared/ui/Input';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { obliczWiek, czyZwolnionyZFpFgsp } from '../../../shared/utils/dates';
 import { useEmployees, useCompany, useConfirm } from '../../../store/AppContext';
+import { animations } from '../../../shared/config/theme';
 import { useEmployeeActions } from '../../../hooks/useEmployeeActions';
 import { pl } from '../../../shared/i18n/pl';
 
@@ -107,7 +108,7 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
   const activeEmployee = pracownicy.find(p => p.id === activeId) ?? null;
 
   return (
-    <div className="animate-in fade-in duration-200 flex flex-col -mx-3 md:-mx-6 lg:-mx-8 -mt-3 md:-mt-6 lg:-mt-8 -mb-3 md:-mb-6 lg:-mb-8 h-[calc(100dvh-96px)]">
+    <div className={`animate-in fade-in ${animations.quick} flex flex-col -mx-3 md:-mx-6 lg:-mx-8 -mt-3 md:-mt-6 lg:-mt-8 -mb-3 md:-mb-6 lg:-mb-8 h-[calc(100dvh-96px)]`}>
 
       {/* ── COMMAND BAR ───────────────────────────────────────────────────── */}
       <div className="shrink-0 bg-white border-b border-[#edebe9] shadow-[0_1px_4px_rgba(0,0,0,0.08)] px-3 md:px-5 h-[52px] flex items-center justify-between gap-2 md:gap-4">
@@ -196,7 +197,7 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
           {/* Empty state (no employees at all) */}
           {pracownicy.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-              <div className="w-12 h-12 bg-[#f3f2f1] rounded-full flex items-center justify-center mb-3 text-[#a19f9d]">
+              <div className="w-12 h-12 bg-white border border-[#edebe9] rounded-sm flex items-center justify-center mb-3 text-[#a19f9d]">
                 <Users />
               </div>
               <p className="text-[13px] font-semibold text-[#201f1e] mb-1">Brak pracowników</p>
@@ -301,7 +302,7 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
           {activeEmployee === null ? (
             /* Placeholder when nothing selected */
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8 select-none">
-              <div className="w-16 h-16 rounded-full bg-[#f3f2f1] flex items-center justify-center mb-4 text-[#c7c6c5]">
+              <div className="w-16 h-16 rounded-sm bg-white border border-[#edebe9] flex items-center justify-center mb-4 text-[#c7c6c5]">
                 <Users />
               </div>
               <p className="text-[14px] font-semibold text-[#201f1e] mb-1">Brak wybranego rekordu</p>
@@ -319,7 +320,7 @@ export const StepPracownicy = ({ onImportClick }: Props) => {
                     className="md:hidden flex items-center justify-center w-8 h-8 rounded-sm hover:bg-[#f3f2f1] text-[#605e5c] flex-shrink-0 transition-colors"
                     title="Wróć do listy"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    <ChevronLeft className="w-4 h-4" />
                   </button>
                   <Avatar name={activeEmployee.imie} surname={activeEmployee.nazwisko} className="w-9 h-9 text-[13px] flex-shrink-0" />
                   <div className="min-w-0">

@@ -83,17 +83,17 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
         // ZAWSZE zielony dla wartości dodatnich
         const isPositiveEffect = diff >= 0;
 
-        const borderClass = isTotalLike ? 'border-b-2 border-slate-100' : 'border-b border-slate-50';
+        const borderClass = isTotalLike ? 'border-b-2 border-[#edebe9]' : 'border-b border-[#edebe9]';
 
         return (
-            <div className={`group grid grid-cols-12 items-center hover:bg-slate-50 transition-colors ${borderClass}`}>
+            <div className={`group grid grid-cols-12 items-center hover:bg-[#f3f2f1] transition-colors ${borderClass}`}>
                 {/* 1. LABEL (Col 1-4) */}
                 <div className="col-span-4 pl-6 py-4 pr-4">
-                    <div className={`text-sm ${isTotalLike ? 'font-bold text-slate-800' : 'font-medium text-slate-700'}`}>
+                    <div className={`text-sm ${isTotalLike ? 'font-bold text-[#201f1e]' : 'font-medium text-[#323130]'}`}>
                         {label}
                     </div>
                     {subLabel && (
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400 mt-0.5 font-semibold">
+                        <div className="text-[10px] uppercase tracking-wider text-[#a19f9d] mt-0.5 font-semibold">
                             {subLabel}
                         </div>
                     )}
@@ -101,14 +101,14 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
 
                 {/* 2. STANDARD (Col 5-7) */}
                 <div className="col-span-3 px-4 py-4 text-right">
-                    <div className={`font-mono tabular-nums tracking-tight ${isTotalLike ? 'text-slate-600 font-bold' : 'text-slate-500 text-sm'}`}>
-                        {valStd !== null ? formatPLN(valStd) : <span className="text-slate-300">-</span>}
+                    <div className={`font-mono tabular-nums tracking-tight ${isTotalLike ? 'text-[#605e5c] font-bold' : 'text-[#605e5c] text-sm'}`}>
+                        {valStd !== null ? formatPLN(valStd) : <span className="text-[#c8c6c4]">-</span>}
                     </div>
                 </div>
 
                 {/* 3. NEW MODEL (Col 8-10) - HIGHLIGHTED */}
                 <div className={`col-span-3 px-4 py-4 text-right relative ${theme.bgHighlight} ${theme.borderL}`}>
-                    <div className={`font-mono tabular-nums tracking-tight ${isTotalLike ? 'text-lg font-extrabold' : 'font-bold text-base'} ${customStrClass || 'text-slate-900'}`}>
+                    <div className={`font-mono tabular-nums tracking-tight ${isTotalLike ? 'text-lg font-extrabold' : 'font-bold text-base'} ${customStrClass || 'text-[#201f1e]'}`}>
                         {formatPLN(valStr)}
                     </div>
                 </div>
@@ -125,7 +125,7 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                             {diff > 0 ? '+' : ''}{formatPLN(diff).replace(' zł', '')}
                         </div>
                     ) : (
-                        <span className="text-slate-300 text-xs">–</span>
+                        <span className="text-[#c8c6c4] text-xs">–</span>
                     )}
                 </div>
             </div>
@@ -138,16 +138,16 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
         const diff = valStr - valStd;
 
         return (
-            <div className="mt-auto bg-slate-900 text-white rounded-b-xl overflow-hidden">
+            <div className="mt-auto bg-[#001433] text-white rounded-b-md overflow-hidden">
                 <div className="grid grid-cols-12 items-center">
                     <div className="col-span-4 pl-6 py-5">
-                        <div className="text-sm font-bold uppercase tracking-widest text-slate-400">Całkowity Koszt Brutto Pracodawcy</div>
-                        <div className="text-xs text-slate-500 mt-0.5">(Miesięcznie)</div>
+                        <div className="text-sm font-bold uppercase tracking-widest text-[#a19f9d]">Całkowity Koszt Brutto Pracodawcy</div>
+                        <div className="text-xs text-[#605e5c] mt-0.5">(Miesięcznie)</div>
                     </div>
                     
                     <div className="col-span-3 px-4 py-5 text-right">
-                        <div className="text-slate-500 text-xs uppercase font-bold mb-1">Standard</div>
-                        <div className="font-mono text-lg text-slate-400 line-through decoration-slate-600">{formatPLN(valStd)}</div>
+                        <div className="text-[#605e5c] text-xs uppercase font-bold mb-1">Standard</div>
+                        <div className="font-mono text-lg text-[#a19f9d] line-through decoration-[#605e5c]">{formatPLN(valStd)}</div>
                     </div>
 
                     <div className={`col-span-3 px-4 py-5 text-right relative bg-white/5`}>
@@ -172,11 +172,11 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
         const isPos = diff <= 0.01 || label.includes('Netto') || label.includes('Podwyżka');
 
         return (
-            <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-sm mb-2">
+            <div className="bg-white border border-[#edebe9] rounded-md p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] mb-2">
                 <div className="flex justify-between items-start mb-2">
                     <div>
-                        <div className="font-bold text-slate-800 text-sm">{label}</div>
-                        <div className="text-[10px] text-slate-400 uppercase font-bold">{subLabel}</div>
+                        <div className="font-bold text-[#201f1e] text-sm">{label}</div>
+                        <div className="text-[10px] text-[#a19f9d] uppercase font-bold">{subLabel}</div>
                     </div>
                     {Math.abs(diff) > 0.01 && (
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${isPos ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-rose-50 text-rose-700 border-rose-100'}`}>
@@ -184,19 +184,19 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                         </span>
                     )}
                 </div>
-                <div className="flex justify-between items-end border-t border-slate-100 pt-2">
-                    <div className="text-xs text-slate-400 font-mono">{valStd ? formatPLN(valStd) : '-'}</div>
-                    <div className={`text-sm font-bold font-mono ${customStrClass || 'text-slate-900'}`}>{formatPLN(valStr)}</div>
+                <div className="flex justify-between items-end border-t border-[#edebe9] pt-2">
+                    <div className="text-xs text-[#a19f9d] font-mono">{valStd ? formatPLN(valStd) : '-'}</div>
+                    <div className={`text-sm font-bold font-mono ${customStrClass || 'text-[#201f1e]'}`}>{formatPLN(valStr)}</div>
                 </div>
             </div>
         );
     };
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-slate-200">
+        <div className="flex flex-col h-full bg-white rounded-md shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] border border-[#edebe9]">
             
             {/* DESKTOP HEADER */}
-            <div className="hidden md:grid grid-cols-12 bg-slate-50/80 border-b border-slate-200 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+            <div className="hidden md:grid grid-cols-12 bg-[#f3f2f1] border-b border-[#edebe9] py-3 text-[10px] font-bold text-[#605e5c] uppercase tracking-wider">
                 <div className="col-span-4 pl-6">Kategoria Kosztowa</div>
                 <div className="col-span-3 text-right px-4">Obecnie (Standard)</div>
                 <div className={`col-span-3 text-right px-4 flex items-center justify-end gap-2 ${theme.textHighlight}`}>
@@ -214,10 +214,10 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                 {renderRow("Netto Pracownika", "DO WYPŁATY (NA RĘKĘ)", stats.standard.netto, stats.stratton.netto, true)}
                 
                 {/* Spacer */}
-                <div className="h-4 bg-slate-50/30 border-b border-slate-50"></div>
+                <div className="h-4 bg-[#f3f2f1]/30 border-b border-[#edebe9]"></div>
 
                  {renderRow("Opłata serwisowa EBS", `${prowizjaProc}% wartości nominalnej świadczeń`,
-                     null, feeAmount, false, undefined, "text-slate-600 font-semibold", true)}
+                     null, feeAmount, false, undefined, "text-[#605e5c] font-semibold", true)}
 
                 {/* Bonus admina 2% zawsze pokazuj */}
                 {adminAmount > 0 &&
@@ -241,20 +241,20 @@ export const SummaryComparisonTable = ({ stats, prowizjaProc, activeModel }: Pro
                 <MobileRowCard label="ZUS Pracownika" subLabel="Społeczne" valStd={stdZusPracownikaTotal} valStr={strZusPracownikaTotal} />
                 <MobileRowCard label="Netto Pracownika" subLabel="Na rękę" valStd={stats.standard.netto} valStr={stats.stratton.netto} customStrClass="text-blue-700" />
                 
-                <div className="my-2 border-t border-dashed border-slate-200"></div>
+                <div className="my-2 border-t border-dashed border-[#edebe9]"></div>
                 <MobileRowCard label="Opłata serwisowa EBS" subLabel={`${prowizjaProc}% wartości nominalnej świadczeń`} valStd={null} valStr={feeAmount} />
                 {/* Bonus admina 2% zawsze pokazuj */}
                 {adminAmount > 0 && <MobileRowCard label="Bonus (2%)" subLabel="Dla działu księgowo-kadrowego" valStd={0} valStr={adminAmount} customStrClass="text-blue-700" customDiffCalc={(s,n) => n} />}
                 {/* Podwyżka 4% tylko dla PRIME */}
                 {includeRaises && raiseAmount > 0 && <MobileRowCard label="Podwyżka (4%)" subLabel="Dla pracownika" valStd={0} valStr={raiseAmount} customStrClass="text-emerald-700" customDiffCalc={(s,n) => n} />}
                 
-                <div className="bg-slate-900 rounded-lg p-4 text-white mt-4">
+                <div className="bg-[#001433] rounded-md p-4 text-white mt-4">
                     <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold uppercase text-slate-400">Koszt Całkowity</span>
-                        <span className="text-xs bg-slate-800 px-2 py-0.5 rounded text-emerald-400">Oszcz. {formatPLN(stats.standard.kosztPracodawcy - strKosztZProwizja)}</span>
+                        <span className="text-xs font-bold uppercase text-[#a19f9d]">Koszt Całkowity</span>
+                        <span className="text-xs bg-[#323130] px-2 py-0.5 rounded-sm text-emerald-400">Oszcz. {formatPLN(stats.standard.kosztPracodawcy - strKosztZProwizja)}</span>
                     </div>
                     <div className="flex justify-between items-end">
-                        <div className="text-sm text-slate-500 line-through font-mono">{formatPLN(stats.standard.kosztPracodawcy)}</div>
+                        <div className="text-sm text-[#605e5c] line-through font-mono">{formatPLN(stats.standard.kosztPracodawcy)}</div>
                         <div className="text-xl font-bold font-mono">{formatPLN(strKosztZProwizja)}</div>
                     </div>
                 </div>

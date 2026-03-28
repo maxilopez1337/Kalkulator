@@ -3,6 +3,7 @@ import { Pracownik } from '../../../../entities/employee/model';
 import { Config } from '../../../../entities/company/model';
 import { obliczWariantStandard } from '../../../tax-engine';
 import { Info, Calculator, TrendingUp } from '../../../../shared/icons/Icons';
+import { animations } from '../../../../shared/config/theme';
 
 interface TaxSimulationProps {
   pracownik: Pracownik;
@@ -62,9 +63,9 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
   };
 
   return (
-    <div className="mt-6 pt-4 border-t border-slate-100">
+    <div className="mt-6 pt-4 border-t border-[#edebe9]">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-slate-800">
+        <div className="flex items-center gap-2 text-[#201f1e]">
             <Calculator className="w-5 h-5 text-indigo-500" />
             <span className="font-semibold text-sm">Symulacja podatkowa (Roczna)</span>
             {enabled && <span className="text-[10px] ml-2 bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider animate-in fade-in">Aktywna</span>}
@@ -78,27 +79,27 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
             checked={enabled}
             onChange={(e) => setEnabled(e.target.checked)}
           />
-          <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-          <span className="ml-3 text-xs font-medium text-slate-500">{enabled ? 'Włączona' : 'Wyłączona'}</span>
+          <div className="w-11 h-6 bg-[#e1dfdd] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#c8c6c4] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+          <span className="ml-3 text-xs font-medium text-[#605e5c]">{enabled ? 'Włączona' : 'Wyłączona'}</span>
         </label>
       </div>
 
       {enabled && symulacja && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2 fade-in duration-300">
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2 fade-in ${animations.standard}`}>
             
             {/* Lewa kolumna: Parametry wejściowe & Wolne od podatku */}
-            <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-sm flex flex-col gap-3">
+            <div className="bg-white border border-[#edebe9] rounded-md p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] flex flex-col gap-3">
                 
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-                    <span className="text-xs text-slate-500">Miesięczna podstawa (PIT)</span>
+                <div className="flex justify-between items-center pb-2 border-b border-[#edebe9]">
+                    <span className="text-xs text-[#605e5c]">Miesięczna podstawa (PIT)</span>
                     <span className="text-sm font-bold">{formatPLN(symulacja.podstawaPit)}</span>
                 </div>
                 
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+                <div className="flex justify-between items-center pb-2 border-b border-[#edebe9]">
                     <div className="flex items-center gap-1.5 tooltip-trigger relative group">
-                        <span className="text-xs text-slate-500">Roczna kwota wolna</span>
-                        <Info className="w-3.5 h-3.5 text-slate-400" />
-                        <div className="absolute hidden group-hover:block bottom-full left-0 mb-1 w-48 bg-slate-800 text-white text-[10px] p-2 rounded z-10">
+                        <span className="text-xs text-[#605e5c]">Roczna kwota wolna</span>
+                        <Info className="w-3.5 h-3.5 text-[#a19f9d]" />
+                        <div className="absolute hidden group-hover:block bottom-full left-0 mb-1 w-48 bg-[#323130] text-white text-[10px] p-2 rounded-sm z-10">
                             Każdy podatnik na skali ma do dyspozycji 30 000 zł całkowicie zwolnione z podatku.
                         </div>
                     </div>
@@ -107,34 +108,34 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
 
                 <div className="flex items-start justify-between">
                     <div className="flex flex-col">
-                        <span className="text-xs text-slate-500">Zmniejszenie podatku (Mies./Rok)</span>
-                        <span className="text-[10px] text-slate-400">Na podst. złożonego PIT-2</span>
+                        <span className="text-xs text-[#605e5c]">Zmniejszenie podatku (Mies./Rok)</span>
+                        <span className="text-[10px] text-[#a19f9d]">Na podst. złożonego PIT-2</span>
                     </div>
                     <div className="flex flex-col items-end">
                         <span className="text-sm font-bold">{formatPLN(symulacja.kwotaZmniejszajacaMiesiac)}</span>
-                        <span className="text-[10px] text-slate-400 font-mono">x 12 = {formatPLN(symulacja.kwotaZmniejszajacaRocznie)}</span>
+                        <span className="text-[10px] text-[#a19f9d] font-mono">x 12 = {formatPLN(symulacja.kwotaZmniejszajacaRocznie)}</span>
                     </div>
                 </div>
             </div>
 
             {/* Prawa kolumna: Detekcja Progów i suma */}
-            <div className={`border rounded-lg p-3 shadow-sm flex flex-col gap-3 ${symulacja.przekroczenieProgu ? 'bg-rose-50 border-rose-200' : 'bg-slate-50 border-slate-200'}`}>
+            <div className={`border rounded-md p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.13),0_0.3px_0.9px_0_rgba(0,0,0,0.11)] flex flex-col gap-3 ${symulacja.przekroczenieProgu ? 'bg-rose-50 border-rose-200' : 'bg-[#f3f2f1] border-[#edebe9]'}`}>
                 
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                <div className="flex justify-between items-center pb-2 border-b border-[#edebe9]">
                     <div className="flex flex-col">
-                        <span className="text-xs text-slate-700 font-semibold mb-0.5">Skumulowana podstawa PIT (Rok)</span>
+                        <span className="text-xs text-[#323130] font-semibold mb-0.5">Skumulowana podstawa PIT (Rok)</span>
                         {symulacja.przekroczenieProgu ? (
                             <span className="text-[10px] text-rose-600 font-bold flex items-center gap-1"><TrendingUp size={12}/> Przekroczono II próg podatkowy!</span>
                         ) : (
                             <span className="text-[10px] text-emerald-600 font-medium">Bezpieczny w I progu podatkowym</span>
                         )}
                     </div>
-                    <span className={`text-sm font-bold ${symulacja.przekroczenieProgu ? 'text-rose-700' : 'text-slate-900'}`}>
+                    <span className={`text-sm font-bold ${symulacja.przekroczenieProgu ? 'text-rose-700' : 'text-[#201f1e]'}`}>
                         {formatPLN(symulacja.rocznaPodstawa)}
                     </span>
                 </div>
 
-                <table className="w-full text-xs text-slate-600">
+                <table className="w-full text-xs text-[#605e5c]">
                     <tbody>
                         <tr>
                             <td className="py-1">Opodatkowanie 12%</td>
@@ -147,17 +148,17 @@ export const TaxSimulation = ({ pracownik, config, stawkaWypadkowa }: TaxSimulat
                             </tr>
                         )}
                         <tr>
-                            <td className="py-1 text-[10px] text-slate-400">Ulga zmniejszająca (PIT-2)</td>
-                            <td className="text-right py-1 text-[10px] text-slate-400 font-mono">- {formatPLN(symulacja.kwotaZmniejszajacaRocznie)}</td>
+                            <td className="py-1 text-[10px] text-[#a19f9d]">Ulga zmniejszająca (PIT-2)</td>
+                            <td className="text-right py-1 text-[10px] text-[#a19f9d] font-mono">- {formatPLN(symulacja.kwotaZmniejszajacaRocznie)}</td>
                         </tr>
                     </tbody>
                 </table>
                 
-                <div className="w-full h-px bg-slate-200 my-0.5"></div>
+                <div className="w-full h-px bg-[#e1dfdd] my-0.5"></div>
                 
                 <div className="flex justify-between items-end">
-                    <span className="text-xs font-bold text-slate-800 uppercase tracking-tight">Roczna Zaliczka Podatkowa</span>
-                    <span className="text-base font-black text-slate-900 leading-none">
+                    <span className="text-xs font-bold text-[#201f1e] uppercase tracking-tight">Roczna Zaliczka Podatkowa</span>
+                    <span className="text-base font-black text-[#201f1e] leading-none">
                         {pracownik.ulgaMlodych ? formatPLN(0) : formatPLN(symulacja.rocznyPodatekZakladany)}
                         {pracownik.ulgaMlodych && <span className="block text-[9px] text-right font-normal text-emerald-600 mt-1">Status: Ulga dla młodych (Zwolnienie)</span>}
                     </span>

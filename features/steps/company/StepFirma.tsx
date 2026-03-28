@@ -6,6 +6,7 @@ import { ButtonSecondary } from '../../../shared/ui/Button';
 import { formatPLN } from '../../../shared/utils/formatters';
 import { useCompany } from '../../../store/CompanyContext';
 import { useCompanyData } from '../../../hooks/useCompanyData';
+import { animations } from '../../../shared/config/theme';
 
 // Compact label + children wrapper (replaces FormField for tight layouts)
 const CompactField = ({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) => (
@@ -30,7 +31,7 @@ export const StepFirma = () => {
   } = useCompanyData();
 
   return (
-    <div className="animate-in fade-in duration-200 flex flex-col -mx-3 md:-mx-6 lg:-mx-8 -mt-3 md:-mt-6 lg:-mt-8">
+    <div className={`animate-in fade-in ${animations.quick} flex flex-col -mx-3 md:-mx-6 lg:-mx-8 -mt-3 md:-mt-6 lg:-mt-8`}>
 
       {/* ── STICKY HEADER BAR ────────────────────────────────────────────── */}
       <div className="sticky top-0 z-20 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.10)] border-b border-[#edebe9]">

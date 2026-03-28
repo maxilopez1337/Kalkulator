@@ -4,7 +4,7 @@ import { TrendingUp, Wallet, PieChart, Users, ChevronDown } from '../../../share
 import { SectionLabel } from '../../../shared/ui/SectionLabel';
 import { KpiCard } from '../../../shared/ui/KpiCard';
 import { SearchInput } from '../../../shared/ui/SearchInput';
-import { shadow } from '../../../shared/config/theme';
+import { shadow, animations } from '../../../shared/config/theme';
 import { DataTableToolbar } from '../../../shared/ui/DataTableToolbar';
 import { ExcelExportButton } from '../../../shared/ui/ExcelExportButton';
 import { applyHeaderStyle, applyDataStyle, applyTotalStyle } from './excelStyles';
@@ -16,24 +16,25 @@ import { formatPLN } from '../../../shared/utils/formatters';
 import { STANDARD_TABLE_CONFIG } from './excelTableConfigs';
 import { WynikPracownika } from '../../../entities/calculation/model';
 import { Avatar } from '../../../shared/ui/Avatar';
+import { EmptyState } from '../../../shared/ui/EmptyState';
 
 // --- MOBILE CARD COMPONENT ---
 const ResultCard: React.FC<{ item: WynikPracownika, standardKoszt: number }> = ({ item, standardKoszt }) => {
     const [expanded, setExpanded] = useState(false);
     
     return (
-        <div className={`bg-white rounded-md border border-[#edebe9] ${shadow.elevation4} overflow-hidden transition-all duration-200 active:scale-[0.99]`}>
+        <div className={`bg-white rounded-md border border-[#edebe9] ${shadow.elevation4} overflow-hidden transition-all ${animations.quick} active:scale-[0.99]`}>
             {/* Header */}
-            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-slate-50 transition-colors" role="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
+            <div className="p-4 flex justify-between items-start cursor-pointer hover:bg-[#f3f2f1] transition-colors" role="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
                 <div className="flex items-center gap-3">
                     <Avatar
                         name={item.pracownik.imie}
                         surname={item.pracownik.nazwisko}
-                        colorClass="bg-slate-100 text-slate-500 border border-slate-200"
+                        colorClass="bg-[#f3f2f1] text-[#605e5c] border border-[#edebe9]"
                     />
                     <div>
-                        <div className="font-bold text-slate-900 text-sm">{item.pracownik.imie} {item.pracownik.nazwisko}</div>
-                        <div className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
+                        <div className="font-bold text-[#201f1e] text-sm">{item.pracownik.imie} {item.pracownik.nazwisko}</div>
+                        <div className="text-xs text-[#605e5c] flex items-center gap-2 mt-0.5">
                             <span className={`uppercase font-bold tracking-wider text-[9px] px-1.5 py-0.5 rounded border ${item.pracownik.typUmowy === 'UOP' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
                                 {item.pracownik.typUmowy}
                             </span>
@@ -41,58 +42,58 @@ const ResultCard: React.FC<{ item: WynikPracownika, standardKoszt: number }> = (
                         </div>
                     </div>
                 </div>
-                <div className={`text-slate-400 p-1 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}>
+                <div className={`text-[#a19f9d] p-1 transition-transform ${animations.quick} ${expanded ? 'rotate-180' : ''}`}>
                     <ChevronDown />
                 </div>
             </div>
 
             {/* Key Metrics Row */}
             <div className="px-4 pb-4 grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                <div className="bg-[#f3f2f1] p-2.5 rounded-sm border border-[#edebe9]">
                     <SectionLabel className="mb-1">Koszt Całkowity</SectionLabel>
-                    <div className="text-sm font-bold text-slate-700">{formatPLN(item.standard.kosztPracodawcy)}</div>
+                    <div className="text-sm font-bold text-[#323130]">{formatPLN(item.standard.kosztPracodawcy)}</div>
                 </div>
-                <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                <div className="bg-[#f3f2f1] p-2.5 rounded-sm border border-[#edebe9]">
                     <SectionLabel className="mb-1">Brutto</SectionLabel>
-                    <div className="text-sm font-bold text-slate-700">{formatPLN(item.standard.brutto)}</div>
+                    <div className="text-sm font-bold text-[#323130]">{formatPLN(item.standard.brutto)}</div>
                 </div>
             </div>
 
             {/* Expanded Details */}
             {expanded && (
-                <div className="border-t border-slate-100 bg-slate-50/50 p-4 space-y-4 animate-in slide-in-from-top-2">
+                <div className="border-t border-[#edebe9] bg-[#f3f2f1]/50 p-4 space-y-4 animate-in slide-in-from-top-2">
                     
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                        <div className="col-span-2 font-bold text-slate-900 border-b border-slate-200 pb-1 mb-1 mt-2 flex items-center gap-2">
+                        <div className="col-span-2 font-bold text-[#201f1e] border-b border-[#edebe9] pb-1 mb-1 mt-2 flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
                             Koszty Pracodawcy
                         </div>
                         
-                        <div className="text-slate-500">ZUS Emerytalne</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zusPracodawca.emerytalna)}</div>
+                        <div className="text-[#605e5c]">ZUS Emerytalne</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zusPracodawca.emerytalna)}</div>
                         
-                        <div className="text-slate-500">ZUS Rentowe</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zusPracodawca.rentowa)}</div>
+                        <div className="text-[#605e5c]">ZUS Rentowe</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zusPracodawca.rentowa)}</div>
                         
-                        <div className="text-slate-500">Wypadkowa</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zusPracodawca.wypadkowa)}</div>
+                        <div className="text-[#605e5c]">Wypadkowa</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zusPracodawca.wypadkowa)}</div>
                         
-                        <div className="text-slate-500">FP + FGŚP</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zusPracodawca.fp + item.standard.zusPracodawca.fgsp)}</div>
+                        <div className="text-[#605e5c]">FP + FGŚP</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zusPracodawca.fp + item.standard.zusPracodawca.fgsp)}</div>
 
-                        <div className="col-span-2 font-bold text-slate-900 border-b border-slate-200 pb-1 mb-1 mt-2 flex items-center gap-2">
+                        <div className="col-span-2 font-bold text-[#201f1e] border-b border-[#edebe9] pb-1 mb-1 mt-2 flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
                             Potrącenia Pracownika
                         </div>
                         
-                        <div className="text-slate-500">ZUS Społeczne</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zusPracownik.suma)}</div>
+                        <div className="text-[#605e5c]">ZUS Społeczne</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zusPracownik.suma)}</div>
                         
-                        <div className="text-slate-500">Zdrowotna</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.zdrowotna)}</div>
+                        <div className="text-[#605e5c]">Zdrowotna</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.zdrowotna)}</div>
                         
-                        <div className="text-slate-500">Zaliczka PIT</div>
-                        <div className="text-right font-mono text-slate-700">{formatPLN(item.standard.pit)}</div>
+                        <div className="text-[#605e5c]">Zaliczka PIT</div>
+                        <div className="text-right font-mono text-[#323130]">{formatPLN(item.standard.pit)}</div>
                     </div>
                 </div>
             )}
@@ -191,7 +192,7 @@ export const StepWynikStandard = () => {
     };
 
     return (
-        <div className="animate-in fade-in zoom-in-95 duration-300 h-full min-h-0 flex flex-col gap-2">
+        <div className={`${animations.fadeIn} h-full min-h-0 flex flex-col gap-2`}>
 
             {/* DATA GRID CONTAINER */}
             <div className={`bg-white rounded-md ${shadow.elevation8} border border-[#edebe9] overflow-hidden flex flex-col flex-1 min-h-0`}>
@@ -250,12 +251,12 @@ export const StepWynikStandard = () => {
                     </div>
 
                     {/* MOBILE CARD LIST */}
-                    <div className="md:hidden h-full overflow-y-auto p-4 space-y-3 bg-slate-100/50 pb-6 custom-scrollbar">
+                    <div className="md:hidden h-full overflow-y-auto p-4 space-y-3 bg-[#f3f2f1]/50 pb-6 custom-scrollbar">
                         {filteredWyniki.map((item) => (
                             <ResultCard key={item.pracownik.id} item={item} standardKoszt={item.standard.kosztPracodawcy} />
                         ))}
                         {filteredWyniki.length === 0 && (
-                            <div className="text-center py-10 text-slate-400 text-sm">Brak wyników spełniających kryteria.</div>
+                            <EmptyState icon={<Users />} title="Brak wyników" description="Brak wyników spełniających kryteria wyszukiwania." />
                         )}
                     </div>
 

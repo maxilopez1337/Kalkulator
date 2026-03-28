@@ -126,11 +126,27 @@ export const useAppStore = () => {
   };
 
   const generateOfferElitonPrimePlus = (item: ZapisanaKalkulacja) => {
+      if (!item.dane.pracownicy.length) {
+          notification.notify('Brak pracowników — nie można wygenerować oferty.', 'error');
+          return;
+      }
+      if (!item.dane.firma.stawkaWypadkowa) {
+          notification.notify('Uzupełnij stawkę wypadkową firmy przed generowaniem oferty.', 'error');
+          return;
+      }
       offerPdfV3Generator.generateOfferPDF(item);
       notification.notify('Generowanie oferty Eliton Prime™ PLUS...', 'info');
   };
 
   const generateLegalizacjaPremii = (item: ZapisanaKalkulacja) => {
+      if (!item.dane.pracownicy.length) {
+          notification.notify('Brak pracowników — nie można wygenerować oferty.', 'error');
+          return;
+      }
+      if (!item.dane.firma.stawkaWypadkowa) {
+          notification.notify('Uzupełnij stawkę wypadkową firmy przed generowaniem oferty.', 'error');
+          return;
+      }
       offerLegalizacjaPremiiGenerator.generateOfferPDF(item);
       notification.notify('Generowanie oferty Legalizacja Premii...', 'info');
   };

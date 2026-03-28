@@ -64,8 +64,8 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
     }, [qualifiedData]);
 
     const rowPy = compact ? '!py-0.5' : '!py-2';
-    const dh = `text-[10px] font-semibold text-slate-400 uppercase tracking-tight ${rowPy} px-2 text-right`;
-    const dc = `text-[11px] text-slate-500 ${rowPy} px-2 tabular-nums text-right border-slate-50`;
+    const dh = `text-[10px] font-semibold text-[#a19f9d] uppercase tracking-tight ${rowPy} px-2 text-right`;
+    const dc = `text-[11px] text-[#605e5c] ${rowPy} px-2 tabular-nums text-right border-[#edebe9]`;
 
     const collapsedGroups: { key: GroupKey; label: string; value: number; color: string }[] = (
         [
@@ -87,11 +87,11 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
             <Thead>
                 <Tr className="h-8">
                     {/* Sticky Columns */}
-                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[40px] text-slate-400">LP</ThCenter>
-                    <ThCenter rowSpan={2} className="bg-slate-50 border-r border-b min-w-[140px] md:min-w-[220px] text-left pl-4 text-slate-600">PRACOWNIK</ThCenter>
+                    <ThCenter rowSpan={2} className="bg-[#f3f2f1] border-r border-b min-w-[40px] text-[#a19f9d]">LP</ThCenter>
+                    <ThCenter rowSpan={2} className="bg-[#f3f2f1] border-r border-b min-w-[140px] md:min-w-[220px] text-left pl-4 text-[#605e5c]">PRACOWNIK</ThCenter>
 
                     {/* DANE WEJŚCIOWE — not collapsible */}
-                    <ThCenter colSpan={4} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-slate-50 text-slate-600 border-slate-200 whitespace-nowrap">DANE WEJŚCIOWE</ThCenter>
+                    <ThCenter colSpan={4} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-[#f3f2f1] text-[#605e5c] border-[#edebe9] whitespace-nowrap">DANE WEJŚCIOWE</ThCenter>
 
                     {/* Collapsible group headers */}
                     <ThGroup colSpan={exp.swiadczenie ? 5 : 1} expanded={exp.swiadczenie} onToggle={() => tog('swiadczenie')}
@@ -102,7 +102,7 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                         className="bg-emerald-50/80 text-emerald-800 border-emerald-100">
                         {exp.wyplata ? 'DO WYPŁATY' : 'Σ Do Wypłaty'}
                     </ThGroup>
-                    <ThCenter colSpan={1} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-slate-100 text-slate-700 border-slate-300 whitespace-nowrap">KOSZT</ThCenter>
+                    <ThCenter colSpan={1} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-[#f3f2f1] text-[#323130] border-[#c8c6c4] whitespace-nowrap">KOSZT</ThCenter>
                     <ThGroup colSpan={exp.zusPrac ? 5 : 1} expanded={exp.zusPrac} onToggle={() => tog('zusPrac')}
                         className="bg-indigo-50/50 text-indigo-800 border-indigo-100">
                         {exp.zusPrac ? 'ZUS PRACOWNIKA' : 'Σ ZUS Prac.'}
@@ -119,12 +119,12 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                         className="bg-purple-50/50 text-purple-800 border-purple-100">
                         {exp.zusFirma ? 'ZUS PRACODAWCY' : 'Σ ZUS Firma'}
                     </ThGroup>
-                    <ThCenter colSpan={1} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-slate-100 text-slate-600 border-slate-300 whitespace-nowrap">SUMA</ThCenter>
+                    <ThCenter colSpan={1} className="text-[10px] font-bold uppercase tracking-wider py-1.5 border-b border-r bg-[#f3f2f1] text-[#605e5c] border-[#c8c6c4] whitespace-nowrap">SUMA</ThCenter>
                 </Tr>
                 <Tr className="h-10">
                     {/* DANE WEJŚCIOWE */}
-                    <ThCenter className="w-16 text-[11px] bg-slate-50/50 text-slate-500 border-b">Umowa</ThCenter>
-                    <ThRight className="w-24 bg-slate-50/30 text-slate-600 border-b border-r text-[11px]">Brutto Łącz.</ThRight>
+                    <ThCenter className="w-16 text-[11px] bg-[#f3f2f1]/50 text-[#605e5c] border-b">Umowa</ThCenter>
+                    <ThRight className="w-24 bg-[#f3f2f1]/30 text-[#605e5c] border-b border-r text-[11px]">Brutto Łącz.</ThRight>
                     <ThRight className="w-28 bg-blue-50/40 text-blue-700 font-bold border-b border-blue-200">Netto Baza</ThRight>
                     <ThRight className="w-24 bg-blue-50/20 text-blue-900 border-b border-r border-blue-100 text-[11px]">Brutto Baza</ThRight>
 
@@ -141,7 +141,7 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                     <ThRight className="w-28 bg-emerald-100 border-b border-r border-emerald-200 font-bold text-emerald-900">RAZEM</ThRight>
 
                     {/* KOSZT */}
-                    <ThRight className="w-28 bg-slate-100 border-b border-r border-slate-300 font-extrabold text-slate-800">KOSZT CAŁK.</ThRight>
+                    <ThRight className="w-28 bg-[#f3f2f1] border-b border-r border-[#c8c6c4] font-extrabold text-[#201f1e]">KOSZT CAŁK.</ThRight>
 
                     {/* ZUS PRACOWNIK */}
                     {exp.zusPrac && <ThRight className={dh}>Podst.</ThRight>}
@@ -170,27 +170,27 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                     <ThRight className="text-[11px] font-bold text-purple-700 bg-purple-50/30 border-r border-purple-100 py-2 px-2 text-right">Σ Firma</ThRight>
 
                     {/* SUMA */}
-                    <ThRight className="text-[11px] font-extrabold bg-slate-100 text-slate-800 py-2 px-2">SUMA SKŁ.</ThRight>
+                    <ThRight className="text-[11px] font-extrabold bg-[#f3f2f1] text-[#201f1e] py-2 px-2">SUMA SKŁ.</ThRight>
                 </Tr>
             </Thead>
             <Tbody>
                 {data.map((w, idx) => {
                     const isStudent = w.pracownik.trybSkladek === 'STUDENT_UZ';
                     const baseRow = isStudent
-                        ? 'opacity-50 bg-slate-50 grayscale hover:bg-slate-100 transition-colors'
-                        : `transition-colors group ${idx % 2 === 1 ? 'bg-slate-50/40' : 'bg-white'} hover:bg-[#f0f7ff]`;
+                        ? 'opacity-50 bg-[#f3f2f1] grayscale hover:bg-[#f3f2f1] transition-colors'
+                        : `transition-colors group ${idx % 2 === 1 ? 'bg-[#f3f2f1]/40' : 'bg-white'} hover:bg-[#f0f7ff]`;
 
                     return (
                         <Tr key={w.pracownik.id} className={baseRow}>
                             {/* Sticky Columns */}
-                            <Td className={`text-center bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 text-slate-400 font-mono text-[10px] ${rowPy}`}>
+                            <Td className={`text-center bg-white group-hover:bg-[#f0f7ff] border-r border-[#edebe9] text-[#a19f9d] font-mono text-[10px] ${rowPy}`}>
                                 {idx + 1}
                             </Td>
-                            <Td className={`bg-white group-hover:bg-[#f0f7ff] border-r border-slate-200 pl-4 ${rowPy}`}>
-                                <div className="font-semibold text-slate-900 text-sm truncate max-w-[120px] md:max-w-[200px]" title={`${w.pracownik.imie} ${w.pracownik.nazwisko}`}>
+                            <Td className={`bg-white group-hover:bg-[#f0f7ff] border-r border-[#edebe9] pl-4 ${rowPy}`}>
+                                <div className="font-semibold text-[#201f1e] text-sm truncate max-w-[120px] md:max-w-[200px]" title={`${w.pracownik.imie} ${w.pracownik.nazwisko}`}>
                                     {w.pracownik.imie} {w.pracownik.nazwisko}
                                 </div>
-                                {isStudent && <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Student (Wykluczony)</div>}
+                                {isStudent && <div className="text-[9px] text-[#a19f9d] font-bold uppercase tracking-wider">Student (Wykluczony)</div>}
                             </Td>
 
                             {/* DANE WEJŚCIOWE */}
@@ -199,15 +199,15 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                                     {w.pracownik.typUmowy}
                                 </span>
                             </TdCenter>
-                            <TdRight className={`${dc} border-r border-slate-100`}>{formatPLN(w.podzial.pit.lacznyPrzychod)}</TdRight>
+                            <TdRight className={`${dc} border-r border-[#edebe9]`}>{formatPLN(w.podzial.pit.lacznyPrzychod)}</TdRight>
                             <td className={`px-2 border-b border-blue-100 bg-blue-50/20 text-right relative transition-colors ${rowPy} ${isStudent ? '' : 'group-hover:bg-blue-50/40'}`}>
                                 {isStudent ? (
-                                    <span className="text-xs text-slate-400 block text-right pr-2">-</span>
+                                    <span className="text-xs text-[#a19f9d] block text-right pr-2">-</span>
                                 ) : (
                                     <NettoZasadniczaCell pracownik={w.pracownik} standardKoszt={w.standard.kosztPracodawcy} />
                                 )}
                             </td>
-                            <TdRight className={`bg-blue-50/10 text-slate-500 border-r border-blue-100 text-[11px] ${rowPy}`}>{formatPLN(w.podzial.zasadnicza.brutto)}</TdRight>
+                            <TdRight className={`bg-blue-50/10 text-[#605e5c] border-r border-blue-100 text-[11px] ${rowPy}`}>{formatPLN(w.podzial.zasadnicza.brutto)}</TdRight>
 
                             {/* ŚWIADCZENIE */}
                             <TdRight className={`text-amber-700 font-bold bg-amber-50/20 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.podzial.swiadczenie.netto)}</TdRight>
@@ -217,12 +217,12 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                             {exp.swiadczenie && <TdRight className="bg-amber-50/10 text-amber-800 border-r border-amber-100 text-[11px]">{formatPLN(w.podzial.swiadczenie.zaliczka)}</TdRight>}
 
                             {/* WYPŁATA */}
-                            {exp.wyplata && <TdRight className="bg-emerald-50/10 text-slate-600 text-[11px]">{formatPLN(w.podzial.doWyplatyGotowka)}</TdRight>}
-                            {exp.wyplata && <TdRight className="bg-emerald-50/10 text-slate-600 text-[11px]">{formatPLN(w.podzial.doWyplatySwiadczenie)}</TdRight>}
+                            {exp.wyplata && <TdRight className="bg-emerald-50/10 text-[#605e5c] text-[11px]">{formatPLN(w.podzial.doWyplatyGotowka)}</TdRight>}
+                            {exp.wyplata && <TdRight className="bg-emerald-50/10 text-[#605e5c] text-[11px]">{formatPLN(w.podzial.doWyplatySwiadczenie)}</TdRight>}
                             <TdRight className={`bg-emerald-100 border-r border-emerald-200 font-bold text-emerald-900 tabular-nums ${rowPy} px-2 text-right text-[13px]`}>{formatPLN(w.podzial.doWyplaty)}</TdRight>
 
                             {/* KOSZT */}
-                            <TdRight className={`bg-slate-100 font-bold text-slate-900 border-r border-slate-300 tabular-nums ${rowPy} px-2 text-right text-[13px]`}>{formatPLN(w.podzial.kosztPracodawcy)}</TdRight>
+                            <TdRight className={`bg-[#f3f2f1] font-bold text-[#201f1e] border-r border-[#c8c6c4] tabular-nums ${rowPy} px-2 text-right text-[13px]`}>{formatPLN(w.podzial.kosztPracodawcy)}</TdRight>
 
                             {/* ZUS PRACOWNIK */}
                             {exp.zusPrac && <TdRight className={dc}>{formatPLN(w.podzial.zasadnicza.brutto)}</TdRight>}
@@ -247,20 +247,20 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                             {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.rentowa)}</TdRight>}
                             {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.wypadkowa)}</TdRight>}
                             {exp.zusFirma && <TdRight className={dc}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.fp)}</TdRight>}
-                            {exp.zusFirma && <TdRight className={`${dc} border-r border-slate-100`}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.fgsp)}</TdRight>}
+                            {exp.zusFirma && <TdRight className={`${dc} border-r border-[#edebe9]`}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.fgsp)}</TdRight>}
                             <TdRight className={`text-[12px] font-bold text-purple-900 bg-purple-50/10 border-r border-purple-200 tabular-nums ${rowPy} px-2 text-right`}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.suma)}</TdRight>
 
                             {/* SUMA SKŁADEK */}
-                            <TdRight className={`font-extrabold text-[12px] text-slate-800 bg-slate-50 tabular-nums ${rowPy} px-3`}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.suma + w.podzial.zasadnicza.zusPracownik.suma + w.podzial.zasadnicza.zdrowotna)}</TdRight>
+                            <TdRight className={`font-extrabold text-[12px] text-[#201f1e] bg-[#f3f2f1] tabular-nums ${rowPy} px-3`}>{formatPLN(w.podzial.zasadnicza.zusPracodawca.suma + w.podzial.zasadnicza.zusPracownik.suma + w.podzial.zasadnicza.zdrowotna)}</TdRight>
                         </Tr>
                     );
                 })}
             </Tbody>
             <Tfoot>
-                <Tr className="bg-slate-100 border-t-2 border-slate-300 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-                    <Td className="bg-slate-100 border-r border-slate-300 font-bold text-slate-500 text-xs" colSpan={2}>
+                <Tr className="bg-[#f3f2f1] border-t-2 border-[#c8c6c4] shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+                    <Td className="bg-[#f3f2f1] border-r border-[#c8c6c4] font-bold text-[#605e5c] text-xs" colSpan={2}>
                         <div className="pl-4 flex flex-col justify-center h-full">
-                            <span className="hidden md:inline text-slate-700 font-extrabold">SUMA (KWALIFIKUJĄCY SIĘ)</span>
+                            <span className="hidden md:inline text-[#323130] font-extrabold">SUMA (KWALIFIKUJĄCY SIĘ)</span>
                             <span className="md:hidden">SUMA</span>
                             {excludedCount > 0 && (
                                 <div className="flex items-center gap-1 text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 mt-1 w-max">
@@ -272,54 +272,54 @@ export const PodzialTable = ({ data }: { data: WynikPracownika[] }) => {
                     </Td>
 
                     {/* Baza */}
-                    <Td className="bg-slate-100 border-b border-slate-300" />
-                    <TdRight className="border-t border-slate-300 text-slate-500 text-[10px] border-r">{formatPLN(total.bruttoLaczne)}</TdRight>
-                    <TdRight className="border-t border-slate-300 bg-blue-100 font-bold text-blue-900 text-[13px]">{formatPLN(total.nettoZasadnicza)}</TdRight>
-                    <TdRight className="border-t border-slate-300 border-r border-blue-200 text-slate-500 text-[10px]">{formatPLN(total.bruttoZasadnicza)}</TdRight>
+                    <Td className="bg-[#f3f2f1] border-b border-[#c8c6c4]" />
+                    <TdRight className="border-t border-[#c8c6c4] text-[#605e5c] text-[10px] border-r">{formatPLN(total.bruttoLaczne)}</TdRight>
+                    <TdRight className="border-t border-[#c8c6c4] bg-blue-100 font-bold text-blue-900 text-[13px]">{formatPLN(total.nettoZasadnicza)}</TdRight>
+                    <TdRight className="border-t border-[#c8c6c4] border-r border-blue-200 text-[#605e5c] text-[10px]">{formatPLN(total.bruttoZasadnicza)}</TdRight>
 
                     {/* Świadczenie */}
-                    <TdRight className="border-t border-slate-300 bg-amber-50 font-bold text-amber-800 text-[13px]">{formatPLN(total.swiadczenieNetto)}</TdRight>
-                    {exp.swiadczenie && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.dodatek)}</TdRight>}
-                    {exp.swiadczenie && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.potracenie)}</TdRight>}
-                    {exp.swiadczenie && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.swiadczenieBrutto)}</TdRight>}
-                    {exp.swiadczenie && <TdRight className="border-t border-slate-300 bg-amber-50 border-r border-amber-200 text-amber-700 text-[11px]">{formatPLN(total.swiadczenieZaliczka)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-amber-50 font-bold text-amber-800 text-[13px]">{formatPLN(total.swiadczenieNetto)}</TdRight>
+                    {exp.swiadczenie && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.dodatek)}</TdRight>}
+                    {exp.swiadczenie && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.potracenie)}</TdRight>}
+                    {exp.swiadczenie && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.swiadczenieBrutto)}</TdRight>}
+                    {exp.swiadczenie && <TdRight className="border-t border-[#c8c6c4] bg-amber-50 border-r border-amber-200 text-amber-700 text-[11px]">{formatPLN(total.swiadczenieZaliczka)}</TdRight>}
 
                     {/* Wypłata */}
-                    {exp.wyplata && <TdRight className="border-t border-slate-300 bg-emerald-50 text-[11px]">{formatPLN(total.wyplataGotowka)}</TdRight>}
-                    {exp.wyplata && <TdRight className="border-t border-slate-300 bg-emerald-50 text-[11px]">{formatPLN(total.wyplataSwiadczenie)}</TdRight>}
-                    <TdRight className="border-t border-slate-300 bg-emerald-200 border-r border-emerald-300 font-extrabold text-emerald-900 text-[13px]">{formatPLN(total.wyplataRazem)}</TdRight>
+                    {exp.wyplata && <TdRight className="border-t border-[#c8c6c4] bg-emerald-50 text-[11px]">{formatPLN(total.wyplataGotowka)}</TdRight>}
+                    {exp.wyplata && <TdRight className="border-t border-[#c8c6c4] bg-emerald-50 text-[11px]">{formatPLN(total.wyplataSwiadczenie)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-emerald-200 border-r border-emerald-300 font-extrabold text-emerald-900 text-[13px]">{formatPLN(total.wyplataRazem)}</TdRight>
 
                     {/* Koszt */}
-                    <TdRight className="border-t border-slate-300 bg-slate-300 border-r border-slate-400 font-extrabold text-slate-900 text-[13px]">{formatPLN(total.koszt)}</TdRight>
+                    <TdRight className="border-t border-[#c8c6c4] bg-[#e1dfdd] border-r border-[#c8c6c4] font-extrabold text-[#201f1e] text-[13px]">{formatPLN(total.koszt)}</TdRight>
 
                     {/* ZUS Pracownik */}
-                    {exp.zusPrac && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.podstZus)}</TdRight>}
-                    {exp.zusPrac && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.zusE)}</TdRight>}
-                    {exp.zusPrac && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.zusR)}</TdRight>}
-                    {exp.zusPrac && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.zusC)}</TdRight>}
-                    <TdRight className="border-t border-slate-300 bg-indigo-50 border-r border-indigo-200 font-bold text-indigo-900 text-[11px]">{formatPLN(total.zusSuma)}</TdRight>
+                    {exp.zusPrac && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.podstZus)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.zusE)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.zusR)}</TdRight>}
+                    {exp.zusPrac && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.zusC)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-indigo-50 border-r border-indigo-200 font-bold text-indigo-900 text-[11px]">{formatPLN(total.zusSuma)}</TdRight>
 
                     {/* Zdrowotna */}
-                    {exp.zdrowotna && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.podstZdr)}</TdRight>}
-                    <TdRight className="border-t border-slate-300 bg-teal-50 border-r border-teal-200 font-bold text-teal-900 text-[11px]">{formatPLN(total.sklZdr)}</TdRight>
+                    {exp.zdrowotna && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.podstZdr)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-teal-50 border-r border-teal-200 font-bold text-teal-900 text-[11px]">{formatPLN(total.sklZdr)}</TdRight>
 
                     {/* PIT */}
-                    {exp.pit && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.kup)}</TdRight>}
-                    {exp.pit && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.podstPit)}</TdRight>}
-                    {exp.pit && <Td className="border-t border-slate-300" />}
-                    {exp.pit && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.pitZasadnicza)}</TdRight>}
-                    <TdRight className="border-t border-slate-300 bg-rose-50 border-r border-rose-200 font-bold text-rose-900 text-[11px]">{formatPLN(total.pitCalk)}</TdRight>
+                    {exp.pit && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.kup)}</TdRight>}
+                    {exp.pit && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.podstPit)}</TdRight>}
+                    {exp.pit && <Td className="border-t border-[#c8c6c4]" />}
+                    {exp.pit && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.pitZasadnicza)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-rose-50 border-r border-rose-200 font-bold text-rose-900 text-[11px]">{formatPLN(total.pitCalk)}</TdRight>
 
                     {/* ZUS Pracodawca */}
-                    {exp.zusFirma && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.firmaE)}</TdRight>}
-                    {exp.zusFirma && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.firmaR)}</TdRight>}
-                    {exp.zusFirma && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.firmaW)}</TdRight>}
-                    {exp.zusFirma && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.firmaFP)}</TdRight>}
-                    {exp.zusFirma && <TdRight className="border-t border-slate-300 text-[10px] text-slate-400">{formatPLN(total.firmaFGSP)}</TdRight>}
-                    <TdRight className="border-t border-slate-300 bg-purple-50 border-r border-purple-200 font-bold text-purple-900 text-[11px]">{formatPLN(total.zusFirma)}</TdRight>
+                    {exp.zusFirma && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.firmaE)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.firmaR)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.firmaW)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.firmaFP)}</TdRight>}
+                    {exp.zusFirma && <TdRight className="border-t border-[#c8c6c4] text-[10px] text-[#a19f9d]">{formatPLN(total.firmaFGSP)}</TdRight>}
+                    <TdRight className="border-t border-[#c8c6c4] bg-purple-50 border-r border-purple-200 font-bold text-purple-900 text-[11px]">{formatPLN(total.zusFirma)}</TdRight>
 
                     {/* Suma Składek */}
-                    <TdRight className="bg-slate-200 font-extrabold text-slate-900 text-xs border-t border-slate-300">{formatPLN(total.sumaSkladek)}</TdRight>
+                    <TdRight className="bg-[#e1dfdd] font-extrabold text-[#201f1e] text-xs border-t border-[#c8c6c4]">{formatPLN(total.sumaSkladek)}</TdRight>
                 </Tr>
             </Tfoot>
             </TableContainer>

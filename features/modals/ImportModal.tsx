@@ -9,6 +9,7 @@ import { Modal } from '../../shared/ui/Modal';
 import { excelGenerator } from '../../services/excelGenerator';
 import { ButtonPrimary, ButtonSecondary } from '../../shared/ui/Button';
 import { pl } from '../../shared/i18n/pl';
+import { shadow } from '../../shared/config/theme';
 
 interface ImportModalProps {
     isOpen: boolean;
@@ -156,40 +157,38 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
             <div className="flex flex-col h-full">
                 
                 {/* 1. Header Area */}
-                <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white">
-                    <div className="flex items-center gap-4">
-                        <div className="p-2.5 bg-indigo-50 text-indigo-700 rounded-lg">
-                            <FileText />
+                <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-[#edebe9] bg-white shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-sm bg-[#0078d4] flex items-center justify-center flex-shrink-0">
+                            <FileText className="w-4 h-4 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900">Import Pracowników</h2>
-                            <div className="text-sm text-slate-500">Kreator importu danych z Excel (XLSX, CSV)</div>
+                            <h2 className="text-[15px] font-semibold text-[#201f1e] leading-tight">Import Pracowników</h2>
+                            <div className="text-[11px] text-[#a19f9d]">Kreator importu danych z Excel (XLSX, CSV)</div>
                         </div>
                     </div>
-                    
+
                     {importRows.length > 0 && (
-                        <div className="flex items-center gap-4">
-                             <div className="flex gap-2 text-sm font-medium bg-slate-50 p-1.5 rounded-lg border border-slate-200">
-                                <div className="px-3 py-1 bg-white rounded-md shadow-sm border border-slate-100 text-slate-700">
-                                    Razem: <strong>{stats.total}</strong>
-                                </div>
-                                <div className="px-3 py-1 rounded-md text-emerald-700 bg-emerald-50 border border-emerald-100">
-                                    Poprawne: <strong>{stats.valid}</strong>
-                                </div>
-                                <div className={`px-3 py-1 rounded-md border ${stats.invalid > 0 ? 'text-rose-700 bg-rose-50 border-rose-100' : 'text-slate-400 border-transparent'}`}>
-                                    Błędy: <strong>{stats.invalid}</strong>
-                                </div>
+                        <div className="hidden sm:flex items-center gap-2 text-xs font-medium bg-[#f3f2f1] p-1 rounded-sm border border-[#edebe9]">
+                            <div className="px-2.5 py-1 bg-white rounded-sm border border-[#edebe9] text-[#323130]">
+                                Razem: <strong>{stats.total}</strong>
+                            </div>
+                            <div className="px-2.5 py-1 rounded-sm text-[#107c10] bg-[#e6f3e6] border border-[#9fd89f]">
+                                Poprawne: <strong>{stats.valid}</strong>
+                            </div>
+                            <div className={`px-2.5 py-1 rounded-sm border ${stats.invalid > 0 ? 'text-[#d83b01] bg-[#fde7e2] border-[#f0937a]' : 'text-[#a19f9d] border-transparent'}`}>
+                                Błędy: <strong>{stats.invalid}</strong>
                             </div>
                         </div>
                     )}
-                    
-                    <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all">
-                        <X />
+
+                    <button onClick={onClose} className="w-8 h-8 flex items-center justify-center text-[#605e5c] hover:text-[#201f1e] hover:bg-[#f3f2f1] rounded-sm transition-all">
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
 
                 {/* 2. Main Content Area */}
-                <div className="flex-1 bg-slate-50 overflow-hidden relative">
+                <div className="flex-1 bg-[#f3f2f1] overflow-hidden relative">
                     
                     {/* STATE A: EMPTY (ONBOARDING) */}
                     {importRows.length === 0 && (
@@ -197,31 +196,31 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full">
                                 
                                 {/* CARD 1: DOWNLOAD */}
-                                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group flex flex-col items-center text-center">
-                                    <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <div className={`bg-white p-6 rounded-md border border-[#edebe9] ${shadow.elevation4} hover:${shadow.elevation8} transition-all group flex flex-col items-center text-center`}>
+                                    <div className="w-12 h-12 bg-[#eff6fc] text-[#0078d4] rounded-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
                                         <ArrowDown />
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">1. Pobierz Szablon</h3>
-                                    <p className="text-slate-500 text-sm mb-8 leading-relaxed">
+                                    <h3 className="text-[15px] font-semibold text-[#201f1e] mb-2">1. Pobierz Szablon</h3>
+                                    <p className="text-[#605e5c] text-sm mb-6 leading-relaxed">
                                         Pobierz przygotowany plik Excel v2.6.1. <br/>
-                                        Zawiera <strong className="text-slate-700">automatyczne formuły</strong> i listy rozwijane, które ułatwiają wprowadzanie danych.
+                                        Zawiera <strong className="text-[#323130]">automatyczne formuły</strong> i listy rozwijane, które ułatwiają wprowadzanie danych.
                                     </p>
-                                    <div className="mt-auto">
-                                        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3 block">Liczba wierszy przykładowych</label>
+                                    <div className="mt-auto w-full">
+                                        <label className="text-[10px] font-bold text-[#a19f9d] uppercase tracking-wider mb-3 block">Liczba wierszy przykładowych</label>
                                         <div className="flex items-center justify-center gap-2 mb-4">
                                             {[10, 50, 100].map(n => (
-                                                <button 
+                                                <button
                                                     key={n}
                                                     onClick={() => setRowsToGenerate(n)}
-                                                    className={`px-3 py-1 text-xs font-bold rounded border ${rowsToGenerate === n ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'}`}
+                                                    className={`px-3 py-1 text-xs font-bold rounded-sm border transition-colors ${rowsToGenerate === n ? 'bg-brand text-white border-brand' : 'bg-white text-[#605e5c] border-[#8a8886] hover:border-[#323130]'}`}
                                                 >
                                                     {n}
                                                 </button>
                                             ))}
                                         </div>
-                                        <button 
+                                        <button
                                             onClick={() => excelGenerator.generateImportTemplate(rowsToGenerate)}
-                                            className="w-full py-3 px-6 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all flex items-center justify-center gap-2"
+                                            className="w-full py-2.5 px-4 bg-white border border-[#8a8886] text-[#323130] font-semibold rounded-sm hover:border-[#0078d4] hover:text-[#0078d4] transition-all flex items-center justify-center gap-2 text-sm"
                                         >
                                             <FileText /> Pobierz .xlsx
                                         </button>
@@ -229,29 +228,29 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                 </div>
 
                                 {/* CARD 2: UPLOAD */}
-                                <div 
+                                <div
                                     onDragEnter={(e) => { e.preventDefault(); setDragActive(true); }}
                                     onDragLeave={(e) => { e.preventDefault(); setDragActive(false); }}
                                     onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                                     onDrop={handleFileUpload}
-                                    className={`bg-white p-8 rounded-2xl border-2 border-dashed shadow-sm transition-all flex flex-col items-center text-center relative overflow-hidden cursor-pointer
-                                        ${dragActive ? 'border-blue-500 bg-blue-50/50' : 'border-slate-300 hover:border-blue-400'}
+                                    className={`bg-white p-6 rounded-md border-2 border-dashed ${shadow.elevation4} transition-all flex flex-col items-center text-center relative overflow-hidden cursor-pointer
+                                        ${dragActive ? 'border-[#0078d4] bg-[#eff6fc]' : 'border-[#c8c6c4] hover:border-[#0078d4]'}
                                     `}
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <input ref={fileInputRef} type="file" accept=".xlsx, .xls, .csv" onChange={handleFileUpload} className="hidden" />
-                                    
-                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors ${dragActive ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-400'}`}>
+
+                                    <div className={`w-12 h-12 rounded-sm flex items-center justify-center mb-5 transition-colors ${dragActive ? 'bg-[#eff6fc] text-[#0078d4]' : 'bg-[#f3f2f1] text-[#a19f9d]'}`}>
                                         <Plus />
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">2. Wgraj wypełniony plik</h3>
-                                    <p className="text-slate-500 text-sm mb-8 leading-relaxed">
+                                    <h3 className="text-[15px] font-semibold text-[#201f1e] mb-2">2. Wgraj wypełniony plik</h3>
+                                    <p className="text-[#605e5c] text-sm mb-6 leading-relaxed">
                                         Przeciągnij plik tutaj lub kliknij, aby wybrać z dysku. <br/>
                                         Obsługujemy formaty <strong>.xlsx, .csv</strong>.
                                     </p>
-                                    
+
                                     <div className="mt-auto w-full">
-                                        <div className="py-3 px-6 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
+                                        <div className="py-2.5 px-4 bg-brand text-white font-semibold rounded-sm hover:bg-brandHover transition-all flex items-center justify-center gap-2 text-sm">
                                             Wybierz plik <ArrowRight />
                                         </div>
                                     </div>
@@ -265,14 +264,14 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                     {importRows.length > 0 && (
                         <div className="h-full flex flex-col">
                             {/* Toolbar */}
-                            <div className="px-6 py-3 bg-white border-b border-slate-200 flex items-center justify-between shrink-0">
-                                <div className="flex items-center gap-3">
-                                    <button 
+                            <div className="px-4 py-2.5 bg-white border-b border-[#edebe9] flex items-center justify-between shrink-0">
+                                <div className="flex items-center gap-2">
+                                    <button
                                         onClick={() => setShowErrorsOnly(!showErrorsOnly)}
-                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border
-                                            ${showErrorsOnly 
-                                                ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                                                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}
+                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all border
+                                            ${showErrorsOnly
+                                                ? 'bg-[#fde7e2] text-[#d83b01] border-[#f0937a]'
+                                                : 'bg-white text-[#605e5c] border-[#8a8886] hover:bg-[#f3f2f1]'}
                                         `}
                                     >
                                         <Filter />
@@ -280,9 +279,9 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                     </button>
 
                                     {selectedIndices.size > 0 && (
-                                        <button 
+                                        <button
                                             onClick={handleDeleteSelected}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition-all shadow-sm"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d83b01] text-white rounded-sm text-xs font-bold hover:bg-[#a80000] transition-all"
                                         >
                                             <Trash /> Usuń zaznaczone ({selectedIndices.size})
                                         </button>
@@ -295,87 +294,87 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                                     setSelectedIndices(new Set());
                                                 }
                                             }}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-rose-200 text-rose-700 rounded-lg text-xs font-bold hover:bg-rose-300 transition-all border border-rose-300"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fde7e2] text-[#d83b01] rounded-sm text-xs font-bold hover:bg-[#fbd4c8] transition-all border border-[#f0937a]"
                                         >
                                             <Trash /> Usuń wszystkich
                                         </button>
                                     )}
                                 </div>
-                                
-                                <div className="text-xs text-slate-400">
-                                    Plik: <span className="text-slate-700 font-medium">{fileName}</span>
+
+                                <div className="text-xs text-[#a19f9d]">
+                                    Plik: <span className="text-[#323130] font-medium">{fileName}</span>
                                 </div>
                             </div>
 
                             {/* Table */}
-                            <div className="flex-1 overflow-auto bg-slate-100 p-4">
-                                <div className="bg-white rounded-lg border border-slate-300 shadow-sm overflow-hidden min-h-full">
+                            <div className="flex-1 overflow-auto bg-[#f3f2f1] p-3">
+                                <div className="bg-white rounded-sm border border-[#edebe9] overflow-hidden min-h-full">
                                     <table className="w-full border-collapse text-xs">
-                                        <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200 shadow-sm">
+                                        <thead className="bg-[#f8fafc] sticky top-0 z-10 border-b border-[#edebe9]">
                                             <tr>
-                                                <th className="p-2 w-10 text-center bg-slate-50 sticky left-0 z-20 border-r border-slate-200">
+                                                <th className="p-2 w-10 text-center bg-[#f3f2f1] sticky left-0 z-20 border-r border-[#edebe9]">
                                                     <input 
                                                         type="checkbox" 
-                                                        className="rounded border-slate-300 cursor-pointer"
+                                                        className="rounded-sm border-[#c8c6c4] cursor-pointer"
                                                         checked={filteredRowsDisplay.length > 0 && selectedIndices.size === filteredRowsDisplay.length}
                                                         onChange={toggleSelectAll}
                                                     />
                                                 </th>
-                                                <th className="p-3 text-left font-bold text-slate-600 border-r border-slate-100">Pracownik (Imię i Nazwisko)</th>
-                                                <th className="p-3 text-left font-bold text-slate-600 border-r border-slate-100 w-32">Data Ur.</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 border-r border-slate-100 w-16">Płeć</th>
-                                                <th className="p-3 text-left font-bold text-slate-600 border-r border-slate-100 w-32">Umowa</th>
-                                                <th className="p-3 text-left font-bold text-slate-600 border-r border-slate-100">Tryb ZUS</th>
-                                                <th className="p-3 text-right font-bold text-slate-600 border-r border-slate-100 w-24">Netto</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 border-r border-slate-100 w-20">KUP</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 border-r border-slate-100 w-20">PIT-2</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 border-r border-slate-100 w-16">Ulga</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 border-r border-slate-100 w-20">Stawka PIT</th>
-                                                <th className="p-3 text-center font-bold text-slate-600 w-12">Akcje</th>
+                                                <th className="p-3 text-left font-bold text-[#605e5c] border-r border-[#edebe9]">Pracownik (Imię i Nazwisko)</th>
+                                                <th className="p-3 text-left font-bold text-[#605e5c] border-r border-[#edebe9] w-32">Data Ur.</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] border-r border-[#edebe9] w-16">Płeć</th>
+                                                <th className="p-3 text-left font-bold text-[#605e5c] border-r border-[#edebe9] w-32">Umowa</th>
+                                                <th className="p-3 text-left font-bold text-[#605e5c] border-r border-[#edebe9]">Tryb ZUS</th>
+                                                <th className="p-3 text-right font-bold text-[#605e5c] border-r border-[#edebe9] w-24">Netto</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] border-r border-[#edebe9] w-20">KUP</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] border-r border-[#edebe9] w-20">PIT-2</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] border-r border-[#edebe9] w-16">Ulga</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] border-r border-[#edebe9] w-20">Stawka PIT</th>
+                                                <th className="p-3 text-center font-bold text-[#605e5c] w-12">Akcje</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-slate-100">
+                                        <tbody className="divide-y divide-[#edebe9]">
                                             {filteredRowsDisplay.map(({ row, originalIdx }) => {
                                                 const p = row.data;
                                                 if (!p) return null;
                                                 const hasError = !row.isValid;
 
                                                 const cellClass = "p-0 h-full relative";
-                                                const inputClass = "w-full h-full px-3 py-2 bg-transparent outline-none focus:bg-blue-50 focus:text-blue-700 transition-colors text-slate-700 placeholder-slate-400 font-medium";
+                                                const inputClass = "w-full h-full px-3 py-2 bg-transparent outline-none focus:bg-blue-50 focus:text-blue-700 transition-colors text-[#323130] placeholder-[#a19f9d] font-medium";
                                                 const errorInputClass = "w-full h-full px-3 py-2 bg-rose-50 text-rose-700 outline-none focus:bg-rose-100 font-bold border-2 border-rose-300 inset-0 absolute";
 
                                                 return (
-                                                    <tr key={originalIdx} className={`group ${hasError ? 'bg-rose-50/30' : 'hover:bg-slate-50'}`}>
-                                                        <td className="p-2 text-center border-r border-slate-200/50 bg-inherit sticky left-0 z-10">
+                                                    <tr key={originalIdx} className={`group ${hasError ? 'bg-rose-50/30' : 'hover:bg-[#f3f2f1]'}`}>
+                                                        <td className="p-2 text-center border-r border-[#edebe9] bg-inherit sticky left-0 z-10">
                                                             <input 
                                                                 type="checkbox" 
-                                                                className="rounded border-slate-300 cursor-pointer"
+                                                                className="rounded-sm border-[#c8c6c4] cursor-pointer"
                                                                 checked={selectedIndices.has(originalIdx)}
                                                                 onChange={() => toggleSelection(originalIdx)}
                                                             />
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <div className="flex">
-                                                                <input type="text" value={p.imie} onChange={(e) => handleUpdateRow(originalIdx, 'imie', e.target.value)} className={`${!p.imie ? errorInputClass : inputClass} w-1/2 border-r border-dashed border-slate-200`} placeholder="Imię" />
+                                                                <input type="text" value={p.imie} onChange={(e) => handleUpdateRow(originalIdx, 'imie', e.target.value)} className={`${!p.imie ? errorInputClass : inputClass} w-1/2 border-r border-dashed border-[#edebe9]`} placeholder="Imię" />
                                                                 <input type="text" value={p.nazwisko} onChange={(e) => handleUpdateRow(originalIdx, 'nazwisko', e.target.value)} className={`${!p.nazwisko ? errorInputClass : inputClass} w-1/2`} placeholder="Nazwisko" />
                                                             </div>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <input type="date" value={p.dataUrodzenia} onChange={(e) => handleUpdateRow(originalIdx, 'dataUrodzenia', e.target.value)} className={inputClass} />
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <select value={p.plec} onChange={(e) => handleUpdateRow(originalIdx, 'plec', e.target.value)} className={inputClass}>
                                                                 <option value="M">M</option>
                                                                 <option value="K">K</option>
                                                             </select>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <select value={p.typUmowy} onChange={(e) => handleUpdateRow(originalIdx, 'typUmowy', e.target.value)} className={`${inputClass} ${p.typUmowy === 'UOP' ? 'text-blue-700' : 'text-amber-700'}`}>
                                                                 <option value="UOP">Umowa o pracę</option>
                                                                 <option value="UZ">Umowa zlecenie</option>
                                                             </select>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <select value={p.trybSkladek} onChange={(e) => handleUpdateRow(originalIdx, 'trybSkladek', e.target.value)} className={inputClass}>
                                                                 <option value="PELNE">Pełne składki</option>
                                                                 <option value="BEZ_CHOROBOWEJ">Bez chor.</option>
@@ -384,10 +383,10 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                                                 <option value="EMERYT_RENCISTA">Emeryt</option>
                                                             </select>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <input type="number" value={p.nettoDocelowe} onChange={(e) => handleUpdateRow(originalIdx, 'nettoDocelowe', parseFloat(e.target.value))} className={`${p.nettoDocelowe <= 0 ? errorInputClass : inputClass} text-right font-bold`} />
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                              <select value={p.kupTyp} onChange={(e) => handleUpdateRow(originalIdx, 'kupTyp', e.target.value)} className={`${inputClass} text-center`}>
                                                                 <option value="STANDARD">250 zł</option>
                                                                 <option value="PODWYZSZONE">300 zł</option>
@@ -395,7 +394,7 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                                                 <option value="PROC_50">50%</option>
                                                             </select>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <select value={p.pit2} onChange={(e) => handleUpdateRow(originalIdx, 'pit2', e.target.value)} className={`${inputClass} text-center`}>
                                                                 <option value="300">300 zł</option>
                                                                 <option value="150">150 zł</option>
@@ -403,10 +402,10 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                                                 <option value="0">0 zł</option>
                                                             </select>
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100 text-center`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9] text-center`}>
                                                             <input type="checkbox" checked={p.ulgaMlodych} onChange={(e) => handleUpdateRow(originalIdx, 'ulgaMlodych', e.target.checked)} className="cursor-pointer w-4 h-4 mt-2" />
                                                         </td>
-                                                        <td className={`${cellClass} border-r border-slate-100`}>
+                                                        <td className={`${cellClass} border-r border-[#edebe9]`}>
                                                             <select value={p.pitMode || 'AUTO'} onChange={(e) => handleUpdateRow(originalIdx, 'pitMode', e.target.value)} className={`${inputClass} text-center`}>
                                                                 <option value="AUTO">Auto</option>
                                                                 <option value="FLAT_12">12%</option>
@@ -415,7 +414,7 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                                                             </select>
                                                         </td>
                                                         <td className="p-2 text-center">
-                                                            <button onClick={() => handleDeleteRow(originalIdx)} className="text-slate-300 hover:text-rose-600 transition-colors p-1">
+                                                            <button onClick={() => handleDeleteRow(originalIdx)} className="text-[#c8c6c4] hover:text-rose-600 transition-colors p-1">
                                                                 <Trash />
                                                             </button>
                                                         </td>
@@ -432,8 +431,8 @@ export const ImportModal = ({ isOpen, onClose }: ImportModalProps) => {
                 </div>
 
                 {/* 3. Footer */}
-                <div className="flex items-center justify-between px-8 py-5 border-t border-slate-200 bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.03)] shrink-0 z-30">
-                    <div className="text-sm text-slate-500">
+                <div className="flex items-center justify-between px-6 py-4 border-t border-[#edebe9] bg-white shrink-0 z-30">
+                    <div className="text-sm text-[#605e5c]">
                         {importRows.length > 0 && <span>Upewnij się, że dane są poprawne przed importem.</span>}
                     </div>
                     <div className="flex gap-4">

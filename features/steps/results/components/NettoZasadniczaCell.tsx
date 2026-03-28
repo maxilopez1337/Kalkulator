@@ -53,7 +53,7 @@ export const NettoZasadniczaCell = ({ pracownik, standardKoszt }: NettoCellProps
     if (isStudent) {
         return (
             <div className="flex items-center justify-end h-full">
-                <span className="text-[10px] text-slate-400 italic mr-2">Brak ZUS</span>
+                <span className="text-[10px] text-[#a19f9d] italic mr-2">Brak ZUS</span>
             </div>
         );
     }

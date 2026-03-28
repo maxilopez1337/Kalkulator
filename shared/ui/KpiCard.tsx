@@ -55,12 +55,12 @@ export const KpiCard = ({
   return (
     <div
       className={`p-5 rounded-md border ${shadow.elevation4} flex items-center justify-between relative overflow-hidden
-        ${isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-[#edebe9]'}
+        ${isDark ? 'bg-[#001433] border-[#001d40] text-white' : 'bg-white border-[#edebe9]'}
         ${className}`}
     >
       {accent && <div className={`absolute left-0 top-0 bottom-0 w-1 ${accent}`} />}
       <div className="min-w-0">
-        <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+        <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${isDark ? 'text-[#a19f9d]' : 'text-[#a19f9d]'}`}>
           {label}
         </div>
         <div className={`text-2xl font-bold ${isDark ? 'text-white' : ''}`}>
@@ -75,7 +75,7 @@ export const KpiCard = ({
         )}
       </div>
       {icon && (
-        <div className={`p-3 rounded-lg shrink-0 ${isDark ? 'bg-white/10 text-white' : ''}`}>
+        <div className={`p-3 rounded-sm shrink-0 ${isDark ? 'bg-white/10 text-white' : ''}`}>
           {icon}
         </div>
       )}

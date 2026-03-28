@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
-import { Database, Folder, Trash, Search, X, Calculator, Users, Wallet, Download } from '../../shared/icons/Icons';
+import { Database, Folder, Trash, X, Calculator, Users, Wallet, Download } from '../../shared/icons/Icons';
+import { EmptyState } from '../../shared/ui/EmptyState';
 import { ZapisanaKalkulacja } from '../../entities/history/model';
 import { formatPLN } from '../../shared/utils/formatters';
 import { Modal } from '../../shared/ui/Modal';
@@ -178,12 +179,12 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
           {/* MAIN CANVAS */}
           <div className="flex-1 bg-[#f3f2f1] overflow-y-auto custom-scrollbar">
             {totalFilteredCount === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center">
-                <div className="w-16 h-16 bg-white border border-[#edebe9] rounded-sm flex items-center justify-center mb-4 shadow-sm">
-                  <Folder className="text-[#a19f9d] w-7 h-7" />
-                </div>
-                <p className="text-[15px] font-semibold text-[#201f1e]">Brak ofert</p>
-                <p className="text-sm text-[#605e5c] mt-1">Zmień filtry lub dodaj nową kalkulację.</p>
+              <div className="h-full flex items-center justify-center">
+                <EmptyState
+                  icon={<Folder />}
+                  title="Brak ofert"
+                  description="Zmień filtry lub dodaj nową kalkulację."
+                />
               </div>
             ) : (
               <div className="p-5 space-y-6 pb-10">
@@ -245,7 +246,7 @@ export const DatabaseModal = ({ isOpen, onClose, onLoad }: Props) => {
                                   </div>
                                 </div>
                                 <button
-                                  onClick={(e) => { e.stopPropagation(); if (window.confirm(`Usunąć ofertę dla ${item.nazwaFirmy}?`)) deleteFromHistory(item.id); }}
+                                  onClick={async (e) => { e.stopPropagation(); if (await confirmDialog(`Usunąć ofertę dla ${item.nazwaFirmy}?`)) deleteFromHistory(item.id); }}
                                   className="text-[#c8c6c4] hover:text-[#d83b01] hover:bg-[#fde7e2] p-1.5 rounded-sm transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100"
                                   title="Usuń"
                                 >

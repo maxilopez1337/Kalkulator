@@ -2,8 +2,8 @@ import React from 'react';
 
 const variantStyles = {
   info: {
-    wrapper: 'bg-slate-50 border-slate-200 text-slate-500',
-    icon: 'text-slate-400',
+    wrapper: 'bg-[#f3f2f1] border-[#edebe9] text-[#a19f9d]',
+    icon: 'text-[#a19f9d]',
   },
   warning: {
     wrapper: 'bg-[#fff4ce] border-[#fde5c4] text-[#323130]',
@@ -46,7 +46,7 @@ export const Alert = ({
   const styles = variantStyles[variant];
   return (
     <div
-      className={`${padding} border rounded-lg ${textSize} ${styles.wrapper} flex gap-3 items-start leading-relaxed ${className}`}
+      className={`${padding} border rounded-sm ${textSize} ${styles.wrapper} flex gap-3 items-start leading-relaxed ${className}`}
     >
       {icon && (
         <span className={`flex-shrink-0 mt-0.5 ${styles.icon}`}>{icon}</span>
