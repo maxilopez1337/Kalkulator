@@ -1,9 +1,10 @@
 import type { SimulationParams } from '../types';
-import { fmtK2 } from '../shared';
+import { fmtK2, BRUTTO_TO_NETTO } from '../shared';
+import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateMechanizmV5 = (p: SimulationParams, date: string): string => {
     const n = p.empCount;
-    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * 0.715);
+    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
     const { totalProv } = p.simulation;
     const bruttOld = Math.round(p.simulation.avgBruttoStd);
     const zusOld   = Math.round(p.simulation.avgZusStd);
@@ -139,16 +140,6 @@ export const generateMechanizmV5 = (p: SimulationParams, date: string): string =
       </div>
     </div>
   </div>
-  <div class="footer">
-    <div class="footer-rule"></div>
-    <div class="footer-inner">
-      <div class="footer-text">Stratton Prime Sp. z o.o.&nbsp;·&nbsp;ul. Nowy Świat 42/44, 80-299 Gdańsk&nbsp;·&nbsp;NIP: 5842867357</div>
-      <div class="footer-brand">
-        <div class="footer-brand-mark"><div class="footer-brand-line"></div><div class="footer-brand-dot"></div><div class="footer-brand-line"></div></div>
-        <div class="footer-brand-name">STRATTON PRIME</div>
-      </div>
-      <div class="footer-confidential">Dokument poufny &nbsp;·&nbsp; Strona 1 / 5</div>
-    </div>
-  </div>
+  ${generateFooterWithPage(1, 5)}
 </div>`;
 };

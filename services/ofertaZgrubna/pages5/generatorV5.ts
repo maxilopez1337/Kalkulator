@@ -27,7 +27,7 @@ export const ofertaV5Generator = {
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oferta Stratton Prime · ${p.firmaNazwa ?? 'Twoja Firma'} · ${docNr}</title>
+  <title>Analiza Wstępna · Stratton Prime · ${p.firmaNazwa ?? 'Twoja Firma'} · ${docNr}</title>
   <link href="${FONTS_URL}" rel="stylesheet"/>
   <style>${getV5Styles()}</style>
 </head>

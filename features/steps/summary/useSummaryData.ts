@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { WynikPracownika } from '../../../entities/calculation/model';
+import { sumBy } from '../../../shared/utils/sumBy';
 
 const round = (val: number) => Math.round(val * 100) / 100;
 
@@ -9,42 +10,26 @@ const calculateStats = (dataList: WynikPracownika[], prowizjaProc: number) => {
     const excludedCount = dataList.length - qualifiedList.length;
 
     const standard = {
-        brutto: qualifiedList.reduce((acc, w) => acc + round(w.standard.brutto), 0),
-        zusPracodawca: qualifiedList.reduce((acc, w) => acc + round(w.standard.zusPracodawca.suma), 0),
-        zusSpoleczne: qualifiedList.reduce((acc, w) => acc + round(w.standard.zusPracownik.suma), 0),
-        zdrowotna: qualifiedList.reduce((acc, w) => acc + round(w.standard.zdrowotna), 0),
-        pit: qualifiedList.reduce((acc, w) => acc + round(w.standard.pit), 0),
-        kosztPracodawcy: qualifiedList.reduce((acc, w) => acc + round(w.standard.kosztPracodawcy), 0),
-        netto: qualifiedList.reduce((acc, w) => acc + round(w.standard.netto), 0)
+        brutto: sumBy(qualifiedList, w => round(w.standard.brutto)),
+        zusPracodawca: sumBy(qualifiedList, w => round(w.standard.zusPracodawca.suma)),
+        zusSpoleczne: sumBy(qualifiedList, w => round(w.standard.zusPracownik.suma)),
+        zdrowotna: sumBy(qualifiedList, w => round(w.standard.zdrowotna)),
+        pit: sumBy(qualifiedList, w => round(w.standard.pit)),
+        kosztPracodawcy: sumBy(qualifiedList, w => round(w.standard.kosztPracodawcy)),
+        netto: sumBy(qualifiedList, w => round(w.standard.netto))
     };
 
     const stratton = {
-        brutto: qualifiedList.reduce((acc, w) => {
-            // Tutaj już nie musimy sprawdzać STUDENT_UZ, bo lista jest przefiltrowana
-            return acc + round(w.podzial.pit.lacznyPrzychod);
-        }, 0),
-        zusPracodawca: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.zasadnicza.zusPracodawca.suma);
-        }, 0),
-        zusSpoleczne: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.zasadnicza.zusPracownik.suma);
-        }, 0),
-        zdrowotna: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.zasadnicza.zdrowotna);
-        }, 0),
-        pit: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.pit.kwota);
-        }, 0),
-        kosztPracodawcy: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.kosztPracodawcy);
-        }, 0),
-        netto: qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.doWyplaty);
-        }, 0),
+        // Tutaj już nie musimy sprawdzać STUDENT_UZ, bo lista jest przefiltrowana
+        brutto: sumBy(qualifiedList, w => round(w.podzial.pit.lacznyPrzychod)),
+        zusPracodawca: sumBy(qualifiedList, w => round(w.podzial.zasadnicza.zusPracodawca.suma)),
+        zusSpoleczne: sumBy(qualifiedList, w => round(w.podzial.zasadnicza.zusPracownik.suma)),
+        zdrowotna: sumBy(qualifiedList, w => round(w.podzial.zasadnicza.zdrowotna)),
+        pit: sumBy(qualifiedList, w => round(w.podzial.pit.kwota)),
+        kosztPracodawcy: sumBy(qualifiedList, w => round(w.podzial.kosztPracodawcy)),
+        netto: sumBy(qualifiedList, w => round(w.podzial.doWyplaty)),
 
-        prowizja: round(qualifiedList.reduce((acc, w) => {
-            return acc + round(w.podzial.swiadczenie.netto);
-        }, 0) * (prowizjaProc / 100))
+        prowizja: round(sumBy(qualifiedList, w => round(w.podzial.swiadczenie.netto)) * (prowizjaProc / 100))
     };
 
     return { standard, stratton, count: qualifiedList.length, excludedCount };

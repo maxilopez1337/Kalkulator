@@ -1,5 +1,6 @@
 import type { SimulationParams } from '../types';
 import { fmtK2 } from '../shared';
+import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateWariantyV5 = (p: SimulationParams, date: string): string => {
     const { monthlySavings } = p.simulation;
@@ -198,16 +199,6 @@ export const generateWariantyV5 = (p: SimulationParams, date: string): string =>
     </div>
 
   </div>
-  <div class="footer">
-    <div class="footer-rule"></div>
-    <div class="footer-inner">
-      <div class="footer-text">Stratton Prime Sp. z o.o.&nbsp;·&nbsp;ul. Nowy Świat 42/44, 80-299 Gdańsk&nbsp;·&nbsp;NIP: 5842867357</div>
-      <div class="footer-brand">
-        <div class="footer-brand-mark"><div class="footer-brand-line"></div><div class="footer-brand-dot"></div><div class="footer-brand-line"></div></div>
-        <div class="footer-brand-name">STRATTON PRIME</div>
-      </div>
-      <div class="footer-confidential">Dokument poufny &nbsp;·&nbsp; Strona 4 / 5</div>
-    </div>
-  </div>
+  ${generateFooterWithPage(4, 5)}
 </div>`;
 };

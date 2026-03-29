@@ -1,5 +1,6 @@
 import type { SimulationParams } from '../types';
 import { radoslawZukPhotoB64 } from '../../offerPdfV3/pages/radoslawZukPhotoB64';
+import { generateFooterWithPage } from '../../offerPdfV3/components';
 import {
   allianz_logo_B64, ergo_hestia_B64, generali_logo_big_B64, ladenhall_B64,
   Laven_logo_dark_B64, lloyds_logo_sized_nav__1__B64, logo_warta_B64, luxmed_B64,
@@ -114,15 +115,5 @@ export const generateWiarygodnoscV5 = (_p: SimulationParams, date: string): stri
     </div>
 
   </div>
-  <div class="footer">
-    <div class="footer-rule"></div>
-    <div class="footer-inner">
-      <div class="footer-text">Stratton Prime Sp. z o.o.&nbsp;·&nbsp;ul. Nowy Świat 42/44, 80-299 Gdańsk&nbsp;·&nbsp;NIP: 5842867357</div>
-      <div class="footer-brand">
-        <div class="footer-brand-mark"><div class="footer-brand-line"></div><div class="footer-brand-dot"></div><div class="footer-brand-line"></div></div>
-        <div class="footer-brand-name">STRATTON PRIME</div>
-      </div>
-      <div class="footer-confidential">Dokument poufny &nbsp;·&nbsp; Strona 3 / 5</div>
-    </div>
-  </div>
+  ${generateFooterWithPage(3, 5)}
 </div>`;

@@ -1,4 +1,5 @@
-# Stratton Prime CRM — Architektura Systemu
+# /btwStratton Prime CRM — Architektura Systemu
+
 ### Dokument dla zespołu deweloperów · v1.0 · Marzec 2026
 
 ---
@@ -11,17 +12,17 @@
 
 ### 1.2 Stos technologiczny (stan obecny)
 
-| Warstwa | Technologia |
-|---|---|
-| Renderer | React 19 + TypeScript 5.8 |
-| Build | Vite 6 |
-| Styling | Tailwind CSS (custom D365 tokens) |
-| Testy | Vitest |
-| PDF | @react-pdf/renderer, jsPDF, pdf-lib, Puppeteer |
-| Excel | ExcelJS (CDN) |
+| Warstwa        | Technologia                                              |
+| -------------- | -------------------------------------------------------- |
+| Renderer       | React 19 + TypeScript 5.8                                |
+| Build          | Vite 6                                                   |
+| Styling        | Tailwind CSS (custom D365 tokens)                        |
+| Testy          | Vitest                                                   |
+| PDF            | @react-pdf/renderer, jsPDF, pdf-lib, Puppeteer           |
+| Excel          | ExcelJS (CDN)                                            |
 | Backend (min.) | Express.js (Node) — tylko generacja PDF przez Puppeteer |
-| Baza danych | LocalStorage (historia kalkulacji JSON) |
-| State | React Context (5 niezależnych providerów) |
+| Baza danych    | LocalStorage (historia kalkulacji JSON)                  |
+| State          | React Context (5 niezależnych providerów)              |
 
 ### 1.3 Główne moduły
 
@@ -59,7 +60,7 @@ ZapisanaKalkulacja (historia):
 #### Silnik podatkowy (`features/tax-engine/`)
 
 - `obliczWariantStandard(pracownik, stawkaWypadkowa, config)` → pełny koszt pracodawcy według standardowego modelu
-- `obliczWariantPodzial(pracownik, stawkaWypadkowa, nettoZasadnicza, config)` → model z podziałem na zasadniczą + świadczenie pozapłacowe  
+- `obliczWariantPodzial(pracownik, stawkaWypadkowa, nettoZasadnicza, config)` → model z podziałem na zasadniczą + świadczenie pozapłacowe
 - `znajdzBruttoDlaNetto(netto, params, config)` → iteracyjny gross-up (odwrócone obliczenie brutto z netto)
 - `obliczPit(brutto, params, config)` → zaliczka PIT z pełną obsługą ulg i progów
 - `obliczZusPracodawca(brutto, typUmowy, ..., config)` → składki po stronie pracodawcy
@@ -101,12 +102,12 @@ Historia jest persystowana w `localStorage`. Brak backendu dla danych użytkowni
 
 ### 1.4 Punkty integracji i API (obecne)
 
-| Punkt | Typ | Opis |
-|---|---|---|
-| `POST /generate-pdf` | HTTP REST | Express → Puppeteer → zwraca PDF buffer |
-| GUS BIR API | HTTP GET (przez proxy lub bezpośrednio) | Pobieranie danych firmy po NIP |
-| LocalStorage | Browser API | Trwałość historii kalkulacji |
-| ExcelJS CDN | Script load | Generacja xlsx po stronie klienta |
+| Punkt                  | Typ                                      | Opis                                      |
+| ---------------------- | ---------------------------------------- | ----------------------------------------- |
+| `POST /generate-pdf` | HTTP REST                                | Express → Puppeteer → zwraca PDF buffer |
+| GUS BIR API            | HTTP GET (przez proxy lub bezpośrednio) | Pobieranie danych firmy po NIP            |
+| LocalStorage           | Browser API                              | Trwałość historii kalkulacji           |
+| ExcelJS CDN            | Script load                              | Generacja xlsx po stronie klienta         |
 
 ### 1.5 Przypadki użycia w CRM
 
@@ -196,24 +197,24 @@ Historia jest persystowana w `localStorage`. Brak backendu dla danych użytkowni
 
 ### 2.3 Stos technologiczny (docelowy)
 
-| Warstwa | Technologia | Uzasadnienie |
-|---|---|---|
-| **Frontend** | Next.js 15 (App Router) | SSR dla SEO, server components dla dashboardu, routing grupowy |
-| **UI** | React 19 + Tailwind CSS | Kontynuacja obecnego stosu — zero przepisywania komponentów |
-| **Design System** | Obecne tokeny D365 + shadcn/ui | Gotowe komponenty Table, Dialog, Combobox |
-| **State (CRM)** | Zustand + React Query (TanStack) | CRM wymaga cache serwera, optimistic updates |
-| **Backend** | NestJS 11 (Node + TypeScript) | Dekoratory modułowe, silna typizacja, DI container |
-| **ORM** | Prisma 6 | Type-safe queries, migracje, obsługa PostgreSQL |
-| **Baza** | PostgreSQL 16 | JSONB dla elastycznych danych kalkulacji, pełny ACID |
-| **Cache/Queue** | Redis 7 + BullMQ | Kolejkowanie generacji PDF (Puppeteer), cache sesji |
-| **Auth** | NextAuth.js v5 + JWT + RBAC | OAuth (Google/Microsoft) + email/password |
-| **PDF** | Puppeteer na workerze BullMQ | Obecny kod bez zmian, izolowany worker |
-| **Excel** | ExcelJS na backendzie | Przeniesione z CDN na node_modules |
-| **Storage** | MinIO (self-hosted) lub AWS S3 | Dokumenty ofert |
-| **Email** | Resend + React Email | Powiadomienia, wysyłka ofert |
-| **Testy** | Vitest + Playwright | Obecne testy silnika + E2E |
-| **Deploy** | Docker Compose (dev) / K8s (prod) | — |
-| **CI/CD** | GitHub Actions | — |
+| Warstwa                 | Technologia                       | Uzasadnienie                                                   |
+| ----------------------- | --------------------------------- | -------------------------------------------------------------- |
+| **Frontend**      | Next.js 15 (App Router)           | SSR dla SEO, server components dla dashboardu, routing grupowy |
+| **UI**            | React 19 + Tailwind CSS           | Kontynuacja obecnego stosu — zero przepisywania komponentów  |
+| **Design System** | Obecne tokeny D365 + shadcn/ui    | Gotowe komponenty Table, Dialog, Combobox                      |
+| **State (CRM)**   | Zustand + React Query (TanStack)  | CRM wymaga cache serwera, optimistic updates                   |
+| **Backend**       | NestJS 11 (Node + TypeScript)     | Dekoratory modułowe, silna typizacja, DI container            |
+| **ORM**           | Prisma 6                          | Type-safe queries, migracje, obsługa PostgreSQL               |
+| **Baza**          | PostgreSQL 16                     | JSONB dla elastycznych danych kalkulacji, pełny ACID          |
+| **Cache/Queue**   | Redis 7 + BullMQ                  | Kolejkowanie generacji PDF (Puppeteer), cache sesji            |
+| **Auth**          | NextAuth.js v5 + JWT + RBAC       | OAuth (Google/Microsoft) + email/password                      |
+| **PDF**           | Puppeteer na workerze BullMQ      | Obecny kod bez zmian, izolowany worker                         |
+| **Excel**         | ExcelJS na backendzie             | Przeniesione z CDN na node_modules                             |
+| **Storage**       | MinIO (self-hosted) lub AWS S3    | Dokumenty ofert                                                |
+| **Email**         | Resend + React Email              | Powiadomienia, wysyłka ofert                                  |
+| **Testy**         | Vitest + Playwright               | Obecne testy silnika + E2E                                     |
+| **Deploy**        | Docker Compose (dev) / K8s (prod) | —                                                             |
+| **CI/CD**         | GitHub Actions                    | —                                                             |
 
 ### 2.4 Schemat bazy danych
 
@@ -567,10 +568,10 @@ class CalculationService {
   async calculate(sessionId: string): Promise<CalculationResult> {
     const session = await this.prisma.calculationSession.findUniqueOrThrow({...});
     const employees = await this.prisma.sessionEmployee.findMany({...});
-    
+  
     // Deserializuj Config z JSONB
     const config: Config = session.config as Config;
-    
+  
     // Uruchom @stratton/tax-engine (ten sam kod!)
     const details = employees.map(emp => ({
       pracownik: mapEmployeeToModel(emp),
@@ -578,12 +579,12 @@ class CalculationService {
       podzial: obliczWariantPodzial(emp, ...),
       oszczednosc: ...
     }));
-    
+  
     const summary = aggregateSummary(details, session.commission_pct);
-    
+  
     // Zapisz snapshot
     await this.prisma.calculationResult.upsert({ where: { sessionId }, data: { summary, details } });
-    
+  
     return { summary, details };
   }
 }
@@ -641,6 +642,7 @@ GET    /api/accounts/:id/timeline → aktywności chronologicznie
 ```
 
 **GUS Integration Service:**
+
 ```typescript
 // gus.service.ts - wrapper obecnego fetch'a GUS w StepFirma
 class GusService {
@@ -860,30 +862,30 @@ PERFORMANCE:
 
 #### F2. Wymagania wydajnościowe
 
-| Metryka | Target | Uwagi |
-|---|---|---|
-| Kalkulacja (100 pracowników) | < 50ms | CPU bound, synchronicznie |
-| Kalkulacja (500 pracowników) | < 200ms | Ewentualnie worker thread |
-| Generacja PDF | < 8s | BullMQ async, user dostaje status |
-| API P95 latency | < 100ms | Typowe CRUD |
-| Dashboard load | < 1s | ISR Next.js + Redis cache |
-| Concurrent users | 50 | Jednofirmowy deployment |
-| DB connections | Pool 20 max | Prisma connection pooling |
+| Metryka                       | Target      | Uwagi                             |
+| ----------------------------- | ----------- | --------------------------------- |
+| Kalkulacja (100 pracowników) | < 50ms      | CPU bound, synchronicznie         |
+| Kalkulacja (500 pracowników) | < 200ms     | Ewentualnie worker thread         |
+| Generacja PDF                 | < 8s        | BullMQ async, user dostaje status |
+| API P95 latency               | < 100ms     | Typowe CRUD                       |
+| Dashboard load                | < 1s        | ISR Next.js + Redis cache         |
+| Concurrent users              | 50          | Jednofirmowy deployment           |
+| DB connections                | Pool 20 max | Prisma connection pooling         |
 
 #### F3. Wymagania bezpieczeństwa (OWASP Top 10)
 
-| Zagrożenie | Mitygacja |
-|---|---|
-| Broken Access Control | RBAC na każdym endpoincie, row-level security (accountId check) |
-| Cryptographic Failures | HTTPS wszędzie, bcrypt dla haseł, JWT z krótkim TTL |
-| Injection | Prisma ORM (parameterized queries), Zod validation na wejściu |
-| Insecure Design | Separation of concerns, CalculationSession izolowane per user |
-| Security Misconfiguration | Helmet.js, strict CSP, no default credentials |
-| Vulnerable Components | Dependabot, `npm audit` w CI |
-| Auth Failures | Rate limiting (Fastify throttle), account lockout po 5 próbach |
-| Software Integrity | Package lock, SBOM, podpisywane commity |
-| Logging Failures | Structured logging (Pino), audit log dla operacji finansowych |
-| SSRF | Whitelist na GUS Integration (tylko gov.pl domeny) |
+| Zagrożenie               | Mitygacja                                                        |
+| ------------------------- | ---------------------------------------------------------------- |
+| Broken Access Control     | RBAC na każdym endpoincie, row-level security (accountId check) |
+| Cryptographic Failures    | HTTPS wszędzie, bcrypt dla haseł, JWT z krótkim TTL           |
+| Injection                 | Prisma ORM (parameterized queries), Zod validation na wejściu   |
+| Insecure Design           | Separation of concerns, CalculationSession izolowane per user    |
+| Security Misconfiguration | Helmet.js, strict CSP, no default credentials                    |
+| Vulnerable Components     | Dependabot,`npm audit` w CI                                    |
+| Auth Failures             | Rate limiting (Fastify throttle), account lockout po 5 próbach  |
+| Software Integrity        | Package lock, SBOM, podpisywane commity                          |
+| Logging Failures          | Structured logging (Pino), audit log dla operacji finansowych    |
+| SSRF                      | Whitelist na GUS Integration (tylko gov.pl domeny)               |
 
 #### F4. Środowisko produkcyjne
 
@@ -974,26 +976,26 @@ Namespace: stratton-crm
 
 ## Harmonogram wdrożenia
 
-| Tydzień | Faza | Deliverables |
-|---|---|---|
-| T1 | A | Monorepo, Docker Compose, PostgreSQL schema |
-| T2 | A | NestJS skeleton, Auth (JWT + RBAC), Prisma setup |
-| T3 | A | @stratton/tax-engine jako pakiet, testy przeniesione |
-| T4 | B | CalculatorModule (CRUD sesji + pracowników) |
-| T5 | B | CalculationService (tax-engine na backendzie) |
-| T6 | B | PDF Worker (BullMQ + Puppeteer), S3 storage |
-| T7 | C | AccountsModule + ContactsModule API |
-| T8 | C | Widoki React: lista firm, szczegóły firmy |
-| T9 | C | PipelineModule API + Kanban frontend |
-| T10| C | Dashboard API + widgety KPI |
-| T11| D | Integracja Account ↔ Calculator (prefill, linki) |
-| T12| D | Auto-update deal po kalkulacji, aktywności timeline |
-| T13| D | GUS Service przez backend, konfiguracja stawek |
-| T14| E | ReportsModule (pipeline, savings, activity) |
-| T15| E | ProjectsModule (po won) |
-| T16| E | Email notifications (Resend) |
-| T17| F | Testy integracyjne, E2E (Playwright) |
-| T18| F | UAT, performance tuning, deploy na prod |
+| Tydzień | Faza | Deliverables                                         |
+| -------- | ---- | ---------------------------------------------------- |
+| T1       | A    | Monorepo, Docker Compose, PostgreSQL schema          |
+| T2       | A    | NestJS skeleton, Auth (JWT + RBAC), Prisma setup     |
+| T3       | A    | @stratton/tax-engine jako pakiet, testy przeniesione |
+| T4       | B    | CalculatorModule (CRUD sesji + pracowników)         |
+| T5       | B    | CalculationService (tax-engine na backendzie)        |
+| T6       | B    | PDF Worker (BullMQ + Puppeteer), S3 storage          |
+| T7       | C    | AccountsModule + ContactsModule API                  |
+| T8       | C    | Widoki React: lista firm, szczegóły firmy          |
+| T9       | C    | PipelineModule API + Kanban frontend                 |
+| T10      | C    | Dashboard API + widgety KPI                          |
+| T11      | D    | Integracja Account ↔ Calculator (prefill, linki)    |
+| T12      | D    | Auto-update deal po kalkulacji, aktywności timeline |
+| T13      | D    | GUS Service przez backend, konfiguracja stawek       |
+| T14      | E    | ReportsModule (pipeline, savings, activity)          |
+| T15      | E    | ProjectsModule (po won)                              |
+| T16      | E    | Email notifications (Resend)                         |
+| T17      | F    | Testy integracyjne, E2E (Playwright)                 |
+| T18      | F    | UAT, performance tuning, deploy na prod              |
 
 **Łącznie: 18 tygodni** ≈ 4,5 miesiąca dla 2-osobowego zespołu.
 
@@ -1002,9 +1004,11 @@ Namespace: stratton-crm
 ## Plan skalowania
 
 ### Faza 1 (do 50 użytkowników, 1 firma)
+
 → Docker Compose na VPS (8 vCPU, 16GB RAM) — proste Operations
 
 ### Faza 2 (do 500 użytkowników, multitenant)
+
 ```sql
 -- Dodaj tenant_id do każdej tabeli
 ALTER TABLE accounts ADD COLUMN tenant_id UUID NOT NULL;
@@ -1012,9 +1016,11 @@ ALTER TABLE users ADD COLUMN tenant_id UUID NOT NULL;
 -- Row-level security w PostgreSQL
 CREATE POLICY tenant_isolation ON accounts USING (tenant_id = current_setting('app.tenant_id')::uuid);
 ```
+
 → Migracja na Kubernetes, connection pooling (PgBouncer)
 
 ### Faza 3 (> 1000 użytkowników)
+
 - Read replicas PostgreSQL
 - Redis Cluster
 - CDN dla statycznych assetów
@@ -1025,11 +1031,13 @@ CREATE POLICY tenant_isolation ON accounts USING (tenant_id = current_setting('a
 ## Podsumowanie dla zespołu
 
 **Co NIE ulega zmianie:**
+
 - Cała logika silnika podatkowego (`features/tax-engine/*`) — przeniesiona 1:1
-- Wszystkie komponenty React kroków wizerdu — przeniesione 1:1  
+- Wszystkie komponenty React kroków wizerdu — przeniesione 1:1
 - Generatory PDF/Excel — przeniesione na worker backend
 
 **Co jest nowe:**
+
 - PostgreSQL zamiast LocalStorage
 - REST API (NestJS) jako warstwa danych
 - Moduły CRM: Firmy, Kontakty, Pipeline, Projekty, Raporty

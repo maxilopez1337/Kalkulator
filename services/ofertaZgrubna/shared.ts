@@ -1,3 +1,6 @@
+/** Przybliżony współczynnik brutto→netto dla UoP przy średniej pensji (2026). */
+export const BRUTTO_TO_NETTO = 0.715;
+
 export const fmt2 = (v: number) =>
     new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
 

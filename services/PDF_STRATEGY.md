@@ -14,7 +14,7 @@ Każdy generator PDF tworzy HTML (string) i przekazuje do `printHtmlAsPdf`:
 |-----------|------|---------|
 | Oferta Eliton Prime™ PLUS | `services/offerPdfV3Generator.ts` | 12-stronicowa oferta handlowa |
 | Oferta Legalizacja Premii | `services/offerLegalizacjaPremii/generator.ts` | 4-stronicowa oferta alternatywna |
-| Oferta Zgrubna V5 | `services/ofertaZgrubna/pages5/generatorV5.ts` | 6-stronicowe zestawienie wstępne |
+| Analiza Wstępna | `services/ofertaZgrubna/pages5/generatorV5.ts` | 6-stronicowa analiza wstępna (z Szybkiej Symulacji) |
 
 **Flow:**
 ```

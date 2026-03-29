@@ -25,10 +25,6 @@ import { generatePageHeaderV3, generateFooterV3 } from '../offerPdfV3/components
 import { LOGO_OFERTA_B64 } from '../offerPdfV3/pages/logoOfertaB64';
 import { obliczWariantStandard, obliczWariantPodzial } from '../../features/tax-engine';
 
-// ── Stałe ZUS (2026) ──────────────────────────────────────────────────────────
-const ZUS_PRAC_RATE   = 0.1371;   // emerytalna 9.76 + rentowa 1.5 + chorobowa 2.45
-const ZUS_PRAC_BASE   = 0.1881;   // emerytalna 9.76 + rentowa 6.5 + FP 2.45 + FGSP 0.1 (bez wypadkowej — dodawana dynamicznie)
-
 export const offerLegalizacjaPremiiGenerator = {
 
     generateOfferPDF: (item: ZapisanaKalkulacja) => {
@@ -46,8 +42,15 @@ export const offerLegalizacjaPremiiGenerator = {
         const fmt  = (v: number) => new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
         const fmtK = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
 
-        const stawkaWypadkowa  = tempFirma.stawkaWypadkowa || 1.67;          // przechowywana jako % (np. 1.67)
-        const zusPracodawcaAdd = ZUS_PRAC_BASE + stawkaWypadkowa / 100;     // konwersja na ułamek dziesiętny
+        const stawkaWypadkowa  = tempFirma.stawkaWypadkowa || 1.67;
+
+        // ── Stawki ZUS z konfiguracji (zsynchronizowane z tax-engine) ────────
+        const zusUop = tempConfig.zus.uop;
+        // pracownik: emerytalna + rentowa + chorobowa (UoP — obowiązkowa)
+        const ZUS_PRAC_RATE = (zusUop.pracownik.emerytalna + zusUop.pracownik.rentowa + zusUop.pracownik.chorobowa) / 100;
+        // pracodawca: emerytalna + rentowa + FP + FGSP (bez wypadkowej — dodawana dynamicznie)
+        const zusPracodawcaBase = (zusUop.pracodawca.emerytalna + zusUop.pracodawca.rentowa + zusUop.pracodawca.fp + zusUop.pracodawca.fgsp) / 100;
+        const zusPracodawcaAdd  = zusPracodawcaBase + stawkaWypadkowa / 100;
 
         // ── Obliczenia per pracownik ──────────────────────────────────────────
         const activePracownicy = tempPracownicy.filter((p: any) => p.trybSkladek !== 'STUDENT_UZ');
@@ -960,7 +963,7 @@ export const offerLegalizacjaPremiiGenerator = {
     </style>
 </head>
 <body style="margin:0;padding:0;background:#CCC8C2;display:flex;flex-direction:column;align-items:center">
-    ${[page1, page2].join('\n')}
+    ${[page1, page2, page3, page4].join('\n')}
     <script>window.onload=()=>window.print();</script>
 </body>
 </html>`;

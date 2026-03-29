@@ -1,19 +1,37 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { StepIndicator } from './shared/ui/StepIndicator';
 import { Menu, X, Home, Zap, Building, ShieldCheck, Calculator, Settings, Database, FileText, Users, TrendingUp, ChevronRight, ChevronLeft } from './shared/icons/Icons';
 import { ImportModal } from './features/modals/ImportModal';
 import { ConfigModal } from './features/modals/ConfigModal';
 import { DatabaseModal } from './features/modals/DatabaseModal';
-import { StepDashboard } from './features/steps/dashboard/StepDashboard';
-import { StepSzybkaSymulacja } from './features/steps/simulation/StepSzybkaSymulacja';
-import { StepFirma } from './features/steps/company/StepFirma';
-import { StepPracownicy } from './features/steps/employees/StepPracownicy';
-import { StepWynikStandard } from './features/steps/results/StepWynikStandard';
-import { StepWynikPodzial } from './features/steps/results/StepWynikPodzial';
-import { StepPorownanie } from './features/steps/comparison/StepPorownanie';
-import { StepPodsumowanie } from './features/steps/summary/StepPodsumowanie';
-import { StepAnalizaPracownika } from './features/steps/simulation/StepAnalizaPracownika';
+const StepDashboard = React.lazy(() =>
+  import('./features/steps/dashboard/StepDashboard').then(m => ({ default: m.StepDashboard }))
+);
+const StepSzybkaSymulacja = React.lazy(() =>
+  import('./features/steps/simulation/StepSzybkaSymulacja').then(m => ({ default: m.StepSzybkaSymulacja }))
+);
+const StepFirma = React.lazy(() =>
+  import('./features/steps/company/StepFirma').then(m => ({ default: m.StepFirma }))
+);
+const StepPracownicy = React.lazy(() =>
+  import('./features/steps/employees/StepPracownicy').then(m => ({ default: m.StepPracownicy }))
+);
+const StepWynikStandard = React.lazy(() =>
+  import('./features/steps/results/StepWynikStandard').then(m => ({ default: m.StepWynikStandard }))
+);
+const StepWynikPodzial = React.lazy(() =>
+  import('./features/steps/results/StepWynikPodzial').then(m => ({ default: m.StepWynikPodzial }))
+);
+const StepPorownanie = React.lazy(() =>
+  import('./features/steps/comparison/StepPorownanie').then(m => ({ default: m.StepPorownanie }))
+);
+const StepPodsumowanie = React.lazy(() =>
+  import('./features/steps/summary/StepPodsumowanie').then(m => ({ default: m.StepPodsumowanie }))
+);
+const StepAnalizaPracownika = React.lazy(() =>
+  import('./features/steps/simulation/StepAnalizaPracownika').then(m => ({ default: m.StepAnalizaPracownika }))
+);
 import { useAppStore } from './store/AppContext';
 import { theme, animations } from './shared/config/theme';
 import { DEFAULT_FIRMA_STATE } from './store/CompanyContext';
@@ -326,7 +344,13 @@ const App = () => {
                             ? 'h-full min-h-0 w-full'
                             : (currentStep >= 0 ? 'min-h-full p-3 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full' : 'min-h-full w-full')
                   }`}>
-                      {renderStep()}
+                      <Suspense fallback={
+                        <div className="flex items-center justify-center min-h-[400px] text-[#a19f9d] animate-pulse">
+                          <div className="text-sm font-medium">Ładowanie...</div>
+                        </div>
+                      }>
+                        {renderStep()}
+                      </Suspense>
                   </div>
               </div>
 

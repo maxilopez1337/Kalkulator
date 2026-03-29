@@ -1,5 +1,6 @@
 ﻿import type { SimulationParams } from '../types';
 import { fmtK2 } from '../shared';
+import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateCTAV5 = (p: SimulationParams, offerValidity: string, date: string): string => {
     const { monthlySavings } = p.simulation;
@@ -175,16 +176,6 @@ export const generateCTAV5 = (p: SimulationParams, offerValidity: string, date: 
     <div class="disc">Stratton Prime Sp. z o.o. · NIP: 5842867357 · ul. Nowy Świat 42/44, 80-299 Gdańsk · stratton-prime.pl · Niniejszy dokument nie stanowi oferty w rozumieniu Kodeksu Cywilnego. Ostateczne warunki określa umowa po indywidualnej kalkulacji. Mechanizm oparty na §2 ust. 1 pkt 26 Rozporządzenia MPiPS z 18.12.1998 r. Kalkulacje mają charakter szacunkowy — rzeczywiste wyniki zależą od indywidualnej struktury zatrudnienia. · <a href="https://stratton-prime.pl/rodo" style="color:inherit;text-decoration:underline">RODO: stratton-prime.pl/rodo</a></div>
 
   </div>
-  <div class="footer">
-    <div class="footer-rule"></div>
-    <div class="footer-inner">
-      <div class="footer-text">Stratton Prime Sp. z o.o. · ul. Nowy Świat 42/44, 80-299 Gdańsk · NIP: 5842867357</div>
-      <div class="footer-brand">
-        <div class="footer-brand-mark"><div class="footer-brand-line"></div><div class="footer-brand-dot"></div><div class="footer-brand-line"></div></div>
-        <div class="footer-brand-name">STRATTON PRIME</div>
-      </div>
-      <div class="footer-confidential">Dokument poufny · Strona 5 / 5</div>
-    </div>
-  </div>
+  ${generateFooterWithPage(5, 5)}
 </div>`;
 };

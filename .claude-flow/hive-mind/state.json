@@ -1,0 +1,19 @@
+{
+  "initialized": true,
+  "topology": "hierarchical-mesh",
+  "workers": [
+    "hive-worker-1774713217380-zulq"
+  ],
+  "consensus": {
+    "pending": [],
+    "history": []
+  },
+  "sharedMemory": {},
+  "createdAt": "2026-03-28T15:53:21.847Z",
+  "updatedAt": "2026-03-28T15:53:37.381Z",
+  "queen": {
+    "agentId": "queen-1774713201847",
+    "electedAt": "2026-03-28T15:53:21.847Z",
+    "term": 1
+  }
+}

@@ -1,5 +1,5 @@
 ﻿import type { SimulationParams } from '../types';
-import { fmtK2 } from '../shared';
+import { fmtK2, BRUTTO_TO_NETTO } from '../shared';
 import { LOGO_OFERTA_B64 } from '../../offerPdfV3/pages/logoOfertaB64';
 
 export const generateCoverV5 = (p: SimulationParams, date: string, docNr: string): string => {
@@ -10,7 +10,7 @@ export const generateCoverV5 = (p: SimulationParams, date: string, docNr: string
     const { monthlySavings, yearlySavings, totalStd, totalNew, totalProv } = p.simulation;
     const advisorName  = p.advisorName  || 'Twój Doradca';
     const advisorEmail = p.advisorEmail || '';
-    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * 0.715);
+    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
     const savingsPct = Math.round((monthlySavings / Math.max(1, totalStd)) * 100);
 
     // Hook kwalifikacyjny — "dlaczego akurat ta firma"
