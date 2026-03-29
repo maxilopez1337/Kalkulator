@@ -1,4 +1,5 @@
-﻿/**
+﻿/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/**
  * Eliton Prime™ — Legalizacja Premii i Dopłat Pracowniczych
  *
  * Oferta 4-stronicowa przeznaczona dla firm, które chcą zastąpić
@@ -26,172 +27,189 @@ import { LOGO_OFERTA_B64 } from '../offerPdfV3/pages/logoOfertaB64';
 import { obliczWariantStandard, obliczWariantPodzial } from '../../features/tax-engine';
 
 export const offerLegalizacjaPremiiGenerator = {
+  generateOfferPDF: (item: ZapisanaKalkulacja) => {
+    const tempPracownicy = item.dane.pracownicy;
+    const tempFirma = item.dane.firma;
+    const tempConfig = item.dane.config;
+    const tempProwizja = item.dane.prowizjaProc || 28;
+    const date = new Date().toLocaleDateString('pl-PL');
 
-    generateOfferPDF: (item: ZapisanaKalkulacja) => {
-        const tempPracownicy = item.dane.pracownicy;
-        const tempFirma      = item.dane.firma;
-        const tempConfig     = item.dane.config;
-        const tempProwizja   = item.dane.prowizjaProc || 28;
-        const date           = new Date().toLocaleDateString('pl-PL');
+    const deadlineDate = new Date();
+    deadlineDate.setDate(deadlineDate.getDate() + 14);
+    const offerDeadline = deadlineDate.toLocaleDateString('pl-PL');
+    const ref = `SP/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}/${(tempFirma?.nip || '').slice(-3) || '001'}`;
 
-        const deadlineDate = new Date();
-        deadlineDate.setDate(deadlineDate.getDate() + 14);
-        const offerDeadline = deadlineDate.toLocaleDateString('pl-PL');
-        const ref = `SP/${new Date().getFullYear()}/${String(new Date().getMonth()+1).padStart(2,'0')}/${(tempFirma?.nip||'').slice(-3)||'001'}`;
+    const fmt = (v: number) =>
+      new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
+        v
+      );
+    const fmtK = (v: number) =>
+      new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
 
-        const fmt  = (v: number) => new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
-        const fmtK = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
+    const stawkaWypadkowa = tempFirma.stawkaWypadkowa || 1.67;
 
-        const stawkaWypadkowa  = tempFirma.stawkaWypadkowa || 1.67;
+    // ── Stawki ZUS z konfiguracji (zsynchronizowane z tax-engine) ────────
+    const zusUop = tempConfig.zus.uop;
+    // pracownik: emerytalna + rentowa + chorobowa (UoP — obowiązkowa)
+    const ZUS_PRAC_RATE =
+      (zusUop.pracownik.emerytalna + zusUop.pracownik.rentowa + zusUop.pracownik.chorobowa) / 100;
+    // pracodawca: emerytalna + rentowa + FP + FGSP (bez wypadkowej — dodawana dynamicznie)
+    const zusPracodawcaBase =
+      (zusUop.pracodawca.emerytalna +
+        zusUop.pracodawca.rentowa +
+        zusUop.pracodawca.fp +
+        zusUop.pracodawca.fgsp) /
+      100;
+    const zusPracodawcaAdd = zusPracodawcaBase + stawkaWypadkowa / 100;
 
-        // ── Stawki ZUS z konfiguracji (zsynchronizowane z tax-engine) ────────
-        const zusUop = tempConfig.zus.uop;
-        // pracownik: emerytalna + rentowa + chorobowa (UoP — obowiązkowa)
-        const ZUS_PRAC_RATE = (zusUop.pracownik.emerytalna + zusUop.pracownik.rentowa + zusUop.pracownik.chorobowa) / 100;
-        // pracodawca: emerytalna + rentowa + FP + FGSP (bez wypadkowej — dodawana dynamicznie)
-        const zusPracodawcaBase = (zusUop.pracodawca.emerytalna + zusUop.pracodawca.rentowa + zusUop.pracodawca.fp + zusUop.pracodawca.fgsp) / 100;
-        const zusPracodawcaAdd  = zusPracodawcaBase + stawkaWypadkowa / 100;
+    // ── Obliczenia per pracownik ──────────────────────────────────────────
+    const activePracownicy = tempPracownicy.filter((p: any) => p.trybSkladek !== 'STUDENT_UZ');
 
-        // ── Obliczenia per pracownik ──────────────────────────────────────────
-        const activePracownicy = tempPracownicy.filter((p: any) => p.trybSkladek !== 'STUDENT_UZ');
+    const workersData = activePracownicy.map((p: any) => {
+      const currentModel = obliczWariantStandard(p, tempFirma.stawkaWypadkowa, tempConfig);
+      const nettoZasadnicza = p.nettoZasadnicza || p.nettoDocelowe * 0.8;
+      const elitonBase = obliczWariantPodzial(
+        p,
+        tempFirma.stawkaWypadkowa,
+        nettoZasadnicza,
+        tempConfig
+      );
 
-        const workersData = activePracownicy.map((p: any) => {
-            const currentModel   = obliczWariantStandard(p, tempFirma.stawkaWypadkowa, tempConfig);
-            const nettoZasadnicza = p.nettoZasadnicza || (p.nettoDocelowe * 0.8);
-            const elitonBase     = obliczWariantPodzial(p, tempFirma.stawkaWypadkowa, nettoZasadnicza, tempConfig);
+      // premiaKwota = swiadczenie.netto = siła nabywcza pracownika z vouchera (netto po PIT)
+      // voucherBrutto = swiadczenie.brutto = przychód art. 12 uPIT = netto + zaliczka PIT
+      //   (tyle pracodawca faktycznie wydaje na świadczenie, cf. kosztPracodawcy w silniku)
+      const premiaKwota = elitonBase.swiadczenie.netto;
+      const voucherBrutto = elitonBase.swiadczenie.brutto;
 
-            // premiaKwota = swiadczenie.netto = siła nabywcza pracownika z vouchera (netto po PIT)
-            // voucherBrutto = swiadczenie.brutto = przychód art. 12 uPIT = netto + zaliczka PIT
-            //   (tyle pracodawca faktycznie wydaje na świadczenie, cf. kosztPracodawcy w silniku)
-            const premiaKwota   = elitonBase.swiadczenie.netto;
-            const voucherBrutto = elitonBase.swiadczenie.brutto;
+      // Próg PIT — używany do obliczenia bruttoRaise
+      const rocznyBrutto = currentModel.brutto * 12;
+      const czyDrugaSkala = rocznyBrutto > 120_000;
+      const pitRate = czyDrugaSkala ? 0.32 : 0.12;
 
-            // Próg PIT — używany do obliczenia bruttoRaise
-            const rocznyBrutto  = currentModel.brutto * 12;
-            const czyDrugaSkala = rocznyBrutto > 120_000;
-            const pitRate       = czyDrugaSkala ? 0.32 : 0.12;
+      // Koszt podwyżki, aby pracownik dostał premiaKwota NETTO w gotówce:
+      //   brutto × (1 − ZUS_prac) × (1 − PIT) = premiaKwota
+      //   → brutto = premiaKwota / ((1 − ZUS_prac) × (1 − PIT))  ← zależy od progu!
+      const bruttoRaise = premiaKwota / ((1 - ZUS_PRAC_RATE) * (1 - pitRate));
+      const kosztRaise = bruttoRaise * (1 + zusPracodawcaAdd);
 
-            // Koszt podwyżki, aby pracownik dostał premiaKwota NETTO w gotówce:
-            //   brutto × (1 − ZUS_prac) × (1 − PIT) = premiaKwota
-            //   → brutto = premiaKwota / ((1 − ZUS_prac) × (1 − PIT))  ← zależy od progu!
-            const bruttoRaise = premiaKwota / ((1 - ZUS_PRAC_RATE) * (1 - pitRate));
-            const kosztRaise  = bruttoRaise * (1 + zusPracodawcaAdd);
+      // Koszt EBS: voucherBrutto (nominał + zaliczka PIT) + opłata serwisowa (prowizja% × nominał)
+      // ZUS = 0 po obu stronach (Rozp. MPiPS § 2 ust. 1 pkt 26 z 18.12.1998)
+      const kosztEBS = voucherBrutto + premiaKwota * (tempProwizja / 100);
 
-            // Koszt EBS: voucherBrutto (nominał + zaliczka PIT) + opłata serwisowa (prowizja% × nominał)
-            // ZUS = 0 po obu stronach (Rozp. MPiPS § 2 ust. 1 pkt 26 z 18.12.1998)
-            const kosztEBS = voucherBrutto + premiaKwota * (tempProwizja / 100);
+      const oszczednosc = kosztRaise - kosztEBS;
+      const oszczednoscPct = kosztRaise > 0 ? Math.round((oszczednosc / kosztRaise) * 100) : 0;
 
-            const oszczednosc    = kosztRaise - kosztEBS;
-            const oszczednoscPct = kosztRaise > 0 ? Math.round(oszczednosc / kosztRaise * 100) : 0;
+      return {
+        imie: p.imie,
+        nazwisko: p.nazwisko,
+        premiaKwota,
+        nettoZasadnicza,
+        bruttoRaise,
+        kosztRaise,
+        kosztEBS,
+        oszczednosc,
+        oszczednoscPct,
+        czyDrugaSkala,
+        pitRate,
+        bruttoCurrent: currentModel.brutto,
+        voucherBrutto,
+      };
+    });
 
-            return {
-                imie: p.imie,
-                nazwisko: p.nazwisko,
-                premiaKwota,
-                nettoZasadnicza,
-                bruttoRaise,
-                kosztRaise,
-                kosztEBS,
-                oszczednosc,
-                oszczednoscPct,
-                czyDrugaSkala,
-                pitRate,
-                bruttoCurrent: currentModel.brutto,
-                voucherBrutto,
-            };
-        });
+    const sumPremia = workersData.reduce((a: number, w: any) => a + w.premiaKwota, 0);
+    const sumKosztRaise = workersData.reduce((a: number, w: any) => a + w.kosztRaise, 0);
+    const sumKosztEBS = workersData.reduce((a: number, w: any) => a + w.kosztEBS, 0);
+    const sumOszczednosc = workersData.reduce((a: number, w: any) => a + w.oszczednosc, 0);
+    const sumOszczRok = sumOszczednosc * 12;
+    const count2Bracket = workersData.filter((w: any) => w.czyDrugaSkala).length;
+    const avgOszczPct =
+      workersData.length > 0
+        ? Math.round(
+            workersData.reduce((a: number, w: any) => a + w.oszczednoscPct, 0) / workersData.length
+          )
+        : 0;
 
-        const sumPremia      = workersData.reduce((a: number, w: any) => a + w.premiaKwota, 0);
-        const sumKosztRaise  = workersData.reduce((a: number, w: any) => a + w.kosztRaise,  0);
-        const sumKosztEBS    = workersData.reduce((a: number, w: any) => a + w.kosztEBS,    0);
-        const sumOszczednosc = workersData.reduce((a: number, w: any) => a + w.oszczednosc, 0);
-        const sumOszczRok    = sumOszczednosc * 12;
-        const count2Bracket  = workersData.filter((w: any) => w.czyDrugaSkala).length;
-        const avgOszczPct    = workersData.length > 0
-            ? Math.round(workersData.reduce((a: number, w: any) => a + w.oszczednoscPct, 0) / workersData.length)
-            : 0;
+    // ── Na potrzeby strony 2: przykład — pracownik ma dostać 1000 zł NETTO ————————————————
+    // Punkt wyjścia: premiaKwota = 1000 zł (siła nabywcza, co pracownik wyda)
+    // EBS:   koszt = voucherBrutto + prowizja_netto (prowizja naliczana od nominału)
+    // Podwyżka: brutto = 1000/((1−ZUS_prac)×(1−PIT)), koszt = brutto × (1+ZUS_pracodawcy)
+    // Oszczędność % rośnie z progiem podatkowym — przy 12% ~19%, przy 32% ~22%.
+    const ex = 1000; // cel netto pracownika
+    // I próg (12% PIT):
+    const exVoucherBruttoI = ex / (1 - 0.12); // 1 136 zł (przychód deklarowany)
+    const exKosztEBSI = exVoucherBruttoI + ex * (tempProwizja / 100); // 1 136 + 150 = 1 286 zł przy 15%
+    const exBruttoRaiseI = ex / ((1 - ZUS_PRAC_RATE) * (1 - 0.12)); // 1 317 zł
+    const exKosztRaiseI = exBruttoRaiseI * (1 + zusPracodawcaAdd); // ~1 608 zł
+    // II próg (32% PIT):
+    const exVoucherBruttoII = ex / (1 - 0.32); // 1 471 zł
+    const exKosztEBSII = exVoucherBruttoII + ex * (tempProwizja / 100); // 1 471 + 150 = 1 621 zł przy 15%
+    const exBruttoRaiseII = ex / ((1 - ZUS_PRAC_RATE) * (1 - 0.32)); // 1 704 zł
+    const exKosztRaiseII = exBruttoRaiseII * (1 + zusPracodawcaAdd); // ~2 081 zł
+    // Oszczędność I próg (~19% przy 15% prowizji); rośnie z progiem PIT:
+    const exOszczPct = Math.round(((exKosztRaiseI - exKosztEBSI) / exKosztRaiseI) * 100); // ~19%
+    const exPITAmount = Math.round(exVoucherBruttoI - ex); // zaliczka PIT od vouchera
+    const exProwizjaNetto = Math.round((ex * tempProwizja) / 100); // opłata serwisowa netto
+    const exVATAmount = Math.round(exProwizjaNetto * 0.23); // VAT od prowizji
 
-        // ── Na potrzeby strony 2: przykład — pracownik ma dostać 1000 zł NETTO ————————————————
-        // Punkt wyjścia: premiaKwota = 1000 zł (siła nabywcza, co pracownik wyda)
-        // EBS:   koszt = voucherBrutto + prowizja_netto (prowizja naliczana od nominału)
-        // Podwyżka: brutto = 1000/((1−ZUS_prac)×(1−PIT)), koszt = brutto × (1+ZUS_pracodawcy)
-        // Oszczędność % rośnie z progiem podatkowym — przy 12% ~19%, przy 32% ~22%.
-        const ex = 1000;  // cel netto pracownika
-        // I próg (12% PIT):
-        const exVoucherBruttoI  = ex / (1 - 0.12);               // 1 136 zł (przychód deklarowany)
-        const exKosztEBSI       = exVoucherBruttoI + ex * (tempProwizja / 100); // 1 136 + 150 = 1 286 zł przy 15%
-        const exBruttoRaiseI    = ex / ((1 - ZUS_PRAC_RATE) * (1 - 0.12));     // 1 317 zł
-        const exKosztRaiseI     = exBruttoRaiseI    * (1 + zusPracodawcaAdd);  // ~1 608 zł
-        // II próg (32% PIT):
-        const exVoucherBruttoII = ex / (1 - 0.32);               // 1 471 zł
-        const exKosztEBSII      = exVoucherBruttoII + ex * (tempProwizja / 100); // 1 471 + 150 = 1 621 zł przy 15%
-        const exBruttoRaiseII   = ex / ((1 - ZUS_PRAC_RATE) * (1 - 0.32));     // 1 704 zł
-        const exKosztRaiseII    = exBruttoRaiseII   * (1 + zusPracodawcaAdd);  // ~2 081 zł
-        // Oszczędność I próg (~19% przy 15% prowizji); rośnie z progiem PIT:
-        const exOszczPct = Math.round((exKosztRaiseI - exKosztEBSI) / exKosztRaiseI * 100); // ~19%
-        const exPITAmount     = Math.round(exVoucherBruttoI - ex);            // zaliczka PIT od vouchera
-        const exProwizjaNetto = Math.round(ex * tempProwizja / 100);           // opłata serwisowa netto
-        const exVATAmount     = Math.round(exProwizjaNetto * 0.23);            // VAT od prowizji
+    // ── Pierwszy pracownik z listy — przykład podziału wynagrodzenia ─────────────────────
+    const w0 = workersData[0] || null;
+    const w0Name = w0 ? `${w0.imie} ${w0.nazwisko}` : 'pracownik';
+    const w0Zasadnicza = w0 ? w0.nettoZasadnicza : 0;
+    const w0Swiadczenie = w0 ? w0.premiaKwota : 0;
+    const w0Laczne = w0Zasadnicza + w0Swiadczenie;
+    const w0ZasadniczaPct = w0Laczne > 0 ? Math.round((w0Zasadnicza / w0Laczne) * 100) : 0;
+    const w0SwiadczeniePct = w0Laczne > 0 ? Math.round((w0Swiadczenie / w0Laczne) * 100) : 0;
+    const nPrac = activePracownicy.length;
+    const pracLabel = nPrac === 1 ? '1 pracownika' : `${nPrac} pracowników`;
 
-        // ── Pierwszy pracownik z listy — przykład podziału wynagrodzenia ─────────────────────
-        const w0              = workersData[0] || null;
-        const w0Name          = w0 ? `${w0.imie} ${w0.nazwisko}` : 'pracownik';
-        const w0Zasadnicza    = w0 ? w0.nettoZasadnicza : 0;
-        const w0Swiadczenie   = w0 ? w0.premiaKwota : 0;
-        const w0Laczne        = w0Zasadnicza + w0Swiadczenie;
-        const w0ZasadniczaPct = w0Laczne > 0 ? Math.round(w0Zasadnicza / w0Laczne * 100) : 0;
-        const w0SwiadczeniePct = w0Laczne > 0 ? Math.round(w0Swiadczenie / w0Laczne * 100) : 0;
-        const nPrac           = activePracownicy.length;
-        const pracLabel       = nPrac === 1 ? '1 pracownika' : `${nPrac} pracowników`;
+    // ── Kafelki strony 2: realne dane z pracownika #1 ─────────────────────────────────────
+    const p1ex = w0 ? Math.round(w0.premiaKwota) : Math.round(ex);
+    const p1Brutto = w0 ? Math.round(w0.voucherBrutto) : Math.round(exVoucherBruttoI);
+    const p1PIT = p1Brutto - p1ex; // zaliczka PIT (wychodzi z reguły 12%/32%)
+    const p1Prowizja = Math.round((p1ex * tempProwizja) / 100); // prowizja netto
+    const p1VAT = Math.round(p1Prowizja * 0.23); // VAT 23% od prowizji → odliczenie
+    const p1Total = p1Brutto + p1Prowizja; // łączny koszt pracodawcy
+    const p1PitPct = w0 ? Math.round(w0.pitRate * 100) : 12; // 12 lub 32
+    const p1Prog = w0 ? (w0.czyDrugaSkala ? 'II próg' : 'I próg') : 'I próg';
 
-        // ── Kafelki strony 2: realne dane z pracownika #1 ─────────────────────────────────────
-        const p1ex      = w0 ? Math.round(w0.premiaKwota) : Math.round(ex);
-        const p1Brutto  = w0 ? Math.round(w0.voucherBrutto) : Math.round(exVoucherBruttoI);
-        const p1PIT     = p1Brutto - p1ex;                              // zaliczka PIT (wychodzi z reguły 12%/32%)
-        const p1Prowizja = Math.round(p1ex * tempProwizja / 100);       // prowizja netto
-        const p1VAT     = Math.round(p1Prowizja * 0.23);                // VAT 23% od prowizji → odliczenie
-        const p1Total   = p1Brutto + p1Prowizja;                        // łączny koszt pracodawcy
-        const p1PitPct  = w0 ? Math.round(w0.pitRate * 100) : 12;       // 12 lub 32
-        const p1Prog    = w0 ? (w0.czyDrugaSkala ? 'II próg' : 'I próg') : 'I próg';
+    // ── II poziom: model fakturowania EBS ─────────────────────────────────────────────────
+    // NOTA (bez VAT): za nominał voucherów = sumPremia (co pracownicy realnie wydają)
+    // FV  (z VAT):    za obsługę = prowizja% × nominał + 23% VAT → VAT do odliczenia
+    const notaMies = sumPremia; // NOTA mies. (bez VAT, KUP)
+    const fvNetMies = notaMies * (tempProwizja / 100); // FV netto obsługa
+    const fvVATMies = fvNetMies * 0.23; // VAT 23% → odliczenie
+    const fvGrossMies = fvNetMies + fvVATMies; // FV brutto
+    const fvVATRok = fvVATMies * 12; // VAT recovery / rok
+    // CIT: zastąpienie gotówki voucherem obniża KUP (brak ZUS składek = mniejszy koszt podatkowy)
+    // → firma traci tarczę CIT od zaoszczędzonych składek ZUS
+    // Netto I poziom = ZUS savings × (1 − citRate); art. 15 ust. 1 uCIT
+    const citRate = 0.19; // std. CIT sp. z o.o. (mały podatnik: 9%)
+    const citKorektaRok = sumOszczRok * citRate; // utracona tarcza CIT na oszczędnościach ZUS
+    const nettoOszczRok = sumOszczRok - citKorektaRok; // I poziom po korekcie CIT
+    const level2Rok = nettoOszczRok + fvVATRok; // łączna korzyść netto / rok
 
-        // ── II poziom: model fakturowania EBS ─────────────────────────────────────────────────
-        // NOTA (bez VAT): za nominał voucherów = sumPremia (co pracownicy realnie wydają)
-        // FV  (z VAT):    za obsługę = prowizja% × nominał + 23% VAT → VAT do odliczenia
-        const notaMies     = sumPremia;                              // NOTA mies. (bez VAT, KUP)
-        const fvNetMies    = notaMies * (tempProwizja / 100);        // FV netto obsługa
-        const fvVATMies    = fvNetMies * 0.23;                       // VAT 23% → odliczenie
-        const fvGrossMies  = fvNetMies + fvVATMies;                  // FV brutto
-        const fvVATRok     = fvVATMies * 12;                         // VAT recovery / rok
-        // CIT: zastąpienie gotówki voucherem obniża KUP (brak ZUS składek = mniejszy koszt podatkowy)
-        // → firma traci tarczę CIT od zaoszczędzonych składek ZUS
-        // Netto I poziom = ZUS savings × (1 − citRate); art. 15 ust. 1 uCIT
-        const citRate       = 0.19;                                  // std. CIT sp. z o.o. (mały podatnik: 9%)
-        const citKorektaRok = sumOszczRok * citRate;                 // utracona tarcza CIT na oszczędnościach ZUS
-        const nettoOszczRok = sumOszczRok - citKorektaRok;           // I poziom po korekcie CIT
-        const level2Rok     = nettoOszczRok + fvVATRok;             // łączna korzyść netto / rok
+    // KUP łączny (nota + FV netto) — oba odpisywalne od podstawy podatku
+    const kupMies = notaMies + fvNetMies;
+    const kupRok = kupMies * 12;
 
-        // KUP łączny (nota + FV netto) — oba odpisywalne od podstawy podatku
-        const kupMies = notaMies + fvNetMies;
-        const kupRok  = kupMies * 12;
+    // Tarcza podatkowa — warianty formy opodatkowania
+    const tarczaData = [
+      { label: 'JDG — skala I próg', stawka: 12, star: false },
+      { label: 'JDG — liniówka', stawka: 19, star: true },
+      { label: 'JDG — skala II próg', stawka: 32, star: false },
+      { label: 'CIT 9% (mały podatnik)', stawka: 9, star: false },
+      { label: 'CIT 19%', stawka: 19, star: true },
+    ].map((v: { label: string; stawka: number; star: boolean }) => ({
+      ...v,
+      tarczaMies: Math.round((kupMies * v.stawka) / 100),
+      tarczaRok: Math.round((kupRok * v.stawka) / 100),
+      lacznie: Math.round((kupRok * v.stawka) / 100 + fvVATRok),
+    }));
 
-        // Tarcza podatkowa — warianty formy opodatkowania
-        const tarczaData = [
-            { label: 'JDG — skala I próg',     stawka: 12, star: false },
-            { label: 'JDG — liniówka',         stawka: 19, star: true  },
-            { label: 'JDG — skala II próg',    stawka: 32, star: false },
-            { label: 'CIT 9% (mały podatnik)', stawka:  9, star: false },
-            { label: 'CIT 19%',                stawka: 19, star: true  },
-        ].map((v: { label: string; stawka: number; star: boolean }) => ({
-            ...v,
-            tarczaMies: Math.round(kupMies * v.stawka / 100),
-            tarczaRok:  Math.round(kupRok  * v.stawka / 100),
-            lacznie:    Math.round(kupRok  * v.stawka / 100 + fvVATRok),
-        }));
-
-        // ══════════════════════════════════════════════════════════════════════
-        // STRONA 1 — OKŁADKA
-        // ══════════════════════════════════════════════════════════════════════
-        const page1 = `
+    // ══════════════════════════════════════════════════════════════════════
+    // STRONA 1 — OKŁADKA
+    // ══════════════════════════════════════════════════════════════════════
+    const page1 = `
 <div class="page" style="background:#0A1128;display:flex;flex-direction:column;overflow:hidden">
 
   <!-- złoty pasek lewej krawędzi -->
@@ -262,29 +280,31 @@ export const offerLegalizacjaPremiiGenerator = {
 
 </div>`;
 
-        // ══════════════════════════════════════════════════════════════════════
-        // STRONA 2 — TRZY ŚCIEŻKI (porównanie scenariuszy)
-        // ══════════════════════════════════════════════════════════════════════
-        const colStyle = (accent: string, bg: string) =>
-            `border:1px solid ${accent};border-top:4px solid ${accent};background:${bg};border-radius:2px;padding:16px;display:flex;flex-direction:column;gap:10px`;
+    // ══════════════════════════════════════════════════════════════════════
+    // STRONA 2 — TRZY ŚCIEŻKI (porównanie scenariuszy)
+    // ══════════════════════════════════════════════════════════════════════
+    const colStyle = (accent: string, bg: string) =>
+      `border:1px solid ${accent};border-top:4px solid ${accent};background:${bg};border-radius:2px;padding:16px;display:flex;flex-direction:column;gap:10px`;
 
-        const badgeHtml = (text: string, color: string, bg: string) =>
-            `<div style="display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:${bg};border:1px solid ${color};border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${color}">${text}</div>`;
+    const badgeHtml = (text: string, color: string, bg: string) =>
+      `<div style="display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:${bg};border:1px solid ${color};border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${color}">${text}</div>`;
 
-        const rowHtml = (label: string, value: string, muted = false) =>
-            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+    const rowHtml = (label: string, value: string, muted = false) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)">
                <span style="font-size:9.5px;color:${muted ? 'var(--sp-text-muted)' : 'var(--sp-text)'}">${label}</span>
                <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:${muted ? 'var(--sp-text-muted)' : 'var(--sp-navy)'}">${value}</span>
              </div>`;
 
-        const page2 = `
+    const page2 = `
 <div class="page">
   ${generatePageHeaderV3('Struktura kosztów Programu Voucher EBS — indywidualna analiza', '02. Model rozliczeń', 2, 2, date)}
 
   <div class="page-body" style="padding-top:10px;padding-bottom:36px;display:flex;flex-direction:column;gap:6px">
 
     <!-- Przykład podziału wynagrodzenia — 1. pracownik z listy -->
-    ${w0 ? `
+    ${
+      w0
+        ? `
     <div style="background:var(--sp-navy);border-radius:3px;padding:7px 14px;text-align:center">
       <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap;justify-content:center">
         <span style="font-size:7.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(198,161,91,.7)">Rekomendowany model wynagradzania &mdash;</span>
@@ -304,7 +324,9 @@ export const offerLegalizacjaPremiiGenerator = {
         <span style="font-size:7.5px;color:rgba(255,255,255,.4)">Zasadnicze ${w0ZasadniczaPct}%</span>
         <span style="font-size:7.5px;color:rgba(198,161,91,.7)">Voucher EBS ${w0SwiadczeniePct}%</span>
       </div>
-    </div>` : ''}
+    </div>`
+        : ''
+    }
 
     <!-- ══ PODZIAŁ KOSZTU VOUCHERA + DOKUMENTY ══ -->
     <div style="border:1px solid rgba(198,161,91,.35);border-top:3px solid var(--sp-gold);padding:7px 12px;background:rgba(198,161,91,.03);flex:1;display:flex;flex-direction:column">
@@ -697,10 +719,12 @@ export const offerLegalizacjaPremiiGenerator = {
   ${generateFooterV3()}
 </div>`;
 
-        // ══════════════════════════════════════════════════════════════════════
-        // STRONA 3 — TWARDE DANE: analiza per pracownik
-        // ══════════════════════════════════════════════════════════════════════
-        const tableRows = workersData.map((w: any) => `
+    // ══════════════════════════════════════════════════════════════════════
+    // STRONA 3 — TWARDE DANE: analiza per pracownik
+    // ══════════════════════════════════════════════════════════════════════
+    const tableRows = workersData
+      .map(
+        (w: any) => `
           <tr>
             <td>${w.imie} ${w.nazwisko}${w.czyDrugaSkala ? '<span class="sub" style="color:#7c3aed;font-weight:700">II próg</span>' : ''}</td>
             <td class="r">${fmt(w.premiaKwota)} zł</td>
@@ -708,9 +732,11 @@ export const offerLegalizacjaPremiiGenerator = {
             <td class="r gold">${fmt(w.kosztEBS)} zł</td>
             <td class="r" style="color:var(--success);font-weight:700">${fmt(w.oszczednosc)} zł</td>
             <td class="r" style="color:var(--success)">${w.oszczednoscPct}%</td>
-          </tr>`).join('');
+          </tr>`
+      )
+      .join('');
 
-        const page3 = `
+    const page3 = `
 <div class="page">
   ${generatePageHeaderV3('Analiza finansowa — Twoja firma', '03. Twarde dane', 3, 4, date)}
 
@@ -765,15 +791,19 @@ export const offerLegalizacjaPremiiGenerator = {
         <div style="font-family:var(--font-serif);font-size:26px;font-weight:700;color:var(--sp-navy)">${fmt(sumOszczRok)} zł<span style="font-size:11px;font-weight:400;color:var(--sp-text-muted)"> / rok</span></div>
         <div style="font-size:8.5px;color:var(--sp-text-muted);margin-top:4px">Przy tych samych kwotach netto dla pracowników</div>
       </div>
-      ${count2Bracket > 0 ? `
+      ${
+        count2Bracket > 0
+          ? `
       <div style="background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);border-left:3px solid #7c3aed;padding:10px 14px">
         <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px">Bonus — II próg podatkowy (32%)</div>
         <div style="font-size:10.5px;color:var(--sp-navy);line-height:1.5">${count2Bracket} z ${activePracownicy.length} pracowni${activePracownicy.length < 5 ? 'ków' : 'ków'} przekracza próg 120&nbsp;000&nbsp;zł/rok. Dla nich podwyżka kosztuje więcej (wyższa PIT w mianowniku brutto). Koszt EBS również rośnie, ale <strong style="color:#7c3aed">oszczędność % (~${exOszczPct}%) pozostaje stała</strong> — a absolutna kwota oszczędności jest wyższa.</div>
-      </div>` : `
+      </div>`
+          : `
       <div style="background:var(--sp-gray);border:1px solid var(--border);padding:10px 14px">
         <div style="font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:4px">Podstawa prawna</div>
         <div style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.5">Vouchery EBS to przychód pracownika wg art. 12 uPIT — objęty PIT wg skali. Są jednak <strong>wyłączone z podstawy wymiaru składek ZUS</strong> (Rozp. MPiPS § 2 ust. 1 pkt 26 z 18.12.1998). To jedyne, lecz realne źródło oszczędności pracodawcy.</div>
-      </div>`}
+      </div>`
+      }
     </div>
 
     <!-- Roczna wizualizacja — miesięczne słupki porównawcze -->
@@ -785,23 +815,23 @@ export const offerLegalizacjaPremiiGenerator = {
           <div style="width:100%;background:#ef4444;height:100%;border-radius:2px 2px 0 0"></div>
           <div style="font-size:7px;color:var(--sp-text-muted);margin-top:3px">Przez podwyżkę</div>
         </div>
-        <div style="flex:${Math.round(sumKosztEBS/sumKosztRaise*100)/100};display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div style="flex:${Math.round((sumKosztEBS / sumKosztRaise) * 100) / 100};display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
           <div style="font-size:7px;color:var(--sp-gold);font-weight:700;margin-bottom:3px">${fmtK(sumKosztEBS)} zł</div>
-          <div style="width:100%;background:var(--sp-gold);height:${Math.round(sumKosztEBS/sumKosztRaise*100)}%;border-radius:2px 2px 0 0"></div>
+          <div style="width:100%;background:var(--sp-gold);height:${Math.round((sumKosztEBS / sumKosztRaise) * 100)}%;border-radius:2px 2px 0 0"></div>
           <div style="font-size:7px;color:var(--sp-text-muted);margin-top:3px">★ Przez EBS</div>
         </div>
       </div>
     </div>
 
-    <p class="disc" style="margin-top:6px">Dane dla Twojej firmy (${activePracownicy.length} pracowni${activePracownicy.length < 5 ? 'ków' : 'ków'}). Kolumna „do ręki" = kwota netto, którą pracownik faktycznie otrzymuje. „Oszczędzasz" = różnica między kosztem podwyżki a kosztem vouchera EBS. Prowizja EBS ${tempProwizja}%, ZUS pracodawcy ${Math.round(zusPracodawcaAdd*100)}%.</p>
+    <p class="disc" style="margin-top:6px">Dane dla Twojej firmy (${activePracownicy.length} pracowni${activePracownicy.length < 5 ? 'ków' : 'ków'}). Kolumna „do ręki" = kwota netto, którą pracownik faktycznie otrzymuje. „Oszczędzasz" = różnica między kosztem podwyżki a kosztem vouchera EBS. Prowizja EBS ${tempProwizja}%, ZUS pracodawcy ${Math.round(zusPracodawcaAdd * 100)}%.</p>
   </div>
   ${generateFooterV3()}
 </div>`;
 
-        // ══════════════════════════════════════════════════════════════════════
-        // STRONA 4 — DLACZEGO TO DZIAŁA + CTA
-        // ══════════════════════════════════════════════════════════════════════
-        const page4 = `
+    // ══════════════════════════════════════════════════════════════════════
+    // STRONA 4 — DLACZEGO TO DZIAŁA + CTA
+    // ══════════════════════════════════════════════════════════════════════
+    const page4 = `
 <div class="page">
   ${generatePageHeaderV3('Dlaczego to działa i co dalej', '04. Podsumowanie', 4, 4, date)}
 
@@ -818,7 +848,7 @@ export const offerLegalizacjaPremiiGenerator = {
         <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px">Miesięcznie</div>
         <div style="font-family:var(--font-mono);font-size:18px;color:rgba(255,255,255,.7);font-weight:700">${fmtK(sumOszczednosc)} zł</div>
         <div style="font-size:8px;color:rgba(255,255,255,.3);margin-top:6px">Śr. oszczędność na pracowniku</div>
-        <div style="font-family:var(--font-mono);font-size:14px;color:var(--sp-gold)">${workersData.length > 0 ? fmtK(sumOszczednosc/workersData.length) : 0} zł/m-c</div>
+        <div style="font-family:var(--font-mono);font-size:14px;color:var(--sp-gold)">${workersData.length > 0 ? fmtK(sumOszczednosc / workersData.length) : 0} zł/m-c</div>
       </div>
     </div>
 
@@ -832,7 +862,7 @@ export const offerLegalizacjaPremiiGenerator = {
 
       <div style="background:var(--sp-gray);padding:12px 16px">
         <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--success);margin-bottom:6px">💰 Skąd pochodzi oszczędność?</div>
-        <p style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.5;margin:0">Z braku ZUS. Przy podwyżce płacisz ~${Math.round(zusPracodawcaAdd*100)}% ZUS pracodawcy na górze, a pracownik traci 13,71% ZUS z dołu. Przy voucherze — ani jedno, ani drugie. Podatek dochodowy płacony jest tak samo jak przy podwyżce.</p>
+        <p style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.5;margin:0">Z braku ZUS. Przy podwyżce płacisz ~${Math.round(zusPracodawcaAdd * 100)}% ZUS pracodawcy na górze, a pracownik traci 13,71% ZUS z dołu. Przy voucherze — ani jedno, ani drugie. Podatek dochodowy płacony jest tak samo jak przy podwyżce.</p>
       </div>
 
       <div style="background:var(--sp-gray);padding:12px 16px">
@@ -890,19 +920,23 @@ export const offerLegalizacjaPremiiGenerator = {
 
       <div style="background:rgba(198,161,91,.05);border:2px solid var(--sp-gold);padding:14px 18px">
         <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:10px">Kontakt w sprawie oferty</div>
-        ${tempFirma?.opiekunNazwa ? `
+        ${
+          tempFirma?.opiekunNazwa
+            ? `
         <div style="margin-bottom:8px">
           <div style="font-size:12px;font-weight:700;color:var(--sp-navy)">${tempFirma.opiekunNazwa}</div>
           <div style="font-size:9px;color:var(--sp-text-muted)">Opiekun Handlowy</div>
         </div>
         ${tempFirma?.opiekunEmail ? `<div style="font-size:9.5px;color:var(--sp-navy);margin-bottom:3px">✉ ${tempFirma.opiekunEmail}</div>` : ''}
         ${tempFirma?.opiekunTelefon ? `<div style="font-size:9.5px;color:var(--sp-navy)">☎ ${tempFirma.opiekunTelefon}</div>` : ''}
-        ` : `
+        `
+            : `
         <div style="font-size:9.5px;color:var(--sp-text-muted);line-height:1.6">
           Stratton Prime Sp. z o.o.<br>
           ul. Nowy Świat 42/44, 80-299 Gdańsk<br>
           NIP: 5842867357
-        </div>`}
+        </div>`
+        }
         <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(198,161,91,.2);font-size:8.5px;color:var(--sp-text-muted)">
           Przygotowany na podstawie przekazanych danych.<br>
           Wyniki szacunkowe — ostateczne wartości po weryfikacji.
@@ -914,8 +948,8 @@ export const offerLegalizacjaPremiiGenerator = {
   ${generateFooterV3()}
 </div>`;
 
-        // ── HTML doc ──────────────────────────────────────────────────────────
-        const html = `<!DOCTYPE html>
+    // ── HTML doc ──────────────────────────────────────────────────────────
+    const html = `<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
@@ -968,11 +1002,9 @@ export const offerLegalizacjaPremiiGenerator = {
 </body>
 </html>`;
 
-        const blob = new Blob([html], { type: 'text/html' });
-        const url  = URL.createObjectURL(blob);
-        const safeNazwa = (tempFirma?.nazwa || 'Eliton-Prime')
-            .replace(/[^a-z0-9\-_ ]/gi, '_')
-            .trim();
-        printHtmlAsPdf(html, url, `Oferta-LegalizacjaPremii-${safeNazwa}.pdf`);
-    },
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const safeNazwa = (tempFirma?.nazwa || 'Eliton-Prime').replace(/[^a-z0-9\-_ ]/gi, '_').trim();
+    printHtmlAsPdf(html, url, `Oferta-LegalizacjaPremii-${safeNazwa}.pdf`);
+  },
 };

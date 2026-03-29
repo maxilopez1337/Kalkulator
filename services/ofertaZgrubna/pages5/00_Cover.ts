@@ -1,29 +1,38 @@
-﻿import type { SimulationParams } from '../types';
+﻿/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { SimulationParams } from '../types';
 import { fmtK2, BRUTTO_TO_NETTO } from '../shared';
 import { LOGO_OFERTA_B64 } from '../../offerPdfV3/pages/logoOfertaB64';
 
 export const generateCoverV5 = (p: SimulationParams, date: string, docNr: string): string => {
-    const firm  = p.firmaNazwa || 'Twoja firma';
-    const n     = p.empCount;
-    const prac  = n === 1 ? 'pracownik' : n < 5 ? 'pracownicy' : 'pracowników';
-    const contractLabel = p.contractType === 'UOP' ? 'Umowy o pracę (UoP)' : p.contractType === 'UZ' ? 'Umowy zlecenia (UZ)' : 'Mix UoP/UZ';
-    const { monthlySavings, yearlySavings, totalStd, totalNew, totalProv } = p.simulation;
-    const advisorName  = p.advisorName  || 'Twój Doradca';
-    const advisorEmail = p.advisorEmail || '';
-    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
-    const savingsPct = Math.round((monthlySavings / Math.max(1, totalStd)) * 100);
+  const firm = p.firmaNazwa || 'Twoja firma';
+  const n = p.empCount;
+  const prac = n === 1 ? 'pracownik' : n < 5 ? 'pracownicy' : 'pracowników';
+  const contractLabel =
+    p.contractType === 'UOP'
+      ? 'Umowy o pracę (UoP)'
+      : p.contractType === 'UZ'
+        ? 'Umowy zlecenia (UZ)'
+        : 'Mix UoP/UZ';
+  const { monthlySavings, yearlySavings, totalStd, totalNew, totalProv } = p.simulation;
+  const advisorName = p.advisorName || 'Twój Doradca';
+  const advisorEmail = p.advisorEmail || '';
+  const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
+  const savingsPct = Math.round((monthlySavings / Math.max(1, totalStd)) * 100);
 
-    // Hook kwalifikacyjny — "dlaczego akurat ta firma"
-    const contractReason =
-        p.contractType === 'UOP'   ? `Twoja firma ma pełną elastyczność struktury wynagrodzenia — przepisy od 1998 r. pozwalają część wynagrodzenia wypłacać jako <strong style="color:rgba(13,31,60,.8)">świadczenie rzeczowe wolne od składek ZUS</strong>, co bezpośrednio obniża koszty pracy.` :
-        p.contractType === 'UZ'    ? `Umowy zlecenia w Twojej firmie to gotowy punkt wejścia dla korekty strukturalnej — przepisy od 1998 r. dają tu <strong style="color:rgba(13,31,60,.8)">realną możliwość obniżenia składek ZUS bez zmiany wynagrodzenia netto</strong>.` :
-        /* MIXED */                  `Mieszana struktura zatrudnienia (UoP/UZ) to dwa niezależne punkty korekty — <strong style="color:rgba(13,31,60,.8)">każdy typ umowy otwiera własną ścieżkę do oszczędności</strong>.`;
-    const scaleReason = n >= 20
-        ? `Przy ${n} pracownikach efekt skali działa na Twoją korzyść — <strong style="color:rgba(13,31,60,.8)">każdy miesiąc wdrożenia przynosi oszczędność pomnożoną ${n}-krotnie.</strong>`
-        : `Nawet przy ${n} pracownikach miesięczna oszczędność przekracza równowartość <strong style="color:rgba(13,31,60,.8)">pełnego wynagrodzenia jednej osoby w Twoim zespole.</strong>`;
-    const ref = `SP/AW/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+  // Hook kwalifikacyjny — "dlaczego akurat ta firma"
+  const contractReason =
+    p.contractType === 'UOP'
+      ? `Twoja firma ma pełną elastyczność struktury wynagrodzenia — przepisy od 1998 r. pozwalają część wynagrodzenia wypłacać jako <strong style="color:rgba(13,31,60,.8)">świadczenie rzeczowe wolne od składek ZUS</strong>, co bezpośrednio obniża koszty pracy.`
+      : p.contractType === 'UZ'
+        ? `Umowy zlecenia w Twojej firmie to gotowy punkt wejścia dla korekty strukturalnej — przepisy od 1998 r. dają tu <strong style="color:rgba(13,31,60,.8)">realną możliwość obniżenia składek ZUS bez zmiany wynagrodzenia netto</strong>.`
+        : /* MIXED */ `Mieszana struktura zatrudnienia (UoP/UZ) to dwa niezależne punkty korekty — <strong style="color:rgba(13,31,60,.8)">każdy typ umowy otwiera własną ścieżkę do oszczędności</strong>.`;
+  const scaleReason =
+    n >= 20
+      ? `Przy ${n} pracownikach efekt skali działa na Twoją korzyść — <strong style="color:rgba(13,31,60,.8)">każdy miesiąc wdrożenia przynosi oszczędność pomnożoną ${n}-krotnie.</strong>`
+      : `Nawet przy ${n} pracownikach miesięczna oszczędność przekracza równowartość <strong style="color:rgba(13,31,60,.8)">pełnego wynagrodzenia jednej osoby w Twoim zespole.</strong>`;
+  const ref = `SP/AW/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}`;
 
-    return `<div class="page" style="display:flex;flex-direction:column;overflow:hidden;background:#F8F7F4">
+  return `<div class="page" style="display:flex;flex-direction:column;overflow:hidden;background:#F8F7F4">
 
   <!-- złoty pasek lewej krawędzi -->
   <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:#C6A15B;opacity:.85;z-index:3"></div>

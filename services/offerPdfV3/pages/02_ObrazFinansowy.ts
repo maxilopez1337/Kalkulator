@@ -1,9 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
-export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector: string): string => {
-  const fmt = (v: number) => new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
-  const fmtK = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
+export const generatePage06V3 = (
+  firma: Firma,
+  totals: any,
+  date: string,
+  sector: string
+): string => {
+  const fmt = (v: number) =>
+    new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
+      v
+    );
+  const fmtK = (v: number) =>
+    new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
   const nettoNewHeight = Math.min(95, Math.round(87 * (1 + totals.sumaRaise / totals.sumaNetto)));
   const yMax = totals.savingsPlus * 36;
   const y1 = totals.savingsPlus * 12;
@@ -30,10 +40,10 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
               <span style="font-size:14px;font-weight:700;color:var(--sp-text-muted)">${fmtK(totals.currentCost)} zł</span>
             </div>
             <div style="display:flex;height:40px;border-radius:2px;overflow:hidden;border:1px solid var(--border)">
-              <div style="flex:${Math.round(totals.sumaBrutto / totals.currentCost * 100)};background:#8fa3b8;display:flex;align-items:center;padding-left:12px;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.sumaBrutto / totals.currentCost) * 100)};background:#8fa3b8;display:flex;align-items:center;padding-left:12px;min-width:0;overflow:hidden">
                 <span style="font-size:9.5px;font-weight:600;color:#fff;white-space:nowrap">Brutto ${fmtK(totals.sumaBrutto)} zł</span>
               </div>
-              <div style="flex:${Math.round(totals.sumaZusPracodawcy / totals.currentCost * 100)};background:#c0cdd8;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.sumaZusPracodawcy / totals.currentCost) * 100)};background:#c0cdd8;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
                 <span style="font-size:9px;color:#fff;font-weight:600;white-space:nowrap">ZUS ${fmtK(totals.sumaZusPracodawcy)} zł</span>
               </div>
             </div>
@@ -55,20 +65,20 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
               <span style="font-size:8.5px;font-weight:700;color:var(--sp-navy);background:rgba(212,175,90,.12);padding:1px 5px;border-radius:2px">${fmtK(totals.sumaZasadnicza + totals.sumaSwiadczenieBrutto)} zł łącznie</span>
             </div>
             <div style="display:flex;height:40px;border-radius:2px;overflow:hidden;border:1px solid var(--border);width:100%">
-              <div style="flex:${Math.round(totals.sumaZasadnicza / totals.currentCost * 100)};background:var(--sp-navy);display:flex;align-items:center;padding-left:10px;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.sumaZasadnicza / totals.currentCost) * 100)};background:var(--sp-navy);display:flex;align-items:center;padding-left:10px;min-width:0;overflow:hidden">
                 <span style="font-size:9.5px;font-weight:600;color:rgba(255,255,255,.9);white-space:nowrap">Zasadnicze br. ${fmtK(totals.sumaZasadnicza)} zł</span>
               </div>
-              <div style="flex:${Math.round(totals.sumaSwiadczenieBrutto / totals.currentCost * 100)};background:var(--sp-gold);display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.sumaSwiadczenieBrutto / totals.currentCost) * 100)};background:var(--sp-gold);display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
                 <span style="font-size:8px;color:#fff;font-weight:700;white-space:nowrap">Voucher br. ${fmtK(totals.sumaSwiadczenieBrutto)} zł</span>
               </div>
-              <div style="flex:${Math.round(totals.sumaZusPracodawcyEliton / totals.currentCost * 100)};background:#3a6186;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.sumaZusPracodawcyEliton / totals.currentCost) * 100)};background:#3a6186;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
                 <span style="font-size:8.5px;color:#fff;font-weight:600;white-space:nowrap">ZUS ${fmtK(totals.sumaZusPracodawcyEliton)}</span>
               </div>
-              <div style="flex:${Math.round((totals.commission - totals.sumaRaise - totals.sumaAdminBonus) / totals.currentCost * 100)};background:#c0a040;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round(((totals.commission - totals.sumaRaise - totals.sumaAdminBonus) / totals.currentCost) * 100)};background:#c0a040;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
                 <span style="font-size:7px;color:#fff;font-weight:600">EBS</span>
               </div>
               <!-- Zielony segment oszczędności wypełnia resztę paska -->
-              <div style="flex:${Math.round(totals.savingsPlus / totals.currentCost * 100)};background:var(--success);display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+              <div style="flex:${Math.round((totals.savingsPlus / totals.currentCost) * 100)};background:var(--success);display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
                 <span style="font-size:8px;color:#fff;font-weight:700;white-space:nowrap">+${fmt(totals.savingsPlus)} zł</span>
               </div>
             </div>
@@ -92,7 +102,7 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
       <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">
         <span style="font-size:9px;font-weight:700;letter-spacing:.05em;color:var(--white);background:var(--sp-navy);padding:2px 7px;border-radius:2px">Wykres 2</span>
         <span style="font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--sp-navy)">Oszczędności narastająco — prognoza 36 miesięcy</span>
-        <span style="font-size:8px;color:var(--sp-text-muted);font-weight:400">(${totals.count} pracowni${totals.count === 1 ? 'k' : (totals.count < 5 ? 'ków' : 'ków')} · wariant PLUS · wartości szacunkowe)</span>
+        <span style="font-size:8px;color:var(--sp-text-muted);font-weight:400">(${totals.count} pracowni${totals.count === 1 ? 'k' : totals.count < 5 ? 'ków' : 'ków'} · wariant PLUS · wartości szacunkowe)</span>
       </div>
 
       <!-- Kontener wykresu — rozciąga się do wypełnienia strony -->
@@ -126,9 +136,9 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
 
             <!-- Słupki — 12 kwartałów, każdy kwartał = para (kwartalna oszczędność złoty + narastająco granatowy) -->
             <div style="display:flex;align-items:flex-end;height:100%;gap:8px">
-              ${Array.from({length: 12}, (_, i) => {
+              ${Array.from({ length: 12 }, (_, i) => {
                 const q = i + 1;
-                const totalPct = (q / 12 * 100).toFixed(2);
+                const totalPct = ((q / 12) * 100).toFixed(2);
                 const isYearEnd = q === 4 || q === 8 || q === 12;
                 const yearLabel = q === 4 ? 'Rok 1' : q === 8 ? 'Rok 2' : q === 12 ? 'Rok 3' : '';
                 const goldColor = isYearEnd ? '#b8902a' : '#D4AF5A';
@@ -147,10 +157,14 @@ export const generatePage06V3 = (firma: Firma, totals: any, date: string, sector
 
         <!-- Etykiety osi X — Q1..Q12 -->
         <div style="display:flex;padding-left:62px;gap:3px">
-          ${Array.from({length: 12}, (_, i) => {
+          ${Array.from({ length: 12 }, (_, i) => {
             const q = i + 1;
             const isYearEnd = q === 4 || q === 8 || q === 12;
-            const col = isYearEnd ? (q === 4 ? 'var(--success)' : 'var(--sp-navy)') : 'var(--sp-text-muted)';
+            const col = isYearEnd
+              ? q === 4
+                ? 'var(--success)'
+                : 'var(--sp-navy)'
+              : 'var(--sp-text-muted)';
             const fw = isYearEnd ? '700' : '400';
             return `<div style="flex:1;text-align:center;font-size:7px;color:${col};font-weight:${fw}">Q${q}</div>`;
           }).join('')}

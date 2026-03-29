@@ -3,9 +3,9 @@ import { fmtK2 } from '../shared';
 import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateWariantyV5 = (p: SimulationParams, date: string): string => {
-    const { monthlySavings } = p.simulation;
+  const { monthlySavings } = p.simulation;
 
-    return `
+  return `
 <!-- ════ STR 4 — WARIANTY WDROŻENIA ════ -->
 <div class="page">
   <div class="ph">

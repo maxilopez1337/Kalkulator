@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
 export const generatePage02V3 = (firma: Firma, totals: any, date: string, sector: string) => {
-  const fmt   = (v: number) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(v);
+  const fmt = (v: number) =>
+    new Intl.NumberFormat('pl-PL', {
+      style: 'currency',
+      currency: 'PLN',
+      maximumFractionDigits: 0,
+    }).format(v);
   const annualLoss = (totals.savingsPlus || 0) * 12;
-  const loss3y     = (totals.savingsPlus || 0) * 36;
+  const loss3y = (totals.savingsPlus || 0) * 36;
   const sectorLabel = sector || 'Twojej branży';
 
   return `

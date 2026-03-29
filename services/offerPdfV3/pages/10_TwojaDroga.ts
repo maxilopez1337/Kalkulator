@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
-export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any, date: string, sector: string) => `
+export const generateIlekosztujeCikadymiesiczwokiV3 = (
+  firma: Firma,
+  totals: any,
+  date: string,
+  sector: string
+) => `
 <div class="page">
 
   ${generatePageHeaderV3('Twoja Droga do Pierwszych Oszczędności', '10. Twoja droga', 10, 11, date)}
@@ -68,7 +74,7 @@ export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any
         <div class="proc-step">
           <div class="proc-circle future" style="border-color:var(--success);color:var(--success);background:var(--sp-gray)">zł</div>
           <div class="proc-label future" style="color:var(--success)">Pierwsze<br>oszczędności</div>
-          <div class="proc-sub" style="color:var(--success)">${new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(totals.savingsPlus)}<br>miesięcznie</div>
+          <div class="proc-sub" style="color:var(--success)">${new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(totals.savingsPlus)}<br>miesięcznie</div>
         </div>
 
         </div>
@@ -92,22 +98,22 @@ export const generateIlekosztujeCikadymiesiczwokiV3 = (firma: Firma, totals: any
     <div class="cod" style="flex:1;align-items:stretch">
       <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.35);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
         <div class="cod-period" style="font-size:10px;margin-bottom:12px">1 miesiąc zwłoki</div>
-        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus)} zł</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totals.savingsPlus)} zł</div>
         <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
       <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.55);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
         <div class="cod-period" style="font-size:10px;margin-bottom:12px">3 miesiące zwłoki</div>
-        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 3)} zł</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totals.savingsPlus * 3)} zł</div>
         <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
       <div class="cod-cell" style="border-top:3px solid rgba(220,38,38,.75);padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
         <div class="cod-period" style="font-size:10px;margin-bottom:12px">6 miesięcy zwłoki</div>
-        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 6)} zł</div>
+        <div class="cod-amount" style="font-size:26px">−${new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totals.savingsPlus * 6)} zł</div>
         <div class="cod-label" style="font-size:12.5px">strata netto</div>
       </div>
       <div class="cod-cell" style="border-top:3px solid #DC2626;padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center">
         <div class="cod-period" style="font-size:10px;margin-bottom:12px">12 miesięcy zwłoki</div>
-        <div class="cod-amount" style="font-size:30px">−${new Intl.NumberFormat('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}).format(totals.savingsPlus * 12)} zł</div>
+        <div class="cod-amount" style="font-size:30px">−${new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totals.savingsPlus * 12)} zł</div>
         <div class="cod-label" style="color:#f87171;font-weight:600;font-size:12.5px">maksymalna strata</div>
       </div>
     </div>

@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Firma } from '../../../entities/company/model';
 
 export const generateHookPageV3 = (_firma: Firma, totals: any, _date: string, _sector: string) => {
-    const fmtK       = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
-    const annualSavings = totals.savingsPlus * 12;
-    const extraNetto    = totals.sumaNettoElitonPlus - totals.sumaNetto;
+  const fmtK = (v: number) =>
+    new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
+  const annualSavings = totals.savingsPlus * 12;
+  const extraNetto = totals.sumaNettoElitonPlus - totals.sumaNetto;
 
-    const opiekunNazwa    = _firma.opiekunNazwa    || 'Michał Zawadzki';
-    const opiekunEmail    = _firma.opiekunEmail    || 'm.zawadzki@stratton-prime.pl';
-    const opiekunTelefon  = _firma.opiekunTelefon  || '+48 730 268 668';
+  const opiekunNazwa = _firma.opiekunNazwa || 'Michał Zawadzki';
+  const opiekunEmail = _firma.opiekunEmail || 'm.zawadzki@stratton-prime.pl';
+  const opiekunTelefon = _firma.opiekunTelefon || '+48 730 268 668';
 
-    return `
+  return `
 <div class="page hook-page" style="background:#f8f7f4">
   <div class="hook-body">
 

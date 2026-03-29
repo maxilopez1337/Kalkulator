@@ -3,21 +3,21 @@ import { fmtK2, BRUTTO_TO_NETTO } from '../shared';
 import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateMechanizmV5 = (p: SimulationParams, date: string): string => {
-    const n = p.empCount;
-    const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
-    const { totalProv } = p.simulation;
-    const bruttOld = Math.round(p.simulation.avgBruttoStd);
-    const zusOld   = Math.round(p.simulation.avgZusStd);
-    const bruttNew = Math.round(p.simulation.avgBruttoNowy);
-    const zusNew   = Math.round(p.simulation.avgZusNowy);
-    const voucher  = Math.round(p.simulation.avgEbs);
-    const perProv  = totalProv / n;
-    const totalStdPP     = bruttOld + zusOld;
-    const totalEPwithFee = bruttNew + zusNew + perProv;
-    const savings        = totalStdPP - totalEPwithFee;
-    const savingsPct     = Math.round((savings / Math.max(1, totalStdPP)) * 100);
+  const n = p.empCount;
+  const avgNet = p.salaryMode === 'NETTO' ? p.avgSalary : Math.round(p.avgSalary * BRUTTO_TO_NETTO);
+  const { totalProv } = p.simulation;
+  const bruttOld = Math.round(p.simulation.avgBruttoStd);
+  const zusOld = Math.round(p.simulation.avgZusStd);
+  const bruttNew = Math.round(p.simulation.avgBruttoNowy);
+  const zusNew = Math.round(p.simulation.avgZusNowy);
+  const voucher = Math.round(p.simulation.avgEbs);
+  const perProv = totalProv / n;
+  const totalStdPP = bruttOld + zusOld;
+  const totalEPwithFee = bruttNew + zusNew + perProv;
+  const savings = totalStdPP - totalEPwithFee;
+  const savingsPct = Math.round((savings / Math.max(1, totalStdPP)) * 100);
 
-    return `
+  return `
 <!-- ════ STR 2 — MECHANIZM ════ -->
 <div class="page">
   <div class="ph">

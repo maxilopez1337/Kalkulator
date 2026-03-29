@@ -1,14 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
-export const generatePage05V3 = (firma: Firma, totals: any, date: string, sector: string): string => {
-  const fmt = (v: number) => new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
-  const fmtK = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
+export const generatePage05V3 = (
+  firma: Firma,
+  totals: any,
+  date: string,
+  sector: string
+): string => {
+  const fmt = (v: number) =>
+    new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
+      v
+    );
+  const fmtK = (v: number) =>
+    new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
   const bruttoNew = totals.sumaZasadnicza + totals.totalBenefit;
   const zusPracDelta = totals.sumaZusPracownika - totals.sumaZusPracownikaEliton;
-  const nettoPercent = totals.sumaNetto > 0 ? Math.round(totals.sumaRaise / totals.sumaNetto * 100) : 0;
+  const nettoPercent =
+    totals.sumaNetto > 0 ? Math.round((totals.sumaRaise / totals.sumaNetto) * 100) : 0;
   const roiMult = fmt((totals.savingsPlus + totals.commission) / totals.commission);
-  const roiPct = Math.round(totals.savingsPlus / totals.commission * 100);
+  const roiPct = Math.round((totals.savingsPlus / totals.commission) * 100);
   return `
 <div class="page">
 

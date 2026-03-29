@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
@@ -91,7 +92,7 @@ export const generatePage04V3 = (firma: Firma, totals: any, date: string, sector
 
     <div class="box-gold">
       <div style="font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--sp-gold);margin-bottom:8px">Wniosek z kalkulacji dla Twojej firmy</div>
-      <p style="font-size:12px;color:var(--sp-text);line-height:1.65">Przeanalizowaliśmy Twoją listę płac pod kątem wszystkich powyższych czynników. <strong>Na podstawie przesłanej listy płac model jest dopasowany do Twojej struktury zatrudnienia.</strong> żadna ze znanych przesłanek wykluczających nie zachodzi &mdash; łączne wynagrodzenie brutto (${new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(totals.sumaBrutto)}) daje przestrzeń do wdrożenia, a prognozowana oszczędność ${new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(totals.savingsPlus)} miesięcznie jest kalkulowana konserwatywnie. Wyniki mogą się różnić w zależności od indywidualnych okoliczności.</p>
+      <p style="font-size:12px;color:var(--sp-text);line-height:1.65">Przeanalizowaliśmy Twoją listę płac pod kątem wszystkich powyższych czynników. <strong>Na podstawie przesłanej listy płac model jest dopasowany do Twojej struktury zatrudnienia.</strong> żadna ze znanych przesłanek wykluczających nie zachodzi &mdash; łączne wynagrodzenie brutto (${new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(totals.sumaBrutto)}) daje przestrzeń do wdrożenia, a prognozowana oszczędność ${new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(totals.savingsPlus)} miesięcznie jest kalkulowana konserwatywnie. Wyniki mogą się różnić w zależności od indywidualnych okoliczności.</p>
     </div>
 
   </div>

@@ -3,12 +3,12 @@ import { fmtK2 } from '../shared';
 import { generateFooterWithPage } from '../../offerPdfV3/components';
 
 export const generateCTAV5 = (p: SimulationParams, offerValidity: string, date: string): string => {
-    const { monthlySavings } = p.simulation;
-    const advisorName  = p.advisorName  || 'Twój Doradca';
-    const advisorPhone = p.advisorPhone || '';
-    const advisorEmail = p.advisorEmail || '';
+  const { monthlySavings } = p.simulation;
+  const advisorName = p.advisorName || 'Twój Doradca';
+  const advisorPhone = p.advisorPhone || '';
+  const advisorEmail = p.advisorEmail || '';
 
-    return `
+  return `
 <!-- ════ STR 5 — CTA ════ -->
 <div class="page">
   <div class="ph">

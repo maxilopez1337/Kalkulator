@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 import { tarczaOchronnaB64 } from './tarczaB64';
 
-export const generate4przesankiwyczeniaZUS2ust1pkt26RozpMPiPSV3 = (firma: Firma, date: string, sector: string) => `
+export const generate4przesankiwyczeniaZUS2ust1pkt26RozpMPiPSV3 = (
+  firma: Firma,
+  date: string,
+  sector: string
+) => `
 <div class="page">
 
   ${generatePageHeaderV3('Mechanizm i Bezpieczeństwo', '08. Mechanizm i bezpieczeństwo', 8, 11, date)}

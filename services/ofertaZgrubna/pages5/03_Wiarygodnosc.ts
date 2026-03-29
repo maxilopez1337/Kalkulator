@@ -2,10 +2,21 @@ import type { SimulationParams } from '../types';
 import { radoslawZukPhotoB64 } from '../../offerPdfV3/pages/radoslawZukPhotoB64';
 import { generateFooterWithPage } from '../../offerPdfV3/components';
 import {
-  allianz_logo_B64, ergo_hestia_B64, generali_logo_big_B64, ladenhall_B64,
-  Laven_logo_dark_B64, lloyds_logo_sized_nav__1__B64, logo_warta_B64, luxmed_B64,
-  orange_B64, pzu_B64, signal_iduna_polska_logo_B64, TU_ZDROWIE_B64,
-  uniqa_logo_B64, unum_B64, vienna_life_logo_B64
+  allianz_logo_B64,
+  ergo_hestia_B64,
+  generali_logo_big_B64,
+  ladenhall_B64,
+  Laven_logo_dark_B64,
+  lloyds_logo_sized_nav__1__B64,
+  logo_warta_B64,
+  luxmed_B64,
+  orange_B64,
+  pzu_B64,
+  signal_iduna_polska_logo_B64,
+  TU_ZDROWIE_B64,
+  uniqa_logo_B64,
+  unum_B64,
+  vienna_life_logo_B64,
 } from '../../offerPdfV3/pages/partners/partnersB64';
 
 const NR_DP = '12602';

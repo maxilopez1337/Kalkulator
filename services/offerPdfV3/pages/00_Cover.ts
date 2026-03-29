@@ -1,14 +1,16 @@
-﻿import { Firma } from '../../../entities/company/model';
+﻿/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+import { Firma } from '../../../entities/company/model';
 import { LOGO_OFERTA_B64 } from './logoOfertaB64';
 
-const fmt = (v: number) => new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
+const fmt = (v: number) =>
+  new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(Math.round(v));
 
 export const generatePage01V3 = (firma: Firma, totals: any, date: string, sector: string) => {
   const savings12 = (totals?.savingsPlus || 0) * 12;
   const n = totals?.count || 0;
   const prac = n === 1 ? 'pracownik' : n < 5 ? 'pracownicy' : 'pracowników';
   const kwalif = n > 1 && n < 5 ? 'kwalifikują się' : 'kwalifikuje się';
-  const ref = `SP/${new Date().getFullYear()}/${String(new Date().getMonth()+1).padStart(2,'0')}/${(firma?.nip||'').slice(-3)||'001'}`;
+  const ref = `SP/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}/${(firma?.nip || '').slice(-3) || '001'}`;
 
   return `
 <div class="page" style="display:flex;flex-direction:column;overflow:hidden;background:#f8f7f4">

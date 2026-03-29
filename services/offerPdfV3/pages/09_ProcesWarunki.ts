@@ -1,4 +1,5 @@
-﻿import { Firma } from '../../../entities/company/model';
+﻿/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Firma } from '../../../entities/company/model';
 import { generatePageHeaderV3, generateFooterV3 } from '../components';
 
 export const generatePage09V3 = (firma: Firma, date: string, sector: string) => `

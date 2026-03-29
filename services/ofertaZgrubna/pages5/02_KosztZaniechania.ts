@@ -1,23 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SimulationParams } from '../types';
 import { fmtK2 } from '../shared';
 import { generateFooterWithPage } from '../../offerPdfV3/components';
 
-export const generateKosztV5 = (p: SimulationParams, offerValidity: string, date: string): string => {
-    const n = p.empCount;
-    const { monthlySavings, yearlySavings, totalStd, totalNew, totalProv } = p.simulation;
-    const kostBez   = totalNew - totalProv;
-    const roi       = totalProv > 0 ? Math.round(monthlySavings / totalProv * 100) : 0;
-    const voucherTot = Math.round(totalProv / 0.28);
-    const q3savings = Math.round(monthlySavings * 3);
-    // "co możesz zrobić z tymi pieniędzmi"
-    const raisePerPerson = Math.round(monthlySavings / n);
-    const newHires = +(monthlySavings / (totalStd / n)).toFixed(1);
-    const bonusPool = Math.round(yearlySavings * 0.5);
-    const pctNew = Math.round((totalNew / Math.max(1, totalStd)) * 100);
-    const pctInvestment = Math.min(99, Math.round((totalProv / Math.max(1, monthlySavings)) * 100));
-    const roiMultiple = +(monthlySavings / Math.max(1, totalProv)).toFixed(1);
+export const generateKosztV5 = (
+  p: SimulationParams,
+  offerValidity: string,
+  date: string
+): string => {
+  const n = p.empCount;
+  const { monthlySavings, yearlySavings, totalStd, totalNew, totalProv } = p.simulation;
+  const kostBez = totalNew - totalProv;
+  const roi = totalProv > 0 ? Math.round((monthlySavings / totalProv) * 100) : 0;
+  const voucherTot = Math.round(totalProv / 0.28);
+  const q3savings = Math.round(monthlySavings * 3);
+  // "co możesz zrobić z tymi pieniędzmi"
+  const raisePerPerson = Math.round(monthlySavings / n);
+  const newHires = +(monthlySavings / (totalStd / n)).toFixed(1);
+  const bonusPool = Math.round(yearlySavings * 0.5);
+  const pctNew = Math.round((totalNew / Math.max(1, totalStd)) * 100);
+  const pctInvestment = Math.min(99, Math.round((totalProv / Math.max(1, monthlySavings)) * 100));
+  const roiMultiple = +(monthlySavings / Math.max(1, totalProv)).toFixed(1);
 
-    return `
+  return `
 <!-- ════ STR 3 — KOSZT ZANIECHANIA ════ -->
 <div class="page">
   <div class="ph">
