@@ -1,4 +1,3 @@
-
 export interface Firma {
   nazwa: string;
   nip: string;
@@ -16,14 +15,32 @@ export interface Firma {
 }
 
 export interface Config {
+  _metadata?: {
+    version: string;
+    validUntil: string;
+    lastUpdated: string;
+    description?: string;
+  };
   zus: {
     uop: {
       pracownik: { emerytalna: number; rentowa: number; chorobowa: number };
-      pracodawca: { emerytalna: number; rentowa: number; wypadkowa: number; fp: number; fgsp: number };
+      pracodawca: {
+        emerytalna: number;
+        rentowa: number;
+        wypadkowa: number;
+        fp: number;
+        fgsp: number;
+      };
     };
     uz: {
       pracownik: { emerytalna: number; rentowa: number; chorobowa: number };
-      pracodawca: { emerytalna: number; rentowa: number; wypadkowa: number; fp: number; fgsp: number };
+      pracodawca: {
+        emerytalna: number;
+        rentowa: number;
+        wypadkowa: number;
+        fp: number;
+        fgsp: number;
+      };
     };
     zdrowotna: number;
   };

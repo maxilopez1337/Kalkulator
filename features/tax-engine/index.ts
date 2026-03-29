@@ -1,5 +1,4 @@
-
-import { Config, Firma } from '../../entities/company/model';
+import { Config } from '../../entities/company/model';
 import { Pracownik } from '../../entities/employee/model';
 import { WynikWariantuStandard, WynikWariantuPodzial } from '../../entities/calculation/model';
 import { obliczZusPracodawca } from './logic/zus';
@@ -15,7 +14,11 @@ export const calculateCommission = (swiadczenieNetto: number, prowizjaProc: numb
 
 // ==================== WARIANTY OBLICZEŃ (ORKIESTRACJA) ====================
 
-export const obliczWariantStandard = (pracownik: Pracownik, stawkaWypadkowa: number, config: Config): WynikWariantuStandard => {
+export const obliczWariantStandard = (
+  pracownik: Pracownik,
+  stawkaWypadkowa: number,
+  config: Config
+): WynikWariantuStandard => {
   const params = {
     typUmowy: pracownik.typUmowy,
     trybSkladek: pracownik.trybSkladek,
@@ -23,29 +26,34 @@ export const obliczWariantStandard = (pracownik: Pracownik, stawkaWypadkowa: num
     pit2: pracownik.pit2,
     ulgaMlodych: pracownik.ulgaMlodych,
     kupTyp: pracownik.kupTyp,
-    pitMode: pracownik.pitMode || 'AUTO'
+    pitMode: pracownik.pitMode || 'AUTO',
   };
-  
+
   const wynik = znajdzBruttoDlaNetto(pracownik.nettoDocelowe, params, config);
-  
+
   const zusPracodawca = obliczZusPracodawca(
-      wynik.brutto, 
-      pracownik.typUmowy, 
-      pracownik.trybSkladek, 
-      stawkaWypadkowa, 
-      pracownik.skladkaFP, 
-      pracownik.skladkaFGSP, 
-      config
+    wynik.brutto,
+    pracownik.typUmowy,
+    pracownik.trybSkladek,
+    stawkaWypadkowa,
+    pracownik.skladkaFP,
+    pracownik.skladkaFGSP,
+    config
   );
-  
+
   return {
     ...wynik,
     zusPracodawca,
-    kosztPracodawcy: wynik.brutto + zusPracodawca.suma
+    kosztPracodawcy: wynik.brutto + zusPracodawca.suma,
   };
 };
 
-export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: number, nettoZasadnicza: number, config: Config): WynikWariantuPodzial => {
+export const obliczWariantPodzial = (
+  pracownik: Pracownik,
+  stawkaWypadkowa: number,
+  nettoZasadnicza: number,
+  config: Config
+): WynikWariantuPodzial => {
   const paramsZasadnicza = {
     typUmowy: pracownik.typUmowy,
     trybSkladek: pracownik.trybSkladek,
@@ -53,23 +61,23 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
     pit2: pracownik.pit2,
     ulgaMlodych: pracownik.ulgaMlodych,
     kupTyp: pracownik.kupTyp,
-    pitMode: pracownik.pitMode || 'AUTO'
+    pitMode: pracownik.pitMode || 'AUTO',
   };
-  
+
   const wynikZasadnicza = znajdzBruttoDlaNetto(nettoZasadnicza, paramsZasadnicza, config);
   const swiadczenieNetto = pracownik.nettoDocelowe - nettoZasadnicza;
-  
+
   if (swiadczenieNetto <= 0) {
     const zusPracodawca = obliczZusPracodawca(
-        wynikZasadnicza.brutto, 
-        pracownik.typUmowy, 
-        pracownik.trybSkladek, 
-        stawkaWypadkowa, 
-        pracownik.skladkaFP, 
-        pracownik.skladkaFGSP, 
-        config
+      wynikZasadnicza.brutto,
+      pracownik.typUmowy,
+      pracownik.trybSkladek,
+      stawkaWypadkowa,
+      pracownik.skladkaFP,
+      pracownik.skladkaFGSP,
+      config
     );
-    
+
     return {
       zasadnicza: { ...wynikZasadnicza, zusPracodawca, nettoGotowka: nettoZasadnicza },
       swiadczenie: { brutto: 0, netto: 0, zaliczka: 0, kup: 0 },
@@ -82,16 +90,16 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
         stawka: wynikZasadnicza.stawkaPit,
         kwota: wynikZasadnicza.pit,
         kwotaOdZasadniczej: wynikZasadnicza.pit,
-        kwotaOdSwiadczenia: 0
+        kwotaOdSwiadczenia: 0,
       },
       kosztPracodawcy: wynikZasadnicza.brutto + zusPracodawca.suma,
       nettoCalkowite: nettoZasadnicza,
       doWyplatyGotowka: nettoZasadnicza,
       doWyplatySwiadczenie: 0,
-      doWyplaty: nettoZasadnicza
+      doWyplaty: nettoZasadnicza,
     };
   }
-  
+
   let stawkaPitDlaSwiadczenia = wynikZasadnicza.stawkaPit / 100;
   if (pracownik.pitMode === 'FLAT_12') stawkaPitDlaSwiadczenia = config.pit.prog1Stawka / 100;
   else if (pracownik.pitMode === 'FLAT_32') stawkaPitDlaSwiadczenia = config.pit.prog2Stawka / 100;
@@ -99,38 +107,39 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
 
   let wspolczynnikKupSwiadczenia = 0;
   if (pracownik.typUmowy === 'UZ') {
-    wspolczynnikKupSwiadczenia = (pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc) / 100;
+    wspolczynnikKupSwiadczenia =
+      (pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc) / 100;
   }
-  
-  let efektywnaStawkaSwiadczenia = stawkaPitDlaSwiadczenia * (1 - wspolczynnikKupSwiadczenia);
-  let swiadczenieBruttoWstepne = swiadczenieNetto / (1 - efektywnaStawkaSwiadczenia);
-  let lacznyPrzychodWstepny = wynikZasadnicza.brutto + swiadczenieBruttoWstepne;
-  
-  let kupCalkowiteWstepne = wynikZasadnicza.kup;
-  if (pracownik.typUmowy === 'UZ') {
-    const procKup = pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc;
-    kupCalkowiteWstepne = (lacznyPrzychodWstepny - wynikZasadnicza.zusPracownik.suma) * (procKup / 100);
-  }
-  
+
+  const efektywnaStawkaSwiadczenia = stawkaPitDlaSwiadczenia * (1 - wspolczynnikKupSwiadczenia);
+  const swiadczenieBruttoWstepne = swiadczenieNetto / (1 - efektywnaStawkaSwiadczenia);
+
   // Kalkulator liczy "Tu i Teraz" (Miesiąc 1) bez projekcji rocznej.
   // Stawka 32% dostępna tylko przez ręczny wybór FLAT_32.
-  
+
   let kupOdSwiadczeniaWstepne = 0;
   if (pracownik.typUmowy === 'UZ') {
-    kupOdSwiadczeniaWstepne = swiadczenieBruttoWstepne * ((pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc) / 100);
+    kupOdSwiadczeniaWstepne =
+      swiadczenieBruttoWstepne *
+      ((pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc) / 100);
   }
-  
-  const zaliczkaOdSwiadczenia = Math.round((swiadczenieBruttoWstepne - kupOdSwiadczeniaWstepne) * stawkaPitDlaSwiadczenia);
+
+  const zaliczkaOdSwiadczenia = Math.round(
+    (swiadczenieBruttoWstepne - kupOdSwiadczeniaWstepne) * stawkaPitDlaSwiadczenia
+  );
   const swiadczenieBrutto = swiadczenieNetto + zaliczkaOdSwiadczenia;
   const lacznyPrzychod = wynikZasadnicza.brutto + swiadczenieBrutto;
-  
+
   let kupCalkowite = wynikZasadnicza.kup;
   if (pracownik.typUmowy === 'UZ') {
-    const procKup = pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc;
+    const procKup =
+      pracownik.kupTyp === 'PROC_50' ? config.pit.uzKupAutorskie : config.pit.uzKupProc;
     kupCalkowite = (lacznyPrzychod - wynikZasadnicza.zusPracownik.suma) * (procKup / 100);
   }
-  
-  const podstawaPitCalkowita = Math.round(Math.max(0, lacznyPrzychod - wynikZasadnicza.zusPracownik.suma - kupCalkowite));
+
+  const podstawaPitCalkowita = Math.round(
+    Math.max(0, lacznyPrzychod - wynikZasadnicza.zusPracownik.suma - kupCalkowite)
+  );
   const kupOdSwiadczenia = kupCalkowite - wynikZasadnicza.kup;
 
   let stawkaPitFinal = config.pit.prog1Stawka;
@@ -138,26 +147,41 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
   else if (pracownik.pitMode === 'FLAT_12') stawkaPitFinal = config.pit.prog1Stawka;
   else if (pracownik.pitMode === 'FLAT_0') stawkaPitFinal = 0;
   // Dla AUTO: sprawdzamy tylko bieżący miesiąc bez projekcji rocznej, chyba że podstawa miesięczna > 120k
-  else stawkaPitFinal = podstawaPitCalkowita > config.pit.prog1Limit ? config.pit.prog2Stawka : config.pit.prog1Stawka;
+  else
+    stawkaPitFinal =
+      podstawaPitCalkowita > config.pit.prog1Limit
+        ? config.pit.prog2Stawka
+        : config.pit.prog1Stawka;
 
-  const pitCalkowity = obliczPit(podstawaPitCalkowita, pracownik.pit2, pracownik.ulgaMlodych, stawkaPitFinal, config);
-  
+  const pitCalkowity = obliczPit(
+    podstawaPitCalkowita,
+    pracownik.pit2,
+    pracownik.ulgaMlodych,
+    stawkaPitFinal,
+    config
+  );
+
   const kwotaOdZasadniczej = wynikZasadnicza.pit || 0;
   const kwotaOdSwiadczenia = pitCalkowity - kwotaOdZasadniczej;
 
   const zusPracodawca = obliczZusPracodawca(
-      wynikZasadnicza.brutto, 
-      pracownik.typUmowy, 
-      pracownik.trybSkladek, 
-      stawkaWypadkowa, 
-      pracownik.skladkaFP, 
-      pracownik.skladkaFGSP, 
-      config
+    wynikZasadnicza.brutto,
+    pracownik.typUmowy,
+    pracownik.trybSkladek,
+    stawkaWypadkowa,
+    pracownik.skladkaFP,
+    pracownik.skladkaFGSP,
+    config
   );
 
   return {
     zasadnicza: { ...wynikZasadnicza, zusPracodawca, nettoGotowka: nettoZasadnicza },
-    swiadczenie: { brutto: swiadczenieBrutto, netto: swiadczenieNetto, zaliczka: kwotaOdSwiadczenia, kup: kupOdSwiadczenia },
+    swiadczenie: {
+      brutto: swiadczenieBrutto,
+      netto: swiadczenieNetto,
+      zaliczka: kwotaOdSwiadczenia,
+      kup: kupOdSwiadczenia,
+    },
     pit: {
       lacznyPrzychod,
       podstawa: podstawaPitCalkowita,
@@ -167,12 +191,15 @@ export const obliczWariantPodzial = (pracownik: Pracownik, stawkaWypadkowa: numb
       stawka: stawkaPitFinal,
       kwota: pitCalkowity,
       kwotaOdZasadniczej: kwotaOdZasadniczej,
-      kwotaOdSwiadczenia: kwotaOdSwiadczenia
+      kwotaOdSwiadczenia: kwotaOdSwiadczenia,
     },
     kosztPracodawcy: wynikZasadnicza.brutto + zusPracodawca.suma + swiadczenieBrutto,
     nettoCalkowite: nettoZasadnicza + swiadczenieNetto,
+    // Korekta o 1 PLN: gross-up może dać netto = nettoZasadnicza lub nettoZasadnicza+1
+    // (tolerancja algorytmu binarnego). Odejmujemy 1 PLN żeby zagwarantować
+    // że wypłata gotówkowa nie przekroczy kwoty docelowej netto pracownika.
     doWyplatyGotowka: nettoZasadnicza - 1,
     doWyplatySwiadczenie: swiadczenieNetto,
-    doWyplaty: nettoZasadnicza - 1 + swiadczenieNetto
+    doWyplaty: nettoZasadnicza - 1 + swiadczenieNetto,
   };
 };
